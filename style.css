@@ -125,3 +125,30 @@ form select {
     color: white;
     font-size: 15px;
 }
+.dashboard-card {
+    background: #181c25;
+    padding: 25px;
+    border-radius: 18px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.dashboard-card h2 {
+    margin-bottom: 15px;
+    color: #ffffff;
+}
+
+.dashboard-card p,
+.dashboard-card li {
+    color: #d7dbe4;
+    margin: 8px 0;
+}
+
+.dashboard-card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.earnings {
+    border: 2px solid #6c63ff;
+}
