@@ -6,5 +6,5 @@ producerBtn.addEventListener('click', () => {
 });
 
 artistBtn.addEventListener('click', () => {
-    alert('Artist registration page coming soon on SONVIA!');
+    window.location.href = 'artist.html';
 });
