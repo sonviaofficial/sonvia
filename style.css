@@ -88,3 +88,30 @@ form input {
 form input::placeholder {
     color: #8c93a3;
 }
+.producer-card {
+    background: #181c25;
+    padding: 25px;
+    border-radius: 18px;
+    margin-bottom: 25px;
+    text-align: left;
+}
+
+.producer-card h2 {
+    margin-bottom: 10px;
+    color: #ffffff;
+}
+
+.producer-card p {
+    color: #aeb4c0;
+    margin-bottom: 15px;
+}
+
+.producer-card ul {
+    list-style: none;
+    margin-bottom: 20px;
+}
+
+.producer-card li {
+    margin: 10px 0;
+    color: #d7dbe4;
+}
