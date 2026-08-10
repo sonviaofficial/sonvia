@@ -115,3 +115,13 @@ form input::placeholder {
     margin: 10px 0;
     color: #d7dbe4;
 }
+form select {
+    width: 100%;
+    padding: 15px;
+    margin: 12px 0;
+    border: none;
+    border-radius: 10px;
+    background: #10131a;
+    color: white;
+    font-size: 15px;
+}
