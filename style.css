@@ -220,3 +220,31 @@ button:hover {
     margin-bottom: 15px;
     border: 2px solid rgba(255,255,255,0.25);
 }
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: #121826;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding: 12px 5px;
+    border-top: 1px solid #232938;
+    z-index: 1000;
+}
+
+.bottom-nav a {
+    text-decoration: none;
+    color: #d7dbe4;
+    font-size: 13px;
+    text-align: center;
+}
+
+.bottom-nav a:hover {
+    color: #ffffff;
+}
+
+body {
+    padding-bottom: 80px;
+}
