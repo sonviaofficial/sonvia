@@ -44,6 +44,14 @@
             </form>
         </section>
     </main>
+<script>
+document.querySelector("form").addEventListener("submit", function (e) {
+    e.preventDefault();
 
+    alert("Producer account created successfully!");
+
+    window.location.href = "login.html";
+});
+</script>
 </body>
 </html>
