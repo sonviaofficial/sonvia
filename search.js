@@ -1,16 +1,24 @@
-const searchInput = document.getElementById('producerSearch');
-const producerCards = document.querySelectorAll('.producer-card');
+document.addEventListener("DOMContentLoaded", function () {
 
-searchInput.addEventListener('keyup', function () {
-    const searchValue = this.value.toLowerCase();
+    const searchInput = document.getElementById("producerSearch");
+    const producerCards = document.querySelectorAll(".producer-card");
 
-    producerCards.forEach(card => {
-        const text = card.innerText.toLowerCase();
+    searchInput.addEventListener("input", function () {
 
-        if (text.includes(searchValue)) {
-            card.style.display = 'block';
-        } else {
-            card.style.display = 'none';
-        }
+        const searchValue = searchInput.value.toLowerCase().trim();
+
+        producerCards.forEach(function (card) {
+
+            const text = card.textContent.toLowerCase();
+
+            if (text.includes(searchValue)) {
+                card.style.display = "";
+            } else {
+                card.style.display = "none";
+            }
+
+        });
+
     });
+
 });
