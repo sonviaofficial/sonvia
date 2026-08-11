@@ -170,3 +170,34 @@ form select {
     margin: 0;
     font-size: 14px;
 }
+body {
+    background: linear-gradient(180deg, #0f1115 0%, #121826 100%);
+}
+
+header {
+    background: linear-gradient(135deg, #6c63ff 0%, #8b5cf6 100%);
+    box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+}
+
+section,
+.producer-card,
+.dashboard-card {
+    box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+    transition: transform 0.2s ease;
+}
+
+section:hover,
+.producer-card:hover,
+.dashboard-card:hover {
+    transform: translateY(-2px);
+}
+
+button {
+    background: linear-gradient(135deg, #7c3aed 0%, #6c63ff 100%);
+    transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+button:hover {
+    transform: scale(1.02);
+    opacity: 0.95;
+}
