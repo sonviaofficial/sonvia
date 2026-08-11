@@ -27,6 +27,15 @@
             </form>
         </section>
     </main>
+<script>
+document.querySelector("form").addEventListener("submit", function (e) {
+    e.preventDefault();
 
+    alert("Artist account created successfully!");
+
+    // Redirect to login page
+    window.location.href = "login.html";
+});
+</script>
 </body>
 </html>
