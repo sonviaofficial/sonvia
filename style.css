@@ -300,3 +300,20 @@ body {
 .navbar a:hover {
     background: #1f2937;
 }
+.file-upload {
+    margin: 15px 0;
+}
+
+.file-upload label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+}
+
+.file-upload input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+}
