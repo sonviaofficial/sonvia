@@ -248,3 +248,21 @@ button:hover {
 body {
     padding-bottom: 80px;
 }
+.search-box {
+    margin-bottom: 25px;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 12px;
+    background: #181c25;
+    color: white;
+    font-size: 15px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.search-box input::placeholder {
+    color: #9aa3b2;
+}
