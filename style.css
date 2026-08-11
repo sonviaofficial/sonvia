@@ -317,3 +317,22 @@ body {
     border-radius: 8px;
     background: white;
 }
+.welcome {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.welcome h2 {
+    font-size: 2rem;
+    margin-bottom: 15px;
+}
+
+.welcome p {
+    margin-bottom: 25px;
+    color: #555;
+}
+
+.welcome button {
+    margin: 10px;
+    min-width: 180px;
+}
