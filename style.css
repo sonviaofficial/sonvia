@@ -201,3 +201,22 @@ button:hover {
     transform: scale(1.02);
     opacity: 0.95;
 }
+.logo-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.logo-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 36px;
+    margin-bottom: 15px;
+    border: 2px solid rgba(255,255,255,0.25);
+}
