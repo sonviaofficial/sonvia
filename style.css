@@ -266,3 +266,17 @@ body {
 .search-box input::placeholder {
     color: #9aa3b2;
 }
+.whatsapp-btn {
+    display: inline-block;
+    margin-top: 10px;
+    padding: 10px 15px;
+    background-color: #25D366;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: bold;
+}
+
+.whatsapp-btn:hover {
+    background-color: #1ebe5d;
+}
