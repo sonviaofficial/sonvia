@@ -280,3 +280,23 @@ body {
 .whatsapp-btn:hover {
     background-color: #1ebe5d;
 }
+.navbar {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin: 15px 0;
+    flex-wrap: wrap;
+}
+
+.navbar a {
+    text-decoration: none;
+    padding: 10px 16px;
+    background: #111827;
+    color: white;
+    border-radius: 8px;
+    font-weight: 600;
+}
+
+.navbar a:hover {
+    background: #1f2937;
+}
