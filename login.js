@@ -6,7 +6,7 @@ loginForm.addEventListener('submit', function (e) {
     const role = document.querySelector('select').value;
 
     if (role === 'Artist') {
-        window.location.href = 'producers.html';
+        window.location.href = "dashboard.html";
     } else if (role === 'Producer') {
         window.location.href = 'dashboard.html';
     } else if (role === 'Admin') {
