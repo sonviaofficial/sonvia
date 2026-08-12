@@ -14,9 +14,11 @@
     <!-- TOP APP BAR -->
     <div class="top-header">
 
-        <button class="notification-btn" type="button" onclick="openNotifications()">
-            🔔
-            <span id="notificationCount">3</span>
+        <button class="notification-btn"
+        type="button"
+        onclick="openNotifications()">
+    🔔
+    <span id="notificationCount">0</span>
         </button>
 
         <div class="home-tabs">
@@ -431,9 +433,32 @@ if (savedProfilePic) {
 }
 </script>
     <script>
-function openSettings() {
-    document.getElementById("settingsOverlay").classList.add("show");
+// NOTIFICATION COUNTER
+let notificationCount = 3;
+
+function updateNotificationCount() {
+    const badge = document.getElementById("notificationCount");
+
+    badge.textContent = notificationCount;
+
+    if (notificationCount <= 0) {
+        badge.style.display = "none";
+    } else {
+        badge.style.display = "flex";
+    }
 }
+
+// When user opens notifications, clear them
+function openNotifications() {
+    document.getElementById("notificationOverlay")
+        .classList.add("show");
+
+    notificationCount = 0;
+    updateNotificationCount();
+}
+
+// Start the badge
+updateNotificationCount();
 
 function closeSettings() {
     document.getElementById("settingsOverlay").classList.remove("show");
