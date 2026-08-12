@@ -6,39 +6,241 @@
     <title>SONVIA – Producer Dashboard</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-      <header>
+<header>
+
+    <!-- TOP APP BAR -->
     <div class="top-header">
-        <div class="bell">🔔</div>
+
+        <button class="notification-btn" type="button" onclick="openNotifications()">
+            🔔
+            <span id="notificationCount">3</span>
+        </button>
 
         <div class="home-tabs">
             <span class="active-tab">For You</span>
             <span>Following</span>
         </div>
 
-        <img src="https://i.pravatar.cc/80" alt="Profile" class="profile-pic">
+        <button class="profile-button" type="button" onclick="openProfile()">
+            <img src="https://i.pravatar.cc/80"
+                 alt="Profile"
+                 class="profile-pic">
+        </button>
+
+        <button class="profile-menu-btn" type="button" onclick="openSettings()">
+            ⋮
+        </button>
+
     </div>
 
+    <!-- SONVIA BRAND -->
     <div class="logo-area">
         <h1>SONVIA</h1>
         <p>Producer Dashboard</p>
     </div>
 
-    <nav class="top-nav">
-        <a href="index.html"><button type="button">🏠 Home</button></a>
-        <nav class="bottom-nav">
+</header>
+
+
+<main>
+
+    <!-- HOME FEED -->
+    <section class="feed-section">
+
+        <h2>🎬 Latest Producer Posts</h2>
+
+        <div id="homeFeed"></div>
+
+    </section>
+
+
+    <!-- MY STUDIO -->
+    <section class="dashboard-card">
+
+        <h2>🏢 My Studio</h2>
+
+        <p>
+            <strong>Studio:</strong>
+            FOSKY Studio
+        </p>
+
+        <p>
+            <strong>Location:</strong>
+            Ikorodu, Lagos
+        </p>
+
+    </section>
+
+
+    <!-- MY SERVICES -->
+    <section class="dashboard-card">
+
+        <h2>🎙️ My Services</h2>
+
+        <ul>
+            <li>Vocal Recording – ₦50,000</li>
+            <li>Mixing – ₦15,000</li>
+            <li>Mastering – ₦10,000</li>
+        </ul>
+
+    </section>
+
+
+    <!-- BOOKINGS -->
+    <section class="dashboard-card">
+
+        <h2>📅 Recent Bookings</h2>
+
+        <p>🎤 Tunde – Vocal Recording – 12 Aug 2026</p>
+
+        <p>🎤 Grace – Mixing – 14 Aug 2026</p>
+
+    </section>
+
+
+    <!-- EARNINGS -->
+    <section class="dashboard-card earnings">
+
+        <h2>💰 Earnings</h2>
+
+        <p>
+            <strong>Total Earned:</strong>
+            ₦75,000
+        </p>
+
+        <p>
+            <strong>SONVIA Fee (5%):</strong>
+            ₦3,750
+        </p>
+
+        <p>
+            <strong>Available Balance:</strong>
+            ₦71,250
+        </p>
+
+    </section>
+
+</main>
+
+
+<!-- PROFILE SETTINGS BOTTOM SHEET -->
+
+<div id="settingsOverlay" class="settings-overlay">
+
+    <div class="settings-panel">
+
+        <div class="settings-handle"></div>
+
+        <div class="settings-header">
+            <h2>Profile</h2>
+
+            <button type="button" onclick="closeSettings()">
+                ✕
+            </button>
+        </div>
+
+        <div class="settings-profile">
+
+            <img src="https://i.pravatar.cc/120"
+                 alt="Profile"
+                 class="settings-profile-pic">
+
+            <h3>FOSKY</h3>
+
+            <p>Producer</p>
+
+        </div>
+
+        <button class="settings-option" type="button" onclick="openProfile()">
+            👤
+            <span>My Profile</span>
+        </button>
+
+        <button class="settings-option" type="button">
+            ⚙️
+            <span>Settings</span>
+        </button>
+
+        <button class="settings-option" type="button" onclick="openNotifications()">
+            🔔
+            <span>Notifications</span>
+        </button>
+
+        <button class="settings-option" type="button">
+            📱
+            <span>App Version <small>v1.0.0</small></span>
+        </button>
+
+        <button class="settings-option logout-option" type="button" onclick="logoutUser()">
+            🚪
+            <span>Log Out</span>
+        </button>
+
+        <button class="settings-option delete-option" type="button">
+            🗑️
+            <span>Delete Account</span>
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- NOTIFICATION PANEL -->
+
+<div id="notificationOverlay" class="settings-overlay">
+
+    <div class="settings-panel">
+
+        <div class="settings-handle"></div>
+
+        <div class="settings-header">
+
+            <h2>Notifications</h2>
+
+            <button type="button" onclick="closeNotifications()">
+                ✕
+            </button>
+
+        </div>
+
+        <div class="notification-item">
+            ❤️ Someone liked your post.
+        </div>
+
+        <div class="notification-item">
+            💬 Someone commented on your post.
+        </div>
+
+        <div class="notification-item">
+            👁️ Someone viewed your profile.
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- BOTTOM NAVIGATION -->
+
+<nav class="bottom-nav">
+
     <a href="dashboard.html" class="active">
         <span>🏠</span>
         <small>Home</small>
     </a>
 
-    <a href="producer.html"
+    <a href="producer.html">
         <span>🔍</span>
         <small>Explore</small>
     </a>
 
-    <a href="post.html" class="post-btn">+</a>
+    <a href="post.html" class="post-btn">
+        +
+    </a>
 
     <a href="meet.html">
         <span>👥</span>
@@ -49,64 +251,36 @@
         <span>💰</span>
         <small>Earnings</small>
     </a>
+
 </nav>
-        <a href="producers.html"><button type="button">🎙️ Studios</button></a>
-    </nav>
-</header>   
 
-    <main>
-<section class="feed-section">
-    <h2>🎬 Latest Producer Posts</h2>
-    <div id="homeFeed"></div>
-</section>
-        <section class="dashboard-card">
-            <h2>🏢 My Studio</h2>
-            <p><strong>Studio:</strong> FOSKY Studio</p>
-            <p><strong>Location:</strong> Ikorodu, Lagos</p>
-        </section>
 
-        <section class="dashboard-card">
-            <h2>🎙️ My Services</h2>
-            <ul>
-                <li>Vocal Recording – ₦50,000</li>
-                <li>Mixing – ₦15,000</li>
-                <li>Mastering – ₦10,000</li>
-            </ul>
-        </section>
+<!-- HOME FEED SCRIPT -->
 
-        <section class="dashboard-card">
-            <h2>📅 Recent Bookings</h2>
-            <p>🎤 Tunde – Vocal Recording – 12 Aug 2026</p>
-            <p>🎤 Grace – Mixing – 14 Aug 2026</p>
-        </section>
-
-        <section class="dashboard-card earnings">
-            <h2>💰 Earnings</h2>
-            <p><strong>Total Earned:</strong> ₦75,000</p>
-            <p><strong>SONVIA Fee (5%):</strong> ₦3,750</p>
-            <p><strong>Available Balance:</strong> ₦71,250</p>
-        </section>
-
-        <div class="dashboard-actions">
-    <a href="login.html" class="logout-btn">🚪 Logout</a>
-</div>
-
-    </main>
 <script>
+
 const homeFeed = document.getElementById("homeFeed");
 
-const posts = JSON.parse(localStorage.getItem("sonviaPosts")) || [];
+const posts =
+    JSON.parse(localStorage.getItem("sonviaPosts")) || [];
 
 if (posts.length === 0) {
+
     homeFeed.innerHTML =
         "<p style='color:#9ca3af;text-align:center;'>No posts yet.</p>";
+
 } else {
+
     posts.forEach(post => {
-        const card = document.createElement("div");
+
+        const card =
+            document.createElement("div");
+
         card.className = "feed-card";
 
         card.innerHTML = `
-            ${post.image}
+
+            ${post.image || ""}
 
             ${post.video ? `
                 <video controls class="studio-video">
@@ -115,21 +289,89 @@ if (posts.length === 0) {
             ` : ""}
 
             <div class="feed-info">
+
                 <h3>${post.studio}</h3>
+
                 <p>${post.caption}</p>
-                <small style="color:#9ca3af;">${post.time}</small>
+
+                <small style="color:#9ca3af;">
+                    ${post.time}
+                </small>
+
             </div>
 
             <div class="feed-actions">
-                <button>❤️ Like</button>
-                <button>💬 Comment</button>
-                <button>😀 Emoji</button>
+
+                <button type="button">
+                    ❤️ 0
+                </button>
+
+                <button type="button">
+                    💬 0
+                </button>
+
+                <button type="button">
+                    👁️ 0
+                </button>
+
             </div>
         `;
 
         homeFeed.appendChild(card);
+
     });
+
 }
+
 </script>
+
+
+<!-- SETTINGS SCRIPT -->
+
+<script>
+
+function openSettings() {
+
+    document.getElementById("settingsOverlay")
+        .classList.add("show");
+
+}
+
+function closeSettings() {
+
+    document.getElementById("settingsOverlay")
+        .classList.remove("show");
+
+}
+
+function openProfile() {
+
+    window.location.href = "profile.html";
+
+}
+
+function logoutUser() {
+
+    window.location.href = "login.html";
+
+}
+
+function openNotifications() {
+
+    document.getElementById("notificationOverlay")
+        .classList.add("show");
+
+}
+
+function closeNotifications() {
+
+    document.getElementById("notificationOverlay")
+        .classList.remove("show");
+
+}
+
+</script>
+
+
 </body>
 </html>
