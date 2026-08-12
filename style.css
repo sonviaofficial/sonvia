@@ -737,3 +737,12 @@ body {
     color: var(--muted);
     font-size: 0.95rem;
 }
+/* ===== LIVE IMAGE PREVIEW ===== */
+
+.preview-photo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 18px;
+    display: block;
+}
