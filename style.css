@@ -746,3 +746,19 @@ body {
     border-radius: 18px;
     display: block;
 }
+/* ===== HOME FEED ===== */
+
+.feed-section {
+    margin-bottom: 28px;
+}
+
+.feed-section h2 {
+    margin-bottom: 16px;
+    font-size: 1.2rem;
+}
+
+#homeFeed {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
