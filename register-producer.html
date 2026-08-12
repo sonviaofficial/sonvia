@@ -6,52 +6,355 @@
     <title>SONVIA – Producer Registration</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <header>
-        <h1>SONVIA</h1>
-        <p>Join as a Producer</p>
-    </header>
+<header>
+    <h1>SONVIA</h1>
+    <p>Join as a Producer</p>
+</header>
+
 <nav class="navbar">
     <a href="producer.html">🏠 Producers</a>
     <a href="register-producer.html">➕ Join Producer</a>
 </nav>
-    <main>
-        <section>
-            <h2>Producer Registration</h2>
 
-            <form>
+<main>
 
-                <input type="text" placeholder="Studio Name" required>
+<section>
 
-                <input type="text" placeholder="Producer Name" required>
+    <h2>Producer Registration</h2>
 
-                <input type="text" placeholder="Studio Location" required>
+    <p style="color:#9aa3b2;">
+        Create your producer account and verify your TikTok identity.
+    </p>
 
-                <input type="number" placeholder="Vocal Recording Price (₦)" required>
+    <form id="producerForm">
 
-                <input type="number" placeholder="Mixing Price (₦)" required>
+        <!-- PRODUCER INFORMATION -->
 
-                <input type="number" placeholder="Mastering Price (₦)" required>
+        <input
+            type="text"
+            id="studioName"
+            placeholder="Studio Name"
+            required
+        >
 
-                <div class="file-upload">
-    <label for="studioImage">📷 Upload Studio Image (optional)</label>
-    <input type="file" id="studioImage" accept="image/*">
-</div>
+        <input
+            type="text"
+            id="producerName"
+            placeholder="Producer Name"
+            required
+        >
 
-                <button type="submit">Submit Application</button>
+        <input
+            type="text"
+            id="studioLocation"
+            placeholder="Studio Location"
+            required
+        >
 
-            </form>
-        </section>
-    </main>
+
+        <!-- TIKTOK VERIFICATION -->
+
+        <h3 style="text-align:left;margin-top:25px;">
+            🎵 TikTok Verification
+        </h3>
+
+        <p style="text-align:left;color:#9aa3b2;font-size:14px;">
+            Your TikTok account is required to help protect SONVIA
+            artists from fake producer accounts.
+        </p>
+
+        <input
+            type="text"
+            id="tiktokUsername"
+            placeholder="TikTok Username (e.g. @producername)"
+            required
+        >
+
+        <input
+            type="url"
+            id="tiktokLink"
+            placeholder="TikTok Profile Link"
+            required
+        >
+
+        <button
+            type="button"
+            id="verifyTikTokBtn"
+        >
+            🔐 Verify TikTok
+        </button>
+
+        <p
+            id="verificationStatus"
+            style="text-align:center;color:#ffcc66;"
+        >
+            ⚠️ TikTok verification required
+        </p>
+
+
+        <!-- SERVICES -->
+
+        <h3 style="text-align:left;margin-top:25px;">
+            🎙️ Studio Services
+        </h3>
+
+        <input
+            type="number"
+            id="recordingPrice"
+            placeholder="Vocal Recording Price (₦)"
+            required
+        >
+
+        <input
+            type="number"
+            id="mixingPrice"
+            placeholder="Mixing Price (₦)"
+            required
+        >
+
+        <input
+            type="number"
+            id="masteringPrice"
+            placeholder="Mastering Price (₦)"
+            required
+        >
+
+
+        <!-- PROFILE PICTURE -->
+
+        <h3 style="text-align:left;margin-top:25px;">
+            👤 Profile Picture
+        </h3>
+
+        <div class="file-upload">
+
+            <label for="profilePicture">
+                📷 Choose Profile Picture
+            </label>
+
+            <input
+                type="file"
+                id="profilePicture"
+                accept="image/*"
+                required
+            >
+
+        </div>
+
+
+        <!-- CREATE ACCOUNT -->
+
+        <button
+            type="submit"
+            id="submitProducer"
+            disabled
+        >
+            Create Producer Account
+        </button>
+
+    </form>
+
+</section>
+
+</main>
+
+
 <script>
-document.querySelector("form").addEventListener("submit", function (e) {
-    e.preventDefault();
 
-    alert("Producer account created successfully!");
+let tiktokVerified = false;
 
-    window.location.href = "login.html";
-});
+
+/* TIKTOK VERIFICATION */
+
+document
+    .getElementById("verifyTikTokBtn")
+    .addEventListener("click", function () {
+
+        const username =
+            document.getElementById("tiktokUsername").value.trim();
+
+        const link =
+            document.getElementById("tiktokLink").value.trim();
+
+        const status =
+            document.getElementById("verificationStatus");
+
+        if (!username || !link) {
+
+            alert("Please enter your TikTok username and profile link.");
+
+            return;
+        }
+
+
+        /*
+        DEMO VERIFICATION
+
+        This is only the prototype stage.
+        Real TikTok ownership verification will be
+        connected when SONVIA has a backend.
+        */
+
+        tiktokVerified = true;
+
+        status.textContent =
+            "✅ TikTok verified for this SONVIA prototype.";
+
+        status.style.color = "#39ff88";
+
+        this.textContent =
+            "✅ TikTok Verified";
+
+        this.disabled = true;
+
+        checkRegistration();
+
+    });
+
+
+/* CHECK REGISTRATION REQUIREMENTS */
+
+function checkRegistration() {
+
+    const form =
+        document.getElementById("producerForm");
+
+    const submitButton =
+        document.getElementById("submitProducer");
+
+    if (
+        form.checkValidity() &&
+        tiktokVerified
+    ) {
+
+        submitButton.disabled = false;
+
+    } else {
+
+        submitButton.disabled = true;
+
+    }
+
+}
+
+
+/* CHECK FORM WHEN USER TYPES */
+
+document
+    .getElementById("producerForm")
+    .addEventListener("input", function () {
+
+        checkRegistration();
+
+    });
+
+
+/* CREATE PRODUCER ACCOUNT */
+
+document
+    .getElementById("producerForm")
+    .addEventListener("submit", function (e) {
+
+        e.preventDefault();
+
+
+        if (!tiktokVerified) {
+
+            alert(
+                "Please verify your TikTok account before creating your producer account."
+            );
+
+            return;
+
+        }
+
+
+        /* SAVE PRODUCER INFORMATION */
+
+        const producerData = {
+
+            studioName:
+                document.getElementById("studioName").value,
+
+            producerName:
+                document.getElementById("producerName").value,
+
+            studioLocation:
+                document.getElementById("studioLocation").value,
+
+            tiktokUsername:
+                document.getElementById("tiktokUsername").value,
+
+            tiktokLink:
+                document.getElementById("tiktokLink").value,
+
+            recordingPrice:
+                document.getElementById("recordingPrice").value,
+
+            mixingPrice:
+                document.getElementById("mixingPrice").value,
+
+            masteringPrice:
+                document.getElementById("masteringPrice").value
+
+        };
+
+
+        localStorage.setItem(
+            "sonviaProducer",
+            JSON.stringify(producerData)
+        );
+
+
+        /* SAVE PROFILE PICTURE */
+
+        const picture =
+            document.getElementById("profilePicture")
+                .files[0];
+
+
+        if (picture) {
+
+            const reader =
+                new FileReader();
+
+            reader.onload = function () {
+
+                localStorage.setItem(
+                    "sonviaProfilePic",
+                    reader.result
+                );
+
+                finishRegistration();
+
+            };
+
+            reader.readAsDataURL(picture);
+
+        } else {
+
+            finishRegistration();
+
+        }
+
+    });
+
+
+function finishRegistration() {
+
+    alert(
+        "🎉 Producer account created successfully!"
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
 </script>
+
 </body>
 </html>
