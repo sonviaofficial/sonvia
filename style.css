@@ -943,3 +943,30 @@ body {
     border-radius: 12px;
     color: #e5e7eb;
 }
+.post-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+    text-align: left;
+}
+
+.post-profile img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #39ff88;
+}
+
+.post-profile strong {
+    display: block;
+    color: white;
+    font-size: 15px;
+}
+
+.post-profile small {
+    display: block;
+    color: #9aa3b2;
+    margin-top: 3px;
+}
