@@ -174,5 +174,16 @@ document.getElementById("postForm").addEventListener("submit", function (e) {
 });
 
 </script>
+    <script>
+
+const savedProfilePic =
+    localStorage.getItem("sonviaProfilePic");
+
+if (savedProfilePic) {
+    document.getElementById("postProfilePic").src =
+        savedProfilePic;
+}
+
+    </script>
 </body>
 </html>
