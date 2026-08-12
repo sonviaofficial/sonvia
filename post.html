@@ -108,6 +108,55 @@
             <small>Earnings</small>
         </a>
     </nav>
+<script>
+const imageInput = document.getElementById("studioImage");
+const videoInput = document.getElementById("studioVideo");
 
+const imagePreview = document.getElementById("imagePreview");
+const videoPreview = document.getElementById("videoPreview");
+
+// Image preview
+imageInput.addEventListener("change", function () {
+    const file = this.files[0];
+
+    if (file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            imagePreview.innerHTML =
+                `<img src="${e.target.result}" class="preview-photo">`;
+        };
+
+        reader.readAsDataURL(file);
+    }
+});
+
+// Video preview
+videoInput.addEventListener("change", function () {
+    const file = this.files[0];
+
+    if (file) {
+        const videoURL = URL.createObjectURL(file);
+
+        videoPreview.src = videoURL;
+        videoPreview.style.display = "block";
+    }
+});
+
+// Fake publish button
+document.getElementById("postForm").addEventListener("submit", function (e) {
+    e.preventDefault();
+
+    alert("🎉 Post published successfully!");
+
+    this.reset();
+
+    imagePreview.innerHTML =
+        "<p>Studio cover will appear here</p>";
+
+    videoPreview.style.display = "none";
+    videoPreview.src = "";
+});
+</script>
 </body>
 </html>
