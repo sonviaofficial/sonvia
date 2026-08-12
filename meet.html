@@ -23,12 +23,20 @@
     <a href="earnings.html"><span>🏦</span><small>Earnings</small></a>
 </nav>
   <script>
-const messageSound = new Audio('./sounds/sonvia-message.mp3');
-
 function playMessageSound() {
-    messageSound.currentTime = 0;
-    messageSound.play();
+    const sound = new Audio('./sounds/sonvia-message.mp3');
+
+    sound.volume = 1.0;
+
+    sound.play()
+        .then(() => {
+            console.log("SONVIA sound played");
+        })
+        .catch(error => {
+            alert("Sound error: " + error);
+            console.log(error);
+        });
 }
-  </script>  
+</script>
 </body>
 </html>
