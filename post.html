@@ -31,7 +31,7 @@
 
             <h2>🎬 Upload Studio Preview</h2>
             <p class="post-note">
-                Only producers can upload studio videos (45–60 seconds).
+                Only producers can upload studio videos (1–2 minutes).
             </p>
 
             <form id="postForm">
@@ -52,12 +52,17 @@
                         required>
                 </div>
 
-                <div class="upload-box">
-                    <label for="studioImage">🖼️ Choose Studio Cover Image</label>
-                    <input
-                        type="file"
-                        id="studioImage"
-                        accept="image/*">
+                
+                        <div class="post-profile">
+    <img id="postProfilePic"
+         src="https://i.pravatar.cc/80"
+         alt="Profile Picture">
+
+    <div>
+        <strong id="postProducerName">FOSKY</strong>
+        <small>Producer</small>
+    </div>
+                        </div>
                 </div>
 
                 <button type="submit">🚀 Publish Post</button>
