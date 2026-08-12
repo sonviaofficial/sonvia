@@ -3,15 +3,90 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SONVIA – Post</title>
+    <title>SONVIA – Create Post</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <main class="welcome">
-        <h2>➕ Create Post</h2>
-        <p>Upload studio videos, beat previews, or music updates.</p>
+    <header>
+        <div class="top-header">
+            <div class="bell">🔔</div>
+
+            <div class="home-tabs">
+                <span class="active-tab">Create Post</span>
+            </div>
+
+            <img src="https://i.pravatar.cc/80" alt="Profile" class="profile-pic">
+        </div>
+
+        <div class="logo-area">
+            <h1>SONVIA</h1>
+            <p>Share your studio work</p>
+        </div>
+    </header>
+
+    <main class="post-container">
+
+        <section class="post-card">
+
+            <h2>🎬 Upload Studio Preview</h2>
+            <p class="post-note">
+                Only producers can upload studio videos (45–60 seconds).
+            </p>
+
+            <form id="postForm">
+
+                <input type="text" placeholder="Studio Name" required>
+
+                <textarea
+                    placeholder="Write a short caption about your studio session..."
+                    rows="4"
+                    required></textarea>
+
+                <div class="upload-box">
+                    <label for="studioVideo">🎥 Choose Studio Video</label>
+                    <input
+                        type="file"
+                        id="studioVideo"
+                        accept="video/mp4,video/webm,video/ogg"
+                        required>
+                </div>
+
+                <div class="upload-box">
+                    <label for="studioImage">🖼️ Choose Studio Cover Image</label>
+                    <input
+                        type="file"
+                        id="studioImage"
+                        accept="image/*">
+                </div>
+
+                <button type="submit">🚀 Publish Post</button>
+
+            </form>
+
+        </section>
+
+        <section class="post-card preview-card">
+
+            <h3>📱 Post Preview</h3>
+
+            <div class="preview-image">
+                <p>Studio cover will appear here</p>
+            </div>
+
+            <video controls class="studio-video">
+                <source src="" type="video/mp4">
+            </video>
+
+            <div class="preview-content">
+                <h4>FOSKY Studio</h4>
+                <p>🎙️ Late night recording session at SONVIA Studio.</p>
+            </div>
+
+        </section>
+
     </main>
+
     <nav class="bottom-nav">
         <a href="dashboard.html">
             <span>🏠</span>
@@ -31,10 +106,10 @@
         </a>
 
         <a href="earnings.html">
-            <span>🏦</span>
+            <span>💰</span>
             <small>Earnings</small>
         </a>
     </nav>
+
 </body>
 </html>
-
