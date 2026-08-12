@@ -1,42 +1,122 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SONVIA – Producer Registration</title>
+    <title>SONVIA – Explore Producers</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
     <header>
-        <h1>SONVIA</h1>
-        <p>Producer Registration</p>
+        <div class="top-header">
+            <div class="bell">🔔</div>
+
+            <div class="home-tabs">
+                <span class="active-tab">Explore</span>
+            </div>
+
+            <img src="https://i.pravatar.cc/80" alt="Profile" class="profile-pic">
+        </div>
+
+        <div class="logo-area">
+            <h1>SONVIA</h1>
+            <p>Discover Producers</p>
+        </div>
     </header>
 
-    <main>
-        <section>
-            <h2>Create Producer Account</h2>
+    <main class="feed-container">
 
-            <form>
-                <input type="text" placeholder="Producer Name" required>
-                <input type="text" placeholder="Studio Name" required>
-                <input type="text" placeholder="Studio Address" required>
-                <input type="tel" placeholder="Phone Number" required>
-                <input type="number" placeholder="Recording Price (₦)" required>
-                <input type="number" placeholder="Mixing Price (₦)" required>
-                <input type="password" placeholder="Create Password" required>
+        <div class="search-box">
+            <input type="text" id="producerSearch" placeholder="🔍 Search producer or studio...">
+        </div>
 
-                <a href="dashboard.html">
-    <button type="button">Create Studio Profile</button>
-</a> 
-            </form>
+        <section class="feed-card producer-card">
+
+            <img src="https://images.unsplash.com/photo-1516280440614-37939bbacd81?q=80&w=1200&auto=format&fit=crop"
+                 alt="FOSKY Studio"
+                 class="feed-image">
+
+            <div class="feed-info">
+                <h2>FOSKY Studio</h2>
+                <p class="producer-name">👤 Producer: FOSKY J</p>
+                <p class="location">📍 Ikorodu, Lagos</p>
+            </div>
+
+            <video controls class="studio-video">
+                <source src="preview.mp4" type="video/mp4">
+                Your browser does not support video.
+            </video>
+
+            <div class="feed-actions">
+                <button>❤️ Like</button>
+                <button>💬 Comment</button>
+                <button>😀 Emoji</button>
+            </div>
+
+            <a href="dashboard.html">
+                <button class="visit-btn">👀 Visit Profile</button>
+            </a>
+
         </section>
+
+        <section class="feed-card producer-card">
+
+            <img src="https://images.unsplash.com/photo-1511379938547-c1f69419868d?q=80&w=1200&auto=format&fit=crop"
+                 alt="Silver Beat Studio"
+                 class="feed-image">
+
+            <div class="feed-info">
+                <h2>Silver Beat Studio</h2>
+                <p class="producer-name">👤 Producer: Silver Beats</p>
+                <p class="location">📍 Yaba, Lagos</p>
+            </div>
+
+            <video controls class="studio-video">
+                <source src="preview2.mp4" type="video/mp4">
+                Your browser does not support video.
+            </video>
+
+            <div class="feed-actions">
+                <button>❤️ Like</button>
+                <button>💬 Comment</button>
+                <button>😀 Emoji</button>
+            </div>
+
+            <a href="booking-silver.html">
+                <button class="visit-btn">👀 Visit Profile</button>
+            </a>
+
+        </section>
+
     </main>
-<nav class="bottom-nav">
-    <a href="index.html">🏠<br>Home</a>
-    <a href="producers.html">🎙️<br>Studios</a>
-    <a href="booking.html">📅<br>Booking</a>
-    <a href="login.html">🔐<br>Login</a>
-</nav>
+
+    <nav class="bottom-nav">
+        <a href="dashboard.html">
+            <span>🏠</span>
+            <small>Home</small>
+        </a>
+
+        <a href="producer.html" class="active">
+            <span>🔍</span>
+            <small>Explore</small>
+        </a>
+
+        <a href="post.html" class="post-btn">+</a>
+
+        <a href="meet.html">
+            <span>👥</span>
+            <small>Meet</small>
+        </a>
+
+        <a href="earnings.html">
+            <span>💰</span>
+            <small>Earnings</small>
+        </a>
+    </nav>
+
+    <script src="search.js"></script>
+
 </body>
 </html>
