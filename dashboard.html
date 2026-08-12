@@ -55,7 +55,10 @@
 </header>   
 
     <main>
-
+<section class="feed-section">
+    <h2>🎬 Latest Producer Posts</h2>
+    <div id="homeFeed"></div>
+</section>
         <section class="dashboard-card">
             <h2>🏢 My Studio</h2>
             <p><strong>Studio:</strong> FOSKY Studio</p>
@@ -89,6 +92,44 @@
 </div>
 
     </main>
+<script>
+const homeFeed = document.getElementById("homeFeed");
 
+const posts = JSON.parse(localStorage.getItem("sonviaPosts")) || [];
+
+if (posts.length === 0) {
+    homeFeed.innerHTML =
+        "<p style='color:#9ca3af;text-align:center;'>No posts yet.</p>";
+} else {
+    posts.forEach(post => {
+        const card = document.createElement("div");
+        card.className = "feed-card";
+
+        card.innerHTML = `
+            ${post.image}
+
+            ${post.video ? `
+                <video controls class="studio-video">
+                    <source src="${post.video}" type="video/mp4">
+                </video>
+            ` : ""}
+
+            <div class="feed-info">
+                <h3>${post.studio}</h3>
+                <p>${post.caption}</p>
+                <small style="color:#9ca3af;">${post.time}</small>
+            </div>
+
+            <div class="feed-actions">
+                <button>❤️ Like</button>
+                <button>💬 Comment</button>
+                <button>😀 Emoji</button>
+            </div>
+        `;
+
+        homeFeed.appendChild(card);
+    });
+}
+</script>
 </body>
 </html>
