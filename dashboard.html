@@ -25,9 +25,14 @@
         </div>
 
         <button class="profile-button" type="button" onclick="openProfile()">
-            <img src="https://i.pravatar.cc/80"
-                 alt="Profile"
-                 class="profile-pic">
+            <a href="profile.html">
+    <img
+        id="dashboardProfilePic"
+        src="https://i.pravatar.cc/80"
+        alt="Profile"
+        class="profile-pic"
+    >
+</a>
         </button>
 
         <button class="profile-menu-btn" type="button" onclick="openSettings()">
@@ -372,6 +377,12 @@ function closeNotifications() {
 
 </script>
 
+<script>
+const savedProfilePic = localStorage.getItem("sonviaProfilePic");
 
+if (savedProfilePic) {
+    document.getElementById("dashboardProfilePic").src = savedProfilePic;
+}
+</script>
 </body>
 </html>
