@@ -33,11 +33,11 @@
         class="profile-pic"
     >
 </a>
-        </button>
-
-        <button class="profile-menu-btn" type="button" onclick="openSettings()">
-            ⋮
-        </button>
+        <button class="profile-menu-btn"
+        type="button"
+        onclick="openSettings()">
+    ⋮
+</button>
 
     </div>
 
@@ -51,7 +51,53 @@
 
 
 <main>
+<!-- SETTINGS PANEL -->
+<div id="settingsOverlay" class="settings-overlay">
+    <div class="settings-panel">
 
+        <div class="settings-handle"></div>
+
+        <div class="settings-header">
+            <h2>Profile</h2>
+            <button type="button" onclick="closeSettings()">✕</button>
+        </div>
+
+        <div class="settings-profile">
+            <img id="settingsProfilePic"
+                 src="https://i.pravatar.cc/120"
+                 alt="Profile"
+                 class="settings-profile-pic">
+
+            <h3>FOSKY</h3>
+            <p>Producer</p>
+        </div>
+
+        <a href="profile.html" class="settings-option">
+            👤 <span>My Profile</span>
+        </a>
+
+        <button class="settings-option" type="button">
+            ⚙️ <span>Settings</span>
+        </button>
+
+        <button class="settings-option" type="button">
+            🔔 <span>Notifications</span>
+        </button>
+
+        <button class="settings-option" type="button">
+            📱 <span>App Version <small>v1.0.0</small></span>
+        </button>
+
+        <a href="login.html" class="settings-option logout-option">
+            🚪 <span>Log Out</span>
+        </a>
+
+        <button class="settings-option delete-option" type="button">
+            🗑️ <span>Delete Account</span>
+        </button>
+
+    </div>
+</div>
     <!-- HOME FEED -->
     <section class="feed-section">
 
@@ -118,12 +164,12 @@
 
         <p>
             <strong>SONVIA Fee (5%):</strong>
-            ₦3,750
+            ₦2,500
         </p>
 
         <p>
             <strong>Available Balance:</strong>
-            ₦71,250
+            ₦72,500
         </p>
 
     </section>
@@ -384,5 +430,22 @@ if (savedProfilePic) {
     document.getElementById("dashboardProfilePic").src = savedProfilePic;
 }
 </script>
+    <script>
+function openSettings() {
+    document.getElementById("settingsOverlay").classList.add("show");
+}
+
+function closeSettings() {
+    document.getElementById("settingsOverlay").classList.remove("show");
+}
+
+// Use the real saved profile picture
+const savedProfilePic = localStorage.getItem("sonviaProfilePic");
+
+if (savedProfilePic) {
+    document.getElementById("dashboardProfilePic").src = savedProfilePic;
+    document.getElementById("settingsProfilePic").src = savedProfilePic;
+}
+    </script>
 </body>
 </html>
