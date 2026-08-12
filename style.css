@@ -970,3 +970,90 @@ body {
     color: #9aa3b2;
     margin-top: 3px;
 }
+/* ===== SETTINGS PANEL ===== */
+
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    align-items: flex-end;
+    z-index: 5000;
+}
+
+.settings-overlay.show {
+    display: flex;
+}
+
+.settings-panel {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #151821;
+    border-radius: 24px 24px 0 0;
+    padding: 15px 20px 30px;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+}
+
+.settings-handle {
+    width: 45px;
+    height: 5px;
+    background: #555;
+    border-radius: 20px;
+    margin: 0 auto 15px;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-header button {
+    width: auto;
+    margin: 0;
+    padding: 5px 10px;
+    background: transparent;
+    font-size: 20px;
+}
+
+.settings-profile {
+    text-align: center;
+    padding: 15px 0 20px;
+}
+
+.settings-profile-pic {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #39ff88;
+}
+
+.settings-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    margin: 6px 0;
+    background: #1d222d;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    text-decoration: none;
+    text-align: left;
+}
+
+.settings-option small {
+    color: #9aa3b2;
+    margin-left: auto;
+}
+
+.logout-option {
+    color: #ffcc66;
+}
+
+.delete-option {
+    color: #ff5555;
+}
