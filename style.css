@@ -537,3 +537,38 @@ body {
     margin-top: -26px;
     box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
 }
+/* ===== SONVIA APP BOTTOM NAV ===== */
+
+.bottom-nav a {
+    text-decoration: none;
+    color: var(--muted);
+    font-size: 12px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    font-weight: 600;
+}
+
+.bottom-nav a span {
+    font-size: 20px;
+}
+
+.bottom-nav a.active {
+    color: var(--green);
+}
+
+.bottom-nav .post-btn {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: var(--green);
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    font-weight: 900;
+    margin-top: -26px;
+    box-shadow: 0 10px 25px rgba(34, 197, 94, 0.4);
+}
