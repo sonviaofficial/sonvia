@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SONVIA – Producer Profile</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<header class="profile-header">
+
+    <div class="profile-top">
+
+        <a href="dashboard.html" class="back-btn">
+            ←
+        </a>
+
+        <h2>Profile</h2>
+
+        <button type="button" class="profile-menu">
+            ⋮
+        </button>
+
+    </div>
+
+</header>
+
+
+<main class="profile-page">
+
+    <!-- PROFILE PICTURE -->
+
+    <div class="profile-picture-area">
+
+        <img
+            id="profilePicture"
+            src="https://i.pravatar.cc/150"
+            alt="Producer Profile Picture"
+            class="large-profile-pic"
+        >
+
+    </div>
+
+
+    <!-- PRODUCER INFORMATION -->
+
+    <h1 id="producerName">
+        Producer
+    </h1>
+
+    <p id="studioName" class="studio-name">
+        Studio
+    </p>
+
+    <p id="tiktokInfo" class="tiktok-info">
+        🎵 TikTok
+    </p>
+
+    <p id="location" class="profile-location">
+        📍 Location
+    </p>
+
+
+    <!-- VERIFICATION -->
+
+    <div class="verified-badge">
+        ✅ TikTok Verified
+    </div>
+
+
+    <!-- PROFILE ACTIONS -->
+
+    <div class="profile-actions">
+
+        <button type="button">
+            💬 Meet
+        </button>
+
+        <button type="button">
+            📅 Book Studio
+        </button>
+
+    </div>
+
+
+    <!-- BIO -->
+
+    <section class="profile-card">
+
+        <h2>About</h2>
+
+        <p id="producerBio">
+            Professional music producer and studio owner
+            available for recording, mixing and mastering.
+        </p>
+
+    </section>
+
+
+    <!-- SERVICES -->
+
+    <section class="profile-card">
+
+        <h2>🎙️ Studio Services</h2>
+
+        <div class="service-item">
+
+            <span>Vocal Recording</span>
+
+            <strong id="recordingPrice">
+                ₦0
+            </strong>
+
+        </div>
+
+
+        <div class="service-item">
+
+            <span>Mixing</span>
+
+            <strong id="mixingPrice">
+                ₦0
+            </strong>
+
+        </div>
+
+
+        <div class="service-item">
+
+            <span>Mastering</span>
+
+            <strong id="masteringPrice">
+                ₦0
+            </strong>
+
+        </div>
+
+    </section>
+
+
+    <!-- POSTS -->
+
+    <section class="profile-card">
+
+        <h2>🎬 Posts</h2>
+
+        <div id="profilePosts">
+
+            <p class="empty-posts">
+                No posts yet.
+            </p>
+
+        </div>
+
+    </section>
+
+
+</main>
+
+
+<!-- BOTTOM NAVIGATION -->
+
+<nav class="bottom-nav">
+
+    <a href="dashboard.html">
+        <span>🏠</span>
+        <small>Home</small>
+    </a>
+
+    <a href="producer.html">
+        <span>🔍</span>
+        <small>Explore</small>
+    </a>
+
+    <a href="post.html" class="post-btn">
+        +
+    </a>
+
+    <a href="meet.html">
+        <span>👥</span>
+        <small>Meet</small>
+    </a>
+
+    <a href="earnings.html">
+        <span>💰</span>
+        <small>Earnings</small>
+    </a>
+
+</nav>
+
+
+<script>
+
+const producerData =
+    JSON.parse(
+        localStorage.getItem("sonviaProducer")
+    );
+
+
+/* PROFILE PICTURE */
+
+const savedProfilePic =
+    localStorage.getItem("sonviaProfilePic");
+
+if (savedProfilePic) {
+
+    document.getElementById(
+        "profilePicture"
+    ).src = savedProfilePic;
+
+}
+
+
+/* PRODUCER INFORMATION */
+
+if (producerData) {
+
+    document.getElementById(
+        "producerName"
+    ).textContent =
+        producerData.producerName;
+
+
+    document.getElementById(
+        "studioName"
+    ).textContent =
+        producerData.studioName;
+
+
+    document.getElementById(
+        "location"
+    ).textContent =
+        "📍 " + producerData.studioLocation;
+
+
+    document.getElementById(
+        "recordingPrice"
+    ).textContent =
+        "₦" + Number(
+            producerData.recordingPrice
+        ).toLocaleString();
+
+
+    document.getElementById(
+        "mixingPrice"
+    ).textContent =
+        "₦" + Number(
+            producerData.mixingPrice
+        ).toLocaleString();
+
+
+    document.getElementById(
+        "masteringPrice"
+    ).textContent =
+        "₦" + Number(
+            producerData.masteringPrice
+        ).toLocaleString();
+
+
+    const tiktok =
+        producerData.tiktokUsername;
+
+
+    const tiktokLink =
+        producerData.tiktokLink;
+
+
+    if (tiktok && tiktokLink) {
+
+        document.getElementById(
+            "tiktokInfo"
+        ).innerHTML =
+
+            `🎵 <a href="${tiktokLink}"
+            target="_blank"
+            rel="noopener">
+            ${tiktok}
+            </a>`;
+
+    }
+
+}
+
+
+/* LOAD PRODUCER POSTS */
+
+const posts =
+    JSON.parse(
+        localStorage.getItem("sonviaPosts")
+    ) || [];
+
+
+const profilePosts =
+    document.getElementById("profilePosts");
+
+
+if (posts.length > 0) {
+
+    profilePosts.innerHTML = "";
+
+    posts.forEach(post => {
+
+        const card =
+            document.createElement("div");
+
+        card.className =
+            "profile-post";
+
+
+        card.innerHTML = `
+
+            ${post.image || ""}
+
+            ${
+                post.video
+                ?
+                `
+                <video
+                    controls
+                    class="studio-video"
+                >
+                    <source
+                        src="${post.video}"
+                        type="video/mp4"
+                    >
+                </video>
+                `
+                :
+                ""
+            }
+
+            <p>
+                ${post.caption || ""}
+            </p>
+
+        `;
+
+        profilePosts.appendChild(card);
+
+    });
+
+}
+
+</script>
+
+
+</body>
+</html>
