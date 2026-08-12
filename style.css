@@ -762,3 +762,184 @@ body {
     flex-direction: column;
     gap: 18px;
 }
+/* ============================= */
+/* SONVIA PROFILE & SETTINGS */
+/* ============================= */
+
+.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 15px;
+}
+
+.notification-btn,
+.profile-button,
+.profile-menu-btn {
+    border: none;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    padding: 5px;
+    width: auto;
+    margin: 0;
+}
+
+.notification-btn {
+    position: relative;
+    font-size: 23px;
+}
+
+#notificationCount {
+    position: absolute;
+    top: -3px;
+    right: -5px;
+    background: red;
+    color: white;
+    font-size: 10px;
+    min-width: 17px;
+    height: 17px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+
+.profile-pic {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid #39ff88;
+}
+
+.profile-button {
+    margin-left: auto;
+}
+
+.profile-menu-btn {
+    font-size: 28px;
+}
+
+.settings-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.65);
+    display: none;
+    align-items: flex-end;
+    z-index: 5000;
+}
+
+.settings-overlay.show {
+    display: flex;
+}
+
+.settings-panel {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    background: #151821;
+    border-radius: 24px 24px 0 0;
+    padding: 15px 20px 30px;
+    box-shadow: 0 -10px 40px rgba(0,0,0,0.5);
+    animation: settingsUp 0.25s ease;
+}
+
+@keyframes settingsUp {
+    from {
+        transform: translateY(100%);
+    }
+
+    to {
+        transform: translateY(0);
+    }
+}
+
+.settings-handle {
+    width: 45px;
+    height: 5px;
+    background: #555;
+    border-radius: 20px;
+    margin: 0 auto 15px;
+}
+
+.settings-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.settings-header h2 {
+    margin: 0;
+}
+
+.settings-header button {
+    width: auto;
+    margin: 0;
+    padding: 5px 10px;
+    background: transparent;
+    font-size: 20px;
+}
+
+.settings-profile {
+    text-align: center;
+    padding: 15px 0 20px;
+}
+
+.settings-profile-pic {
+    width: 75px;
+    height: 75px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #39ff88;
+}
+
+.settings-profile h3 {
+    margin: 8px 0 3px;
+}
+
+.settings-profile p {
+    margin: 0;
+    color: #9aa3b2;
+}
+
+.settings-option {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    margin: 6px 0;
+    background: #1d222d;
+    border: none;
+    border-radius: 12px;
+    color: white;
+    text-align: left;
+}
+
+.settings-option span {
+    font-size: 15px;
+}
+
+.settings-option small {
+    color: #9aa3b2;
+    margin-left: auto;
+}
+
+.logout-option {
+    color: #ffcc66;
+}
+
+.delete-option {
+    color: #ff5555;
+}
+
+.notification-item {
+    background: #1d222d;
+    padding: 15px;
+    margin: 8px 0;
+    border-radius: 12px;
+    color: #e5e7eb;
+}
