@@ -142,21 +142,32 @@ videoInput.addEventListener("change", function () {
         videoPreview.style.display = "block";
     }
 });
-
-// Fake publish button
+// Publish post
 document.getElementById("postForm").addEventListener("submit", function (e) {
     e.preventDefault();
 
+    const studioName = this.querySelector("input[type='text']").value;
+    const caption = this.querySelector("textarea").value;
+
+    const post = {
+        studio: studioName,
+        caption: caption,
+        image: imagePreview.innerHTML,
+        video: videoPreview.src || "",
+        time: new Date().toLocaleString()
+    };
+
+    const posts = JSON.parse(localStorage.getItem("sonviaPosts")) || [];
+
+    posts.unshift(post);
+
+    localStorage.setItem("sonviaPosts", JSON.stringify(posts));
+
     alert("🎉 Post published successfully!");
 
-    this.reset();
-
-    imagePreview.innerHTML =
-        "<p>Studio cover will appear here</p>";
-
-    videoPreview.style.display = "none";
-    videoPreview.src = "";
+    window.location.href = "dashboard.html";
 });
+
 </script>
 </body>
 </html>
