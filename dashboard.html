@@ -259,19 +259,15 @@
             </button>
 
         <div class="feed-stats">
-    <span>👁️ 124 Views</span>
-    <span>❤️ 18 Likes</span>
-    <span>💬 4 Comments</span>
+    <span>👁️ <span class="view-count">124</span> Views</span>
+    <span>❤️ <span class="like-count">0</span> Likes</span>
+    <span>💬 <span class="comment-count">2</span> Comments</span>
 </div>
 
 <div class="feed-actions">
     <button onclick="toggleLike(this)">❤️ Like</button>
-    <button onclick="openComments()">💬 Comment</button>
+    <button onclick="openComments(this)">💬 Comment</button>
     <button onclick="sharePost()">📤 Share</button>
-</div>
-
-    </div>
-
 </div>
 
 
@@ -471,28 +467,40 @@ if (savedProfilePic) {
 }
     </script>
     <script>
-function toggleLike(button) {
-    button.classList.toggle('liked');
 let notificationCount = 3;
 
 function updateNotificationCount() {
     document.getElementById('notificationCount').textContent = notificationCount;
 }
+
+function toggleLike(button) {
+    const card = button.closest('.feed-card');
+    const countEl = card.querySelector('.like-count');
+
+    let count = parseInt(countEl.textContent);
+
     if (button.classList.contains('liked')) {
+        button.classList.remove('liked');
+        button.innerHTML = '❤️ Like';
+        count--;
+    } else {
+        button.classList.add('liked');
         button.innerHTML = '💚 Liked';
+        count++;
+
         notificationCount++;
         updateNotificationCount();
-    } else {
-        button.innerHTML = '❤️ Like';
     }
+
+    countEl.textContent = count;
 }
-function openComments() {
+
+function openComments(button) {
     document.getElementById('commentOverlay').style.display = 'flex';
 }
 
 function closeComments() {
     document.getElementById('commentOverlay').style.display = 'none';
-  }
 }
 
 function sharePost() {
