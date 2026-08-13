@@ -13,22 +13,9 @@
         <p>Create Artist Account</p>
     </header>
 
-    <main>
-        <section>
-            <h2>Artist Registration</h2>
-
-            <form>
-                <input type="text" placeholder="Full Name" required>
-                <input type="text" placeholder="Artist Name" required>
-                <input type="email" placeholder="Email Address" required>
-                <input type="password" placeholder="Password" required>
-
-                <button type="submit">Create Artist Account</button>
-            </form>
-        </section>
-    </main>
-<script>
-document.querySelector("form").addEventListener("submit", function finishRegistration() {
+    <script>
+document.querySelector("form").addEventListener("submit", function(e) {
+    e.preventDefault();
 
     // Keep artist logged in
     localStorage.setItem("sonviaLoggedIn", "true");
@@ -37,6 +24,9 @@ document.querySelector("form").addEventListener("submit", function finishRegistr
     alert("🎉 Artist account created successfully!");
 
     // Open artist dashboard immediately
+    window.location.href = "artist-dashboard.html";
+});
+    </script>
     window.location.href = "artist-dashboard.html";
 }
 </script>
