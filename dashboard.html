@@ -480,9 +480,13 @@ function toggleLike(button) {
         button.innerHTML = '❤️ Like';
     }
 }
-
 function openComments() {
-    alert('💬 Comment system coming next in SONVIA!');
+    document.getElementById('commentOverlay').style.display = 'flex';
+}
+
+function closeComments() {
+    document.getElementById('commentOverlay').style.display = 'none';
+  }
 }
 
 function sharePost() {
