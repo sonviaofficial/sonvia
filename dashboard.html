@@ -475,45 +475,119 @@ function updateNotificationCount() {
 
 function toggleLike(button) {
     const card = button.closest('.feed-card');
+
+    if (!card) return;
+
     const countEl = card.querySelector('.like-count');
 
-    let count = parseInt(countEl.textContent);
+    if (!countEl) return;
 
-    if (button.classList.contains('liked')) {
+    const postId =
+        card.dataset.postId ||
+        card.querySelector('video')?.src ||
+        card.innerText.substring(0, 30);
+
+    const likeKey = 'sonviaLike_' + btoa(postId).replace(/[^a-zA-Z0-9]/g, '');
+
+    let liked = localStorage.getItem(likeKey) === 'true';
+
+    let count = parseInt(countEl.textContent) || 0;
+
+    if (liked) {
+        liked = false;
+        count = Math.max(0, count - 1);
+
+        localStorage.removeItem(likeKey);
+
         button.classList.remove('liked');
         button.innerHTML = '❤️ Like';
-        count--;
+
     } else {
-        button.classList.add('liked');
-        button.innerHTML = '💚 Liked';
+        liked = true;
         count++;
 
-        notificationCount++;
-        updateNotificationCount();
+        localStorage.setItem(likeKey, 'true');
+
+        button.classList.add('liked');
+        button.innerHTML = '💚 Liked';
+
+        if (typeof notificationCount !== 'undefined') {
+            notificationCount++;
+            updateNotificationCount();
+        }
     }
 
     countEl.textContent = count;
 }
 
-function openComments(button) {
-    document.getElementById('commentOverlay').style.display = 'flex';
+
+function restoreLikes() {
+
+    document.querySelectorAll('.feed-card').forEach(function (card) {
+
+        const button = card.querySelector(
+            '.feed-actions button[onclick^="toggleLike"]'
+        );
+
+        const countEl = card.querySelector('.like-count');
+
+        if (!button || !countEl) return;
+
+        const postId =
+            card.dataset.postId ||
+            card.querySelector('video')?.src ||
+            card.innerText.substring(0, 30);
+
+        const likeKey =
+            'sonviaLike_' +
+            btoa(postId).replace(/[^a-zA-Z0-9]/g, '');
+
+        if (localStorage.getItem(likeKey) === 'true') {
+
+            button.classList.add('liked');
+            button.innerHTML = '💚 Liked';
+
+        } else {
+
+            button.classList.remove('liked');
+            button.innerHTML = '❤️ Like';
+        }
+    });
 }
+
+
+function openComments(button) {
+
+    document.getElementById('commentOverlay')
+        .style.display = 'flex';
+}
+
 
 function closeComments() {
-    document.getElementById('commentOverlay').style.display = 'none';
+
+    document.getElementById('commentOverlay')
+        .style.display = 'none';
 }
 
+
 function sharePost() {
+
     if (navigator.share) {
+
         navigator.share({
             title: 'SONVIA Producer Post',
             text: 'Check out this producer on SONVIA!',
             url: window.location.href
         });
+
     } else {
+
         alert('📤 Share feature not supported on this device.');
     }
 }
+
+
+restoreLikes();
 
 updateNotificationCount();
     </script>
