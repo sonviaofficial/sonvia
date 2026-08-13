@@ -301,137 +301,27 @@
 
 </nav>
 
-
-<!-- HOME FEED SCRIPT -->
-
-<script>
-
-const homeFeed = document.getElementById("homeFeed");
-
-const posts =
-    JSON.parse(localStorage.getItem("sonviaPosts")) || [];
-
-if (posts.length === 0) {
-
-    homeFeed.innerHTML =
-        "<p style='color:#9ca3af;text-align:center;'>No posts yet.</p>";
-
-} else {
-
-    posts.forEach(post => {
-
-        const card =
-            document.createElement("div");
-
-        card.className = "feed-card";
-
-        card.innerHTML = `
-
-            ${post.image || ""}
-
-            ${post.video ? `
-                <video controls class="studio-video">
-                    <source src="${post.video}" type="video/mp4">
-                </video>
-            ` : ""}
-
-            <div class="feed-info">
-
-                <h3>${post.studio}</h3>
-
-                <p>${post.caption}</p>
-
-                <small style="color:#9ca3af;">
-                    ${post.time}
-                </small>
-
-            </div>
-
-            <div class="feed-actions">
-
-                <button type="button">
-                    ❤️ 0
-                </button>
-
-                <button type="button">
-                    💬 0
-                </button>
-
-                <button type="button">
-                    👁️ 0
-                </button>
-
-            </div>
-        `;
-
-        homeFeed.appendChild(card);
-
-    });
-
 }
 
 </script>
 
-
-<!-- SETTINGS SCRIPT -->
-
-<script>
-
-function openSettings() {
-
-    document.getElementById("settingsOverlay")
-        .classList.add("show");
-
-}
-
-function closeSettings() {
-
-    document.getElementById("settingsOverlay")
-        .classList.remove("show");
-
-}
-
-function openProfile() {
-
-    window.location.href = "profile.html";
-
-}
-
-function logoutUser() {
-
-    window.location.href = "login.html";
-
-}
-
-function openNotifications() {
-
-    document.getElementById("notificationOverlay")
-        .classList.add("show");
-
-}
-
-function closeNotifications() {
-
-    document.getElementById("notificationOverlay")
-        .classList.remove("show");
-
-}
-
-</script>
+<!-- SONVIA FEED + SOCIAL FUNCTIONS -->
 
 <script>
-const savedProfilePic = localStorage.getItem("sonviaProfilePic");
 
-if (savedProfilePic) {
-    document.getElementById("dashboardProfilePic").src = savedProfilePic;
-}
-</script>
-    <script>
-// NOTIFICATION COUNTER
 let notificationCount = 3;
 
+
+/* =========================
+   NOTIFICATIONS
+========================= */
+
 function updateNotificationCount() {
-    const badge = document.getElementById("notificationCount");
+
+    const badge =
+        document.getElementById("notificationCount");
+
+    if (!badge) return;
 
     badge.textContent = notificationCount;
 
@@ -442,155 +332,542 @@ function updateNotificationCount() {
     }
 }
 
-// When user opens notifications, clear them
+
 function openNotifications() {
-    document.getElementById("notificationOverlay")
-        .classList.add("show");
+
+    const overlay =
+        document.getElementById("notificationOverlay");
+
+    if (overlay) {
+        overlay.classList.add("show");
+    }
 
     notificationCount = 0;
+
     updateNotificationCount();
 }
 
-// Start the badge
-updateNotificationCount();
+
+function closeNotifications() {
+
+    const overlay =
+        document.getElementById("notificationOverlay");
+
+    if (overlay) {
+        overlay.classList.remove("show");
+    }
+}
+
+
+/* =========================
+   SETTINGS
+========================= */
+
+function openSettings() {
+
+    const overlay =
+        document.getElementById("settingsOverlay");
+
+    if (overlay) {
+        overlay.classList.add("show");
+    }
+}
+
 
 function closeSettings() {
-    document.getElementById("settingsOverlay").classList.remove("show");
+
+    const overlay =
+        document.getElementById("settingsOverlay");
+
+    if (overlay) {
+        overlay.classList.remove("show");
+    }
 }
 
-// Use the real saved profile picture
-const savedProfilePic = localStorage.getItem("sonviaProfilePic");
+
+function openProfile() {
+
+    window.location.href = "profile.html";
+
+}
+
+
+function logoutUser() {
+
+    window.location.href = "login.html";
+
+}
+
+
+/* =========================
+   PROFILE PICTURE
+========================= */
+
+const savedProfilePic =
+    localStorage.getItem("sonviaProfilePic");
+
 
 if (savedProfilePic) {
-    document.getElementById("dashboardProfilePic").src = savedProfilePic;
-    document.getElementById("settingsProfilePic").src = savedProfilePic;
-}
-    </script>
-    <script>
-let notificationCount = 3;
 
-function updateNotificationCount() {
-    document.getElementById('notificationCount').textContent = notificationCount;
+    const dashboardPic =
+        document.getElementById("dashboardProfilePic");
+
+    const settingsPic =
+        document.getElementById("settingsProfilePic");
+
+
+    if (dashboardPic) {
+
+        dashboardPic.src =
+            savedProfilePic;
+
+    }
+
+
+    if (settingsPic) {
+
+        settingsPic.src =
+            savedProfilePic;
+
+    }
+
 }
+
+
+/* =========================
+   LOAD POSTS
+========================= */
+
+const homeFeed =
+    document.getElementById("homeFeed");
+
+
+const posts =
+    JSON.parse(
+        localStorage.getItem("sonviaPosts")
+    ) || [];
+
+
+if (posts.length === 0) {
+
+    homeFeed.innerHTML =
+        "<p style='color:#9ca3af;text-align:center;'>No posts yet.</p>";
+
+} else {
+
+    posts.forEach(function(post, index) {
+
+        const card =
+            document.createElement("div");
+
+
+        card.className =
+            "feed-card";
+
+
+        card.dataset.postId =
+            "sonvia-post-" + index;
+
+
+        card.innerHTML = `
+
+            ${post.image || ""}
+
+            ${
+                post.video
+                ?
+                `
+                <video
+                    controls
+                    playsinline
+                    muted
+                    class="studio-video"
+                    preload="metadata">
+
+                    <source
+                        src="${post.video}"
+                        type="video/mp4">
+
+                </video>
+                `
+                :
+                ""
+            }
+
+
+            <div class="feed-info">
+
+                <h3>
+                    ${post.studio}
+                </h3>
+
+                <p>
+                    ${post.caption}
+                </p>
+
+                <small style="color:#9ca3af;">
+                    ${post.time}
+                </small>
+
+            </div>
+
+
+            <div class="feed-stats">
+
+                <span>
+                    👁️
+                    <span class="view-count">
+                        0
+                    </span>
+                    Views
+                </span>
+
+
+                <span>
+                    ❤️
+                    <span class="like-count">
+                        0
+                    </span>
+                    Likes
+                </span>
+
+
+                <span>
+                    💬
+                    <span class="comment-count">
+                        0
+                    </span>
+                    Comments
+                </span>
+
+            </div>
+
+
+            <div class="feed-actions">
+
+                <button
+                    type="button"
+                    onclick="toggleLike(this)">
+
+                    ❤️ Like
+
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="openComments(this)">
+
+                    💬 Comment
+
+                </button>
+
+
+                <button
+                    type="button"
+                    onclick="sharePost()">
+
+                    📤 Share
+
+                </button>
+
+            </div>
+
+        `;
+
+
+        homeFeed.appendChild(card);
+
+    });
+
+}
+
+
+/* =========================
+   LIKE SYSTEM
+========================= */
 
 function toggleLike(button) {
-    const card = button.closest('.feed-card');
+
+    const card =
+        button.closest(".feed-card");
+
 
     if (!card) return;
 
-    const countEl = card.querySelector('.like-count');
+
+    const countEl =
+        card.querySelector(".like-count");
+
 
     if (!countEl) return;
 
+
     const postId =
-        card.dataset.postId ||
-        card.querySelector('video')?.src ||
-        card.innerText.substring(0, 30);
+        card.dataset.postId;
 
-    const likeKey = 'sonviaLike_' + btoa(postId).replace(/[^a-zA-Z0-9]/g, '');
 
-    let liked = localStorage.getItem(likeKey) === 'true';
+    const likeKey =
+        "sonviaLike_" + postId;
 
-    let count = parseInt(countEl.textContent) || 0;
 
-    if (liked) {
-        liked = false;
-        count = Math.max(0, count - 1);
+    const alreadyLiked =
+        localStorage.getItem(likeKey) === "true";
 
-        localStorage.removeItem(likeKey);
 
-        button.classList.remove('liked');
-        button.innerHTML = '❤️ Like';
+    let count =
+        parseInt(countEl.textContent) || 0;
+
+
+    if (alreadyLiked) {
+
+        count =
+            Math.max(0, count - 1);
+
+
+        localStorage.removeItem(
+            likeKey
+        );
+
+
+        button.classList.remove(
+            "liked"
+        );
+
+
+        button.innerHTML =
+            "❤️ Like";
+
 
     } else {
-        liked = true;
+
         count++;
 
-        localStorage.setItem(likeKey, 'true');
 
-        button.classList.add('liked');
-        button.innerHTML = '💚 Liked';
+        localStorage.setItem(
+            likeKey,
+            "true"
+        );
 
-        if (typeof notificationCount !== 'undefined') {
-            notificationCount++;
-            updateNotificationCount();
-        }
+
+        button.classList.add(
+            "liked"
+        );
+
+
+        button.innerHTML =
+            "💚 Liked";
+
+
+        notificationCount++;
+
+        updateNotificationCount();
+
     }
 
-    countEl.textContent = count;
+
+    countEl.textContent =
+        count;
+
 }
 
+
+/* =========================
+   RESTORE LIKES
+========================= */
 
 function restoreLikes() {
 
-    document.querySelectorAll('.feed-card').forEach(function (card) {
+    document
+        .querySelectorAll(".feed-card")
+        .forEach(function(card) {
 
-        const button = card.querySelector(
-            '.feed-actions button[onclick^="toggleLike"]'
-        );
+            const button =
+                card.querySelector(
+                    ".feed-actions button"
+                );
 
-        const countEl = card.querySelector('.like-count');
 
-        if (!button || !countEl) return;
+            const countEl =
+                card.querySelector(
+                    ".like-count"
+                );
 
-        const postId =
-            card.dataset.postId ||
-            card.querySelector('video')?.src ||
-            card.innerText.substring(0, 30);
 
-        const likeKey =
-            'sonviaLike_' +
-            btoa(postId).replace(/[^a-zA-Z0-9]/g, '');
+            if (!button || !countEl) {
+                return;
+            }
 
-        if (localStorage.getItem(likeKey) === 'true') {
 
-            button.classList.add('liked');
-            button.innerHTML = '💚 Liked';
+            const postId =
+                card.dataset.postId;
 
-        } else {
 
-            button.classList.remove('liked');
-            button.innerHTML = '❤️ Like';
-        }
-    });
+            const likeKey =
+                "sonviaLike_" + postId;
+
+
+            if (
+                localStorage.getItem(
+                    likeKey
+                ) === "true"
+            ) {
+
+                button.classList.add(
+                    "liked"
+                );
+
+
+                button.innerHTML =
+                    "💚 Liked";
+
+            }
+
+        });
+
 }
 
 
+/* =========================
+   COMMENTS
+========================= */
+
 function openComments(button) {
 
-    document.getElementById('commentOverlay')
-        .style.display = 'flex';
+    const overlay =
+        document.getElementById(
+            "commentOverlay"
+        );
+
+
+    if (overlay) {
+
+        overlay.style.display =
+            "flex";
+
+    }
+
 }
 
 
 function closeComments() {
 
-    document.getElementById('commentOverlay')
-        .style.display = 'none';
+    const overlay =
+        document.getElementById(
+            "commentOverlay"
+        );
+
+
+    if (overlay) {
+
+        overlay.style.display =
+            "none";
+
+    }
+
 }
 
+
+/* =========================
+   SHARE
+========================= */
 
 function sharePost() {
 
     if (navigator.share) {
 
         navigator.share({
-            title: 'SONVIA Producer Post',
-            text: 'Check out this producer on SONVIA!',
-            url: window.location.href
+
+            title:
+                "SONVIA Producer Post",
+
+            text:
+                "Check out this producer on SONVIA!",
+
+            url:
+                window.location.href
+
         });
 
     } else {
 
-        alert('📤 Share feature not supported on this device.');
+        alert(
+            "📤 Share feature not supported on this device."
+        );
+
     }
+
 }
 
+
+/* =========================
+   VIDEO AUTOPLAY
+========================= */
+
+const feedVideos =
+    document.querySelectorAll(
+        ".feed-card video"
+    );
+
+
+const videoObserver =
+    new IntersectionObserver(
+
+        function(entries) {
+
+            entries.forEach(
+                function(entry) {
+
+                    const video =
+                        entry.target;
+
+
+                    if (
+                        entry.isIntersecting
+                    ) {
+
+                        video.play()
+                            .catch(
+                                function() {}
+                            );
+
+                    } else {
+
+                        video.pause();
+
+                    }
+
+                }
+            );
+
+        },
+
+        {
+            threshold: 0.6
+        }
+
+    );
+
+
+feedVideos.forEach(
+    function(video) {
+
+        videoObserver.observe(video);
+
+    }
+);
+
+
+/* =========================
+   START
+========================= */
 
 restoreLikes();
 
 updateNotificationCount();
-    </script>
+
+</script>
+
     <!-- COMMENT PANEL -->
 <div id="commentOverlay" class="comment-overlay">
     <div class="comment-panel">
