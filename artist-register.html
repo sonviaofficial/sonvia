@@ -13,22 +13,45 @@
         <p>Create Artist Account</p>
     </header>
 
+    <main>
+        <section>
+            <h2>Artist Registration</h2>
+
+            <form id="artistForm">
+                <input type="text" id="fullName" placeholder="Full Name" required>
+                <input type="text" id="artistName" placeholder="Artist Name" required>
+                <input type="email" id="email" placeholder="Email Address" required>
+                <input type="password" id="password" placeholder="Password" required>
+
+                <button type="submit">Create Artist Account</button>
+            </form>
+        </section>
+    </main>
+
     <script>
-document.querySelector("form").addEventListener("submit", function(e) {
-    e.preventDefault();
+    document.getElementById("artistForm").addEventListener("submit", function(e) {
+        e.preventDefault();
 
-    // Keep artist logged in
-    localStorage.setItem("sonviaLoggedIn", "true");
-    localStorage.setItem("sonviaUserRole", "artist");
+        // Save artist information
+        const artistData = {
+            fullName: document.getElementById("fullName").value,
+            artistName: document.getElementById("artistName").value,
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value
+        };
 
-    alert("🎉 Artist account created successfully!");
+        localStorage.setItem("sonviaArtist", JSON.stringify(artistData));
 
-    // Open artist dashboard immediately
-    window.location.href = "artist-dashboard.html";
-});
+        // Keep artist logged in
+        localStorage.setItem("sonviaLoggedIn", "true");
+        localStorage.setItem("sonviaUserRole", "artist");
+
+        alert("🎉 Artist account created successfully!");
+
+        // Open artist dashboard immediately
+        window.location.href = "artist-dashboard.html";
+    });
     </script>
-    window.location.href = "artist-dashboard.html";
-}
-</script>
+
 </body>
 </html>
