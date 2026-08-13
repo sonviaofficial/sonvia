@@ -25,6 +25,8 @@
 
                 <input type="email" id="email" placeholder="Email Address" required>
 
+                <input type="password" id="password" placeholder="Password" required>
+
                 <input type="text" id="tiktokUsername" placeholder="TikTok Username" required>
 
                 <input type="url" id="tiktokLink" placeholder="TikTok Profile Link">
@@ -38,7 +40,7 @@
                 <label>Profile Picture</label>
                 <input type="file" id="profilePicture" accept="image/*">
 
-                <button type="button" onclick="verifyTikTok()">
+                <button type="button" id="verifyBtn">
                     🔐 Verify TikTok
                 </button>
 
@@ -53,11 +55,13 @@
     <script>
     let tiktokVerified = false;
 
-    function verifyTikTok() {
+    // Verify TikTok button
+    document.getElementById("verifyBtn").addEventListener("click", function() {
+
         const username = document.getElementById("tiktokUsername").value.trim();
 
-        if (!username) {
-            alert("Please enter your TikTok username first");
+        if (username === "") {
+            alert("⚠️ Please enter your TikTok username first");
             return;
         }
 
@@ -67,13 +71,16 @@
             "✅ TikTok Verified";
 
         alert("✅ TikTok verified successfully!");
-    }
+    });
 
+    // Create account
     document.getElementById("producerForm").addEventListener("submit", function(e) {
+
         e.preventDefault();
 
-        if (!tiktokVerified) {
-            alert("⚠️ Please verify your TikTok account first");
+        // Stop if TikTok is not verified
+        if (tiktokVerified === false) {
+            alert("⚠️ You must verify your TikTok account before creating an account.");
             return;
         }
 
@@ -81,6 +88,7 @@
             producerName: document.getElementById("producerName").value,
             studioLocation: document.getElementById("studioLocation").value,
             email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
             tiktokUsername: document.getElementById("tiktokUsername").value,
             tiktokLink: document.getElementById("tiktokLink").value,
             recordingPrice: document.getElementById("recordingPrice").value,
@@ -90,30 +98,13 @@
 
         localStorage.setItem("sonviaProducer", JSON.stringify(producerData));
 
-        const picture = document.getElementById("profilePicture").files[0];
-
-        if (picture) {
-            const reader = new FileReader();
-
-            reader.onload = function() {
-                localStorage.setItem("sonviaProfilePic", reader.result);
-                finishRegistration();
-            };
-
-            reader.readAsDataURL(picture);
-        } else {
-            finishRegistration();
-        }
-    });
-
-    function finishRegistration() {
         localStorage.setItem("sonviaLoggedIn", "true");
         localStorage.setItem("sonviaUserRole", "producer");
 
         alert("🎉 Producer account created successfully!");
 
         window.location.href = "profile.html";
-    }
+    });
     </script>
 
 </body>
