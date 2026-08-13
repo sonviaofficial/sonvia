@@ -258,19 +258,17 @@
                 ✕
             </button>
 
-        </div>
+        <div class="feed-stats">
+    <span>👁️ 124 Views</span>
+    <span>❤️ 18 Likes</span>
+    <span>💬 4 Comments</span>
+</div>
 
-        <div class="notification-item">
-            ❤️ Someone liked your post.
-        </div>
-
-        <div class="notification-item">
-            💬 Someone commented on your post.
-        </div>
-
-        <div class="notification-item">
-            👁️ Someone viewed your profile.
-        </div>
+<div class="feed-actions">
+    <button onclick="toggleLike(this)">❤️ Like</button>
+    <button onclick="openComments()">💬 Comment</button>
+    <button onclick="sharePost()">📤 Share</button>
+</div>
 
     </div>
 
@@ -470,6 +468,33 @@ const savedProfilePic = localStorage.getItem("sonviaProfilePic");
 if (savedProfilePic) {
     document.getElementById("dashboardProfilePic").src = savedProfilePic;
     document.getElementById("settingsProfilePic").src = savedProfilePic;
+}
+    </script>
+    <script>
+function toggleLike(button) {
+    button.classList.toggle('liked');
+
+    if (button.classList.contains('liked')) {
+        button.innerHTML = '💚 Liked';
+    } else {
+        button.innerHTML = '❤️ Like';
+    }
+}
+
+function openComments() {
+    alert('💬 Comment system coming next in SONVIA!');
+}
+
+function sharePost() {
+    if (navigator.share) {
+        navigator.share({
+            title: 'SONVIA Producer Post',
+            text: 'Check out this producer on SONVIA!',
+            url: window.location.href
+        });
+    } else {
+        alert('📤 Share feature not supported on this device.');
+    }
 }
     </script>
 </body>
