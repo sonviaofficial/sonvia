@@ -37,9 +37,20 @@
              alt="Producer"
              class="profile-avatar">
 
-        <h2>FOSKY</h2>
-        <p class="profile-role">Producer • FOSKY Studio</p>
+        <h2 id="producerName">FOSKY</h2>
 
+<p class="profile-role" id="studioName">
+    Producer • FOSKY Studio
+</p>
+
+<p>
+    👥 Followers: <span id="followersCount">0</span>
+</p>
+
+<button id="followBtn" class="btn-primary">
+    Follow
+</button>
+        
         <div class="profile-meta">
             <p>📍 Ikorodu, Lagos</p>
             <p>🎵 TikTok: @fosky.j</p>
@@ -399,6 +410,42 @@ if (producer) {
     const profilePic = localStorage.getItem('sonviaProfilePic');
     if (profilePic) {
         document.getElementById('profilePicture').src = profilePic;
+ // ===== FOLLOW SYSTEM =====
+
+let isFollowing = localStorage.getItem("sonviaFollowing") === "true";
+let followers = parseInt(localStorage.getItem("sonviaFollowers")) || 0;
+
+const followBtn = document.getElementById("followBtn");
+const followersCount = document.getElementById("followersCount");
+
+function updateFollowUI() {
+    followersCount.textContent = followers;
+
+    if (isFollowing) {
+        followBtn.textContent = "Following";
+        followBtn.style.background = "#444";
+    } else {
+        followBtn.textContent = "Follow";
+        followBtn.style.background = "#16a34a";
+    }
+}
+
+followBtn.addEventListener("click", function() {
+    if (isFollowing) {
+        isFollowing = false;
+        followers = Math.max(0, followers - 1);
+    } else {
+        isFollowing = true;
+        followers += 1;
+    }
+
+    localStorage.setItem("sonviaFollowing", isFollowing);
+    localStorage.setItem("sonviaFollowers", followers);
+
+    updateFollowUI();
+});
+
+updateFollowUI();
     }
 }
 </script>
