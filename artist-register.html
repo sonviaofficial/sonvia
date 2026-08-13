@@ -28,14 +28,17 @@
         </section>
     </main>
 <script>
-document.querySelector("form").addEventListener("submit", function (e) {
-    e.preventDefault();
+document.querySelector("form").addEventListener("submit", function finishRegistration() {
 
-    alert("Artist account created successfully!");
+    // Keep artist logged in
+    localStorage.setItem("sonviaLoggedIn", "true");
+    localStorage.setItem("sonviaUserRole", "artist");
 
-    // Redirect to login page
-    window.location.href = "login.html";
-});
+    alert("🎉 Artist account created successfully!");
+
+    // Open artist dashboard immediately
+    window.location.href = "artist-dashboard.html";
+}
 </script>
 </body>
 </html>
