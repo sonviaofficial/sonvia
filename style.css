@@ -1057,3 +1057,31 @@ body {
 .delete-option {
     color: #ff5555;
 }
+.notification-btn {
+    position: relative;
+    background: transparent;
+    border: none;
+    font-size: 24px;
+    color: #facc15;
+    cursor: pointer;
+    padding: 6px;
+}
+
+#notificationCount {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    background: #ef4444;
+    color: #ffffff;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 18px;
+    height: 18px;
+    padding: 0 5px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid #111827;
+    line-height: 1;
+}
