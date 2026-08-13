@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SONVIA – Artist Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>SONVIA</h1>
+        <p>Artist Dashboard</p>
+    </header>
+
+    <main>
+        <section class="dashboard-card">
+            <h2 id="artistName">Welcome Artist</h2>
+            <p>🎵 Explore producers and book studio sessions.</p>
+
+            <a href="index.html" class="btn">🏠 Go to Home</a>
+        </section>
+    </main>
+
+    <script>
+    const artist = JSON.parse(localStorage.getItem("sonviaArtist"));
+
+    if (artist) {
+        document.getElementById("artistName").textContent =
+            "Welcome, " + artist.artistName + " 🎤";
+    }
+    </script>
+
+</body>
+</html>
