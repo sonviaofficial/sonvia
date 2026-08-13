@@ -22,7 +22,7 @@
     <a href="meet.html" class="active"><span>👥</span><small>Meet</small></a>
     <a href="earnings.html"><span>🏦</span><small>Earnings</small></a>
 </nav>
-  <script>
+<script>
 function playMessageSound() {
     const sound = new Audio('./sounds/sonvia-message.mp3');
 
@@ -30,10 +30,10 @@ function playMessageSound() {
 
     sound.play()
         .then(() => {
-            console.log("SONVIA sound played");
+            console.log('SONVIA sound played');
         })
         .catch(error => {
-            alert("Sound error: " + error);
+            alert('Sound error: ' + error.message);
             console.log(error);
         });
 }
