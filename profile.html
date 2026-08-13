@@ -375,7 +375,32 @@ if (posts.length > 0) {
 }
 
 </script>
+    
+<script>
+const producer = JSON.parse(localStorage.getItem('sonviaProducer'));
 
+if (producer) {
+    document.getElementById('producerName').textContent = producer.producerName;
+    document.getElementById('studioLocation').textContent = '📍 ' + producer.studioLocation;
 
+    document.getElementById('recordingPrice').textContent = '🎙️ Recording: ₦' + producer.recordingPrice;
+    document.getElementById('mixingPrice').textContent = '🎚️ Mixing: ₦' + producer.mixingPrice;
+    document.getElementById('masteringPrice').textContent = '🎧 Mastering: ₦' + producer.masteringPrice;
+
+    if (producer.tiktokUsername) {
+        document.getElementById('tiktokUsername').textContent = '@' + producer.tiktokUsername;
+    }
+
+    if (producer.tiktokLink) {
+        document.getElementById('tiktokLink').href = producer.tiktokLink;
+        document.getElementById('tiktokLink').style.display = 'inline-block';
+    }
+
+    const profilePic = localStorage.getItem('sonviaProfilePic');
+    if (profilePic) {
+        document.getElementById('profilePicture').src = profilePic;
+    }
+}
+</script>
 </body>
 </html>
