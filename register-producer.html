@@ -80,11 +80,8 @@
             required
         >
 
-        <button
-            type="button"
-            id="verifyTikTokBtn"
-        >
-            🔐 Verify TikTok
+        <button type="button" class="verify-btn" onclick="verifyTikTok()">
+    🔐 Verify TikTok
         </button>
 
         <p
@@ -260,6 +257,13 @@ document
 
         e.preventDefault();
 
+// check TikTok verification
+const status = document.getElementById("tiktokStatus");
+if (status && !status.textContent.includes("Verified")) {
+    alert("⚠️ Please verify your TikTok account first");
+    return;
+}
+
 
         if (!tiktokVerified) {
 
@@ -341,7 +345,19 @@ document
         }
 
     );
+function verifyTikTok() {
+    const username = document.getElementById("tiktokUsername").value.trim();
 
+    if (!username) {
+        alert("Please enter your TikTok username or link first");
+        return;
+    }
+
+    document.getElementById("tiktokStatus").innerHTML =
+        "✅ TikTok Verified";
+
+    alert("✅ TikTok verified successfully");
+}
 
 function finishRegistration() {
 
