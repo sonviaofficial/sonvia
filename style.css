@@ -1145,3 +1145,69 @@ body {
     background: #232938;
     color: #ffffff;
 }
+.producer-feed {
+    padding: 24px 20px 110px;
+}
+
+.producer-feed-card {
+    background: #181c25;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+    margin-bottom: 22px;
+}
+
+.producer-cover {
+    width: 100%;
+    height: 220px;
+    object-fit: cover;
+}
+
+.producer-feed-info {
+    padding: 18px;
+}
+
+.producer-feed-info h3 {
+    font-size: 1.4rem;
+    margin-bottom: 6px;
+    color: #ffffff;
+}
+
+.producer-name {
+    color: #9ca3af;
+    margin-bottom: 14px;
+}
+
+.producer-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    color: #d7dbe4;
+    font-size: 0.95rem;
+    margin-bottom: 18px;
+}
+
+.producer-feed-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.visit-btn,
+.book-btn {
+    flex: 1;
+    text-align: center;
+    padding: 12px 14px;
+    border-radius: 999px;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.visit-btn {
+    background: #232938;
+    color: #ffffff;
+}
+
+.book-btn {
+    background: #22c55e;
+    color: #04110a;
+}
