@@ -1211,3 +1211,39 @@ body {
     background: #22c55e;
     color: #04110a;
 }
+.feed-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 14px;
+    margin-bottom: 12px;
+    color: #9ca3af;
+    font-size: 0.85rem;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.feed-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.feed-actions button {
+    flex: 1;
+    background: #232938;
+    color: #ffffff;
+    border: none;
+    border-radius: 999px;
+    padding: 11px 12px;
+    font-size: 0.92rem;
+    font-weight: 700;
+}
+
+.feed-actions button:hover {
+    background: #2f3747;
+}
+
+.feed-actions button.liked {
+    background: #22c55e;
+    color: #04110a;
+}
