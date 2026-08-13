@@ -473,9 +473,15 @@ if (savedProfilePic) {
     <script>
 function toggleLike(button) {
     button.classList.toggle('liked');
+let notificationCount = 3;
 
+function updateNotificationCount() {
+    document.getElementById('notificationCount').textContent = notificationCount;
+}
     if (button.classList.contains('liked')) {
         button.innerHTML = '💚 Liked';
+        notificationCount++;
+        updateNotificationCount();
     } else {
         button.innerHTML = '❤️ Like';
     }
@@ -500,6 +506,8 @@ function sharePost() {
         alert('📤 Share feature not supported on this device.');
     }
 }
+
+updateNotificationCount();
     </script>
     <!-- COMMENT PANEL -->
 <div id="commentOverlay" class="comment-overlay">
