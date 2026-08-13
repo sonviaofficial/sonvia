@@ -340,19 +340,21 @@ document
 
         }
 
-    });
+    );
 
 
 function finishRegistration() {
 
-    alert(
-        "🎉 Producer account created successfully!"
-    );
+    // Keep user logged in
+    localStorage.setItem("sonviaLoggedIn", "true");
+    localStorage.setItem("sonviaUserRole", "producer");
 
-    window.location.href =
-        "login.html";
+    alert("🎉 Producer account created successfully!");
 
+    // Open profile immediately
+    window.location.href = "profile.html";
 }
+
 
 </script>
 
