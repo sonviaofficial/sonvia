@@ -8,43 +8,110 @@
 </head>
 <body>
 
-    <header>
-        <div class="logo-area">
-            <div class="logo-circle">🎙️</div>
-            <h1>SONVIA</h1>
-        </div>
-        <p>Secure Login</p>
-    </header>
+<header>
+    <h1>SONVIA</h1>
+    <p>Login to your account</p>
+</header>
 
-    <main>
-        <section>
-            <h2>Sign In</h2>
+<main>
+    <section>
 
-            <form>
-                <input type="email" placeholder="Email Address" required>
-                <input type="password" placeholder="Password" required>
+        <h2>Welcome Back</h2>
 
-                <select required>
-                    <option value="">Login As</option>
-                    <option>Artist</option>
-                    <option>Producer</option>
-                    <option>Admin</option>
-                </select>
+        <form id="loginForm">
 
-                <button type="submit">Login</button>
-            </form>
+            <input type="email"
+                   id="email"
+                   placeholder="Email Address"
+                   required>
 
-            <br>
+            <input type="password"
+                   id="password"
+                   placeholder="Password"
+                   required>
 
-            <a href="artist.html">
-                <button type="button">Create Artist Account</button>
-            </a>
+            <button type="submit">
+                Login
+            </button>
 
-            <a href="producer.html">
-                <button type="button">Create Producer Account</button>
-            </a>
-        </section>
-    </main>
-<script src="login.js"></script>
+        </form>
+
+    </section>
+</main>
+
+<script type="module">
+
+import { supabase } from './supabase.js';
+
+document.getElementById('loginForm')
+    .addEventListener('submit', async function (e) {
+
+    e.preventDefault();
+
+    const email =
+        document.getElementById('email')
+            .value
+            .trim();
+
+    const password =
+        document.getElementById('password')
+            .value;
+
+    const { data, error } =
+        await supabase.auth.signInWithPassword({
+            email,
+            password
+        });
+
+    if (error) {
+
+        alert('❌ ' + error.message);
+
+        return;
+    }
+
+    const user = data.user;
+
+    if (!user) {
+
+        alert('❌ Login failed.');
+
+        return;
+    }
+
+    // Get user profile
+    const { data: profile, error: profileError } =
+        await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single();
+
+    if (profileError || !profile) {
+
+        alert('❌ Could not load your profile.');
+
+        return;
+    }
+
+    // Keep user logged in locally
+    localStorage.setItem('sonviaLoggedIn', 'true');
+    localStorage.setItem('sonviaUserRole', profile.role);
+
+    alert('✅ Login successful!');
+
+    // Redirect by role
+    if (profile.role === 'producer') {
+
+        window.location.href = 'dashboard.html';
+
+    } else {
+
+        window.location.href = 'artist-dashboard.html';
+    }
+
+});
+
+</script>
 </body>
 </html>
