@@ -8,50 +8,76 @@
 </head>
 <body>
 
-    <header>
-        <h1>SONVIA</h1>
-        <p>Create Artist Account</p>
-    </header>
+<header>
+    <h1>SONVIA</h1>
+    <p>Create Artist Account</p>
+</header>
 
-    <main>
-        <section>
-            <h2>Artist Registration</h2>
+<main>
+    <section>
+        <h2>Artist Registration</h2>
 
-            <form id="artistForm">
-                <input type="text" id="fullName" placeholder="Full Name" required>
-                <input type="text" id="artistName" placeholder="Artist Name" required>
-                <input type="email" id="email" placeholder="Email Address" required>
-                <input type="password" id="password" placeholder="Password" required>
+        <form id="artistForm">
 
-                <button type="submit">Create Artist Account</button>
-            </form>
-        </section>
-    </main>
+            <input type="text" id="fullName" placeholder="Full Name" required>
 
-    <script>
-    document.getElementById("artistForm").addEventListener("submit", function(e) {
-        e.preventDefault();
+            <input type="text" id="artistName" placeholder="Artist Name" required>
 
-        // Save artist information
-        const artistData = {
-            fullName: document.getElementById("fullName").value,
-            artistName: document.getElementById("artistName").value,
-            email: document.getElementById("email").value,
-            password: document.getElementById("password").value
-        };
+            <input type="email" id="email" placeholder="Email Address" required>
 
-        localStorage.setItem("sonviaArtist", JSON.stringify(artistData));
+            <input type="password" id="password" placeholder="Password" required>
 
-        // Keep artist logged in
-        localStorage.setItem("sonviaLoggedIn", "true");
-        localStorage.setItem("sonviaUserRole", "artist");
+            <button type="submit">
+                Create Artist Account
+            </button>
 
-        alert("🎉 Artist account created successfully!");
+        </form>
+    </section>
+</main>
 
-        // Open artist dashboard immediately
-        window.location.href = "artist-dashboard.html";
+<script type="module">
+
+import { supabase } from './supabase.js';
+
+document.getElementById('artistForm').addEventListener('submit', async function (e) {
+
+    e.preventDefault();
+
+    const fullName = document.getElementById('fullName').value.trim();
+    const artistName = document.getElementById('artistName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+
+    const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+            emailRedirectTo: 'https://sonviaofficial.github.io/sonvia/login.html'
+        }
     });
-    </script>
 
+    if (error) {
+        alert('❌ ' + error.message);
+        return;
+    }
+
+    const user = data.user;
+
+    if (user) {
+        await supabase.from('profiles').insert({
+            id: user.id,
+            role: 'artist',
+            full_name: fullName,
+            artist_name: artistName,
+            email: email
+        });
+    }
+
+    alert('📧 Verification email sent! Please check your email before logging in.');
+
+    window.location.href = 'login.html';
+});
+
+</script>
 </body>
 </html>
