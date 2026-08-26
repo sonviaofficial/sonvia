@@ -6,6 +6,7 @@
     <title>SONVIA – Artist Registration</title>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header>
@@ -15,23 +16,45 @@
 
 <main>
     <section>
+
         <h2>Artist Registration</h2>
 
         <form id="artistForm">
 
-            <input type="text" id="fullName" placeholder="Full Name" required>
+            <input
+                type="text"
+                id="fullName"
+                placeholder="Full Name"
+                required
+            >
 
-            <input type="text" id="artistName" placeholder="Artist Name" required>
+            <input
+                type="text"
+                id="artistName"
+                placeholder="Artist Name"
+                required
+            >
 
-            <input type="email" id="email" placeholder="Email Address" required>
+            <input
+                type="email"
+                id="email"
+                placeholder="Email Address"
+                required
+            >
 
-            <input type="password" id="password" placeholder="Password" required>
+            <input
+                type="password"
+                id="password"
+                placeholder="Password"
+                required
+            >
 
-            <button type="submit">
+            <button type="submit" id="registerButton">
                 Create Artist Account
             </button>
 
         </form>
+
     </section>
 </main>
 
@@ -39,45 +62,159 @@
 
 import { supabase } from './supabase.js';
 
-document.getElementById('artistForm').addEventListener('submit', async function (e) {
+const artistForm =
+    document.getElementById('artistForm');
+
+const registerButton =
+    document.getElementById('registerButton');
+
+
+artistForm.addEventListener('submit', async function (e) {
 
     e.preventDefault();
 
-    const fullName = document.getElementById('fullName').value.trim();
-    const artistName = document.getElementById('artistName').value.trim();
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value;
+    const fullName =
+        document.getElementById('fullName')
+            .value
+            .trim();
 
-    const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            emailRedirectTo: 'https://sonviaofficial.github.io/sonvia/'
-        }
-    });
+    const artistName =
+        document.getElementById('artistName')
+            .value
+            .trim();
 
-    if (error) {
-        alert('❌ ' + error.message);
+    const email =
+        document.getElementById('email')
+            .value
+            .trim();
+
+    const password =
+        document.getElementById('password')
+            .value;
+
+
+    if (!fullName || !artistName || !email || !password) {
+
+        alert('❌ Please complete all fields.');
+
         return;
     }
 
-    const user = data.user;
 
-    if (user) {
-        await supabase.from('profiles').insert({
-            id: user.id,
-            role: 'artist',
-            full_name: fullName,
-            artist_name: artistName,
-            email: email
+    registerButton.disabled = true;
+    registerButton.textContent = 'Creating account...';
+
+
+    try {
+
+        // CREATE AUTH ACCOUNT
+        const {
+            data,
+            error
+        } = await supabase.auth.signUp({
+
+            email: email,
+
+            password: password,
+
+            options: {
+
+                emailRedirectTo:
+                    'https://sonviaofficial.github.io/sonvia/'
+
+            }
+
         });
+
+
+        if (error) {
+
+            throw error;
+
+        }
+
+
+        const user = data.user;
+
+
+        if (!user) {
+
+            throw new Error(
+                'SONVIA could not create your account.'
+            );
+
+        }
+
+
+        // CREATE ARTIST PROFILE
+        const {
+            error: profileError
+        } = await supabase
+            .from('profiles')
+            .insert({
+
+                id: user.id,
+
+                role: 'artist',
+
+                full_name: fullName,
+
+                artist_name: artistName,
+
+                email: email
+
+            });
+
+
+        if (profileError) {
+
+            console.error(
+                'Profile error:',
+                profileError
+            );
+
+            throw new Error(
+                'Your account was created, but your artist profile could not be created.'
+            );
+
+        }
+
+
+        // EVERYTHING SUCCESSFUL
+        alert(
+            '✅ SONVIA artist account created successfully!\n\n' +
+            '📧 A confirmation email has been sent to:\n' +
+            email +
+            '\n\n' +
+            'Please confirm your email before logging in.'
+        );
+
+
+        window.location.href =
+            'login.html';
+
+
+    } catch (error) {
+
+        console.error(
+            'Artist registration error:',
+            error
+        );
+
+        alert(
+            '❌ ' + error.message
+        );
+
+        registerButton.disabled = false;
+
+        registerButton.textContent =
+            'Create Artist Account';
+
     }
 
-    alert('📧 Verification email sent! Please check your email before logging in.');
-
-    window.location.href = 'login.html';
 });
 
 </script>
+
 </body>
 </html>
