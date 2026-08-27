@@ -108,23 +108,16 @@ artistForm.addEventListener('submit', async function (e) {
     try {
 
         // CREATE AUTH ACCOUNT
-        const {
-            data,
-            error
-        } = await supabase.auth.signUp({
-
-            email: email,
-
-            password: password,
-
-            options: {
-
-                emailRedirectTo:
-                    'https://sonviaofficial.github.io/sonvia/'
-
-            }
-
-        });
+        const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+        emailRedirectTo: 'https://sonviaofficial.github.io/sonvia/',
+        data: {
+            role: 'artist'
+        }
+    }
+});
 
 
         if (error) {
@@ -147,23 +140,6 @@ artistForm.addEventListener('submit', async function (e) {
 
 
         // CREATE ARTIST PROFILE
-        const {
-            error: profileError
-        } = await supabase
-            .from('profiles')
-            .insert({
-
-                id: user.id,
-
-                role: 'artist',
-
-                full_name: fullName,
-
-                artist_name: artistName,
-
-                email: email
-
-            });
 
 
         if (profileError) {
