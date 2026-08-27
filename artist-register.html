@@ -168,16 +168,15 @@ artistForm.addEventListener('submit', async function (e) {
 
         if (profileError) {
 
-            console.error(
-                'Profile error:',
-                profileError
-            );
+    console.error('Profile error:', profileError);
 
-            throw new Error(
-                'Your account was created, but your artist profile could not be created.'
-            );
+    alert(
+        '❌ Profile error:\n\n' +
+        profileError.message
+    );
 
-        }
+    return;
+}
 
 
         // EVERYTHING SUCCESSFUL
