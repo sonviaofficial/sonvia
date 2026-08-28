@@ -3,33 +3,426 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>SONVIA – Artist Dashboard</title>
+
     <link rel="stylesheet" href="style.css">
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #0b0b0f;
+            color: #ffffff;
+        }
+
+        header {
+            padding: 22px 20px;
+            background: #111116;
+            border-bottom: 1px solid #22222a;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 25px;
+            letter-spacing: 1px;
+        }
+
+        header p {
+            margin: 5px 0 0;
+            color: #9999a5;
+            font-size: 14px;
+        }
+
+        main {
+            padding: 20px;
+            padding-bottom: 100px;
+            max-width: 700px;
+            margin: auto;
+        }
+
+        /* Welcome */
+
+        .welcome {
+            padding: 22px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, #191922, #101015);
+            border: 1px solid #292933;
+            margin-bottom: 20px;
+        }
+
+        .welcome h2 {
+            margin: 0 0 8px;
+            font-size: 23px;
+        }
+
+        .welcome p {
+            margin: 0;
+            color: #aaaab5;
+            line-height: 1.5;
+        }
+
+        /* Quick action */
+
+        .section-title {
+            font-size: 17px;
+            margin: 25px 0 12px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .action {
+            text-decoration: none;
+            color: #fff;
+            background: #15151c;
+            border: 1px solid #282832;
+            border-radius: 16px;
+            padding: 20px 16px;
+            transition: 0.2s;
+        }
+
+        .action:active {
+            transform: scale(0.97);
+        }
+
+        .action-icon {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .action-title {
+            font-size: 15px;
+            font-weight: bold;
+        }
+
+        .action-text {
+            font-size: 12px;
+            color: #8f8f9b;
+            margin-top: 5px;
+            line-height: 1.4;
+        }
+
+        /* Booking */
+
+        .booking-card {
+            background: #15151c;
+            border: 1px solid #282832;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .empty-icon {
+            font-size: 35px;
+            margin-bottom: 10px;
+        }
+
+        .booking-card h3 {
+            margin: 0 0 7px;
+            font-size: 16px;
+        }
+
+        .booking-card p {
+            margin: 0;
+            color: #8f8f9b;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        .find-btn {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 11px 17px;
+            border-radius: 10px;
+            background: #ffffff;
+            color: #000000;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        /* Wallet */
+
+        .wallet-card {
+            background: #15151c;
+            border: 1px solid #282832;
+            border-radius: 16px;
+            padding: 20px;
+        }
+
+        .wallet-label {
+            color: #8f8f9b;
+            font-size: 13px;
+        }
+
+        .wallet-balance {
+            font-size: 28px;
+            font-weight: bold;
+            margin-top: 8px;
+        }
+
+        .wallet-link {
+            display: inline-block;
+            margin-top: 14px;
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        /* Bottom navigation */
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 72px;
+            background: rgba(15, 15, 20, 0.97);
+            border-top: 1px solid #25252e;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .nav-item {
+            color: #858591;
+            text-decoration: none;
+            text-align: center;
+            font-size: 11px;
+        }
+
+        .nav-item span {
+            display: block;
+            font-size: 21px;
+            margin-bottom: 3px;
+        }
+
+        .nav-item.active {
+            color: #ffffff;
+        }
+
+        @media (min-width: 600px) {
+            .action-grid {
+                grid-template-columns: repeat(4, 1fr);
+            }
+        }
+    </style>
 </head>
+
 <body>
+
+    <!-- HEADER -->
 
     <header>
         <h1>SONVIA</h1>
         <p>Artist Dashboard</p>
     </header>
 
-    <main>
-        <section class="dashboard-card">
-            <h2 id="artistName">Welcome Artist</h2>
-            <p>🎵 Explore producers and book studio sessions.</p>
 
-            <a href="index.html" class="btn">🏠 Go to Home</a>
+    <main>
+
+        <!-- WELCOME -->
+
+        <section class="welcome">
+
+            <h2 id="artistName">
+                Welcome, Artist 🎤
+            </h2>
+
+            <p>
+                Find producers, book studio services,
+                and manage your SONVIA activity.
+            </p>
+
         </section>
+
+
+        <!-- QUICK ACTIONS -->
+
+        <h3 class="section-title">
+            Quick Actions
+        </h3>
+
+        <div class="action-grid">
+
+            <a href="producers.html" class="action">
+
+                <div class="action-icon">🔎</div>
+
+                <div class="action-title">
+                    Find Producers
+                </div>
+
+                <div class="action-text">
+                    Discover producers and studio services.
+                </div>
+
+            </a>
+
+
+            <a href="artist-bookings.html" class="action">
+
+                <div class="action-icon">📅</div>
+
+                <div class="action-title">
+                    Bookings
+                </div>
+
+                <div class="action-text">
+                    View your upcoming and recent bookings.
+                </div>
+
+            </a>
+
+
+            <a href="artist-wallet.html" class="action">
+
+                <div class="action-icon">💰</div>
+
+                <div class="action-title">
+                    Wallet
+                </div>
+
+                <div class="action-text">
+                    View your balance and spending records.
+                </div>
+
+            </a>
+
+
+            <a href="artist-settings.html" class="action">
+
+                <div class="action-icon">⚙️</div>
+
+                <div class="action-title">
+                    Settings
+                </div>
+
+                <div class="action-text">
+                    Manage your SONVIA account.
+                </div>
+
+            </a>
+
+        </div>
+
+
+        <!-- BOOKINGS -->
+
+        <h3 class="section-title">
+            Upcoming Booking
+        </h3>
+
+        <section class="booking-card">
+
+            <div class="empty-icon">
+                📅
+            </div>
+
+            <h3>
+                No upcoming bookings
+            </h3>
+
+            <p>
+                You haven't booked a producer or studio session yet.
+            </p>
+
+            <a href="producers.html" class="find-btn">
+                Find a Producer
+            </a>
+
+        </section>
+
+
+        <!-- WALLET -->
+
+        <h3 class="section-title">
+            Wallet
+        </h3>
+
+        <section class="wallet-card">
+
+            <div class="wallet-label">
+                Available Balance
+            </div>
+
+            <div class="wallet-balance">
+                ₦0.00
+            </div>
+
+            <a href="artist-wallet.html" class="wallet-link">
+                View wallet →
+            </a>
+
+        </section>
+
     </main>
 
-    <script>
-    const artist = JSON.parse(localStorage.getItem("sonviaArtist"));
 
-    if (artist) {
-        document.getElementById("artistName").textContent =
-            "Welcome, " + artist.artistName + " 🎤";
-    }
+    <!-- BOTTOM NAVIGATION -->
+
+    <nav class="bottom-nav">
+
+        <a href="index.html" class="nav-item active">
+            <span>🏠</span>
+            Home
+        </a>
+
+        <a href="producers.html" class="nav-item">
+            <span>🔎</span>
+            Explore
+        </a>
+
+        <a href="artist-bookings.html" class="nav-item">
+            <span>📅</span>
+            Bookings
+        </a>
+
+        <a href="artist-wallet.html" class="nav-item">
+            <span>💰</span>
+            Wallet
+        </a>
+
+        <a href="artist-settings.html" class="nav-item">
+            <span>⚙️</span>
+            Settings
+        </a>
+
+    </nav>
+
+
+    <!-- ARTIST INFORMATION -->
+
+    <script>
+
+        const artist =
+            JSON.parse(
+                localStorage.getItem("sonviaArtist")
+            );
+
+
+        if (artist) {
+
+            const name =
+                artist.artistName ||
+                artist.fullName ||
+                "Artist";
+
+            document.getElementById("artistName")
+                .textContent =
+                "Welcome, " + name + " 🎤";
+
+        }
+
     </script>
 
 </body>
-</html>
+    </html>
