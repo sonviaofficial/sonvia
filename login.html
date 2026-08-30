@@ -104,14 +104,11 @@ document.getElementById('loginForm')
     alert('✅ Login successful!');
 
     // Redirect by role
-    if (profile.role === 'producer') {
-
-        window.location.href = 'dashboard.html';
-
-    } else {
-
-        window.location.href = 'artist-dashboard.html';
-    }
+if (profile.role === 'producer') {
+    window.location.href = "producer-dashboard.html";
+} else {
+    window.location.href = "artist-dashboard.html";
+}
 
 });
 
