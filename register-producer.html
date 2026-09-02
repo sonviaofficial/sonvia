@@ -96,12 +96,15 @@ document.getElementById('producerForm').addEventListener('submit', async functio
     const masteringPrice = Number(document.getElementById('masteringPrice').value);
 
     const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-            emailRedirectTo: 'https://sonviaofficial.github.io/sonvia/'
-        }
-    });
+  email,
+  password,
+  options: {
+    emailRedirectTo: 'https://sonviaofficial.github.io/sonvia/login.html',
+    data: {
+      role: 'producer'
+    }
+  }
+});
 
     if (error) {
         alert('❌ ' + error.message);
