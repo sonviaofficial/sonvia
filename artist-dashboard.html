@@ -135,7 +135,8 @@ color:#bbb;
 <div class="profile">
 
 <img id="avatar" class="avatar"
-src="https://placehold.co/80x80/222/fff?text=A">
+src="https://placehold.co/80x80/222/fff?text=A"
+alt="Artist avatar">
 
 <div>
 
@@ -155,6 +156,9 @@ Verified
 
 </div>
 
+<!-- Avatar upload is kept ready but disabled until
+     the Supabase Storage policy is completed. -->
+
 <input
 type="file"
 id="avatarInput"
@@ -163,7 +167,7 @@ hidden>
 
 <div style="margin-top:18px;">
 
-<button onclick="document.getElementById('avatarInput').click()">
+<button id="changeAvatarBtn" type="button">
 
 Change Profile Picture
 
@@ -197,13 +201,15 @@ Change Profile Picture
 
 <strong>FOSKY Studio</strong>
 
-<div style="color:#999;font-size:13px;margin-top:5px;">
+<div id="locationText"
+style="color:#999;font-size:13px;margin-top:5px;">
 
 📍 Calculating distance...
 
 </div>
 
-<div class="verified" style="width:max-content;margin-top:12px;">
+<div class="verified"
+style="width:max-content;margin-top:12px;">
 
 <div class="verify-dot">✓</div>
 
@@ -213,7 +219,7 @@ Verified
 
 <div style="margin-top:12px;">
 
-<button>Book Now</button>
+<button type="button">Book Now</button>
 
 </div>
 
@@ -235,7 +241,7 @@ Upload up to 3 songs for producers to hear your sound.
 
 </div>
 
-<button>Upload Song</button>
+<button type="button">Upload Song</button>
 
 </div>
 
@@ -243,7 +249,11 @@ Upload up to 3 songs for producers to hear your sound.
 
 <div class="section" style="padding-bottom:90px;">
 
-<button id="logoutBtn" style="background:#222;">Log Out</button>
+<button id="logoutBtn" style="background:#222;" type="button">
+
+Log Out
+
+</button>
 
 </div>
 
@@ -265,98 +275,199 @@ Upload up to 3 songs for producers to hear your sound.
 
 import { supabase } from './supabase.js';
 
-const { data:{user} } = await supabase.auth.getUser();
+
+// ==========================================
+// LOAD LOGGED-IN ARTIST
+// ==========================================
+
+async function loadArtist(){
+
+try{
+
+const {
+data: { user },
+error: authError
+} = await supabase.auth.getUser();
+
+if(authError){
+
+console.error('Authentication error:', authError);
+
+window.location.href = 'login.html';
+
+return;
+
+}
 
 if(!user){
 
-window.location='login.html';
+window.location.href = 'login.html';
+
+return;
 
 }
 
-const { data:profile }=await supabase
+
+// ==========================================
+// GET ARTIST PROFILE
+// ==========================================
+
+const {
+data: profile,
+error: profileError
+} = await supabase
 
 .from('profiles')
-
 .select('*')
-
-.eq('id',user.id)
-
+.eq('id', user.id)
 .single();
 
-if(profile){
 
-document.getElementById('artistName').textContent=
+if(profileError){
 
-profile.artist_name||profile.full_name||'Artist';
+console.error('Profile loading error:', profileError);
 
-document.getElementById('artistTag').textContent='@'+
+document.getElementById('artistName').textContent = 'Artist';
 
-(profile.artist_name||'artist')
+document.getElementById('artistTag').textContent = '@artist';
 
+return;
+
+}
+
+
+// ==========================================
+// DISPLAY ARTIST INFORMATION
+// ==========================================
+
+const artistName =
+profile.artist_name ||
+profile.full_name ||
+'Artist';
+
+
+document.getElementById('artistName').textContent =
+artistName;
+
+
+const username =
+(profile.artist_name ||
+profile.full_name ||
+'artist')
+.trim()
 .replace(/\s+/g,'')
-
 .toLowerCase();
+
+
+document.getElementById('artistTag').textContent =
+'@' + username;
+
+
+// ==========================================
+// LOAD EXISTING AVATAR
+// ==========================================
 
 if(profile.avatar_url){
 
-document.getElementById('avatar').src=profile.avatar_url;
-
-}
-
-}
-
-document.getElementById('avatarInput')
-
-.addEventListener('change',async(e)=>{
-
-const file=e.target.files[0];
-
-if(!file)return;
-
-const fileExt = file.name.split('.').pop();
-const path = `${user.id}/avatar.${fileExt}`;
-
-const { error: uploadError } = await supabase.storage
-  .from('avatars')
-  .upload(path, file, { upsert: true });
-
-if (uploadError) {
-  alert(uploadError.message);
-  return;
-}
-
-const { data } = supabase.storage
-  .from('avatars')
-  .getPublicUrl(path);
-
-await supabase
-  .from('profiles')
-  .update({ avatar_url: data.publicUrl })
-  .eq('id', user.id);
-
-// Force refresh so the browser doesn't use the old image
 document.getElementById('avatar').src =
-  data.publicUrl + '?t=' + Date.now();
+profile.avatar_url;
+
+}
+
+}
+
+catch(error){
+
+console.error('Dashboard error:', error);
+
+document.getElementById('artistName').textContent =
+'Artist';
+
+}
+
+}
+
+
+// ==========================================
+// AVATAR BUTTON
+// ==========================================
+
+document.getElementById('changeAvatarBtn')
+.addEventListener('click',()=>{
+
+alert(
+'Profile picture upload will be available shortly. ' +
+'We are completing the secure avatar storage setup.'
+);
 
 });
 
-navigator.geolocation.getCurrentPosition((pos)=>{
 
-document.querySelector('.card div').textContent=
+// ==========================================
+// LOCATION
+// ==========================================
 
-`📍 Around your location`;
+if(navigator.geolocation){
 
-});
+navigator.geolocation.getCurrentPosition(
 
-document.getElementById('logoutBtn').onclick=async()=>{
+()=>{
 
-await supabase.auth.signOut();
+document.getElementById('locationText').textContent =
+'📍 Around your location';
+
+},
+
+()=>{
+
+document.getElementById('locationText').textContent =
+'📍 Location unavailable';
+
+}
+
+);
+
+}else{
+
+document.getElementById('locationText').textContent =
+'📍 Location unavailable';
+
+}
+
+
+// ==========================================
+// LOGOUT
+// ==========================================
+
+document.getElementById('logoutBtn')
+.addEventListener('click',async()=>{
+
+const {
+error
+} = await supabase.auth.signOut();
+
+if(error){
+
+console.error('Logout error:',error);
+
+alert('Unable to log out. Please try again.');
+
+return;
+
+}
 
 localStorage.clear();
 
-window.location='login.html';
+window.location.href = 'login.html';
 
-};
+});
+
+
+// ==========================================
+// START DASHBOARD
+// ==========================================
+
+loadArtist();
 
 </script>
 
