@@ -3,161 +3,360 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SONVIA • Artist Dashboard</title>
+
+<title>SONVIA Artist</title>
+
 <link rel="stylesheet" href="style.css">
-</head>
-<body>
 
-<header class="hero">
-  <box gap=1 align=center padding=4>
-    <badge label="🟣 Early Access Member" color=discovery size=md />
-    <title size=xl>SONVIA</title>
-    <text>Artist Dashboard</text>
-  </box>
-</header>
+<style>
 
-<main class="container">
-
-  <box background=surface radius=2xl padding=3 gap=3>
-    <row align=center gap=3>
-      <box radius="100%" clip background=surface-secondary border=1>
-        <AsyncImage query="default user avatar profile circle" aspectRatio="1:1" maxWidth=72 maxHeight=72/>
-      </box>
-
-      <box gap=1 flex=1>
-        <title id="artistName">Loading...</title>
-        <text id="artistTag">@artist</text>
-        <badge label="Artist" color=discovery />
-      </box>
-    </row>
-
-    <button block variant=outline>📸 Change Profile Picture</button>
-  </box>
-
-  <grid columns=2>
-    <grid-item>
-      <box background=surface radius=xl padding=3 align=center gap=2>
-        <icon name=search color=discovery />
-        <text textAlign=center>Find Producers</text>
-      </box>
-    </grid-item>
-    <grid-item>
-      <box background=surface radius=xl padding=3 align=center gap=2>
-        <icon name=calendar color=discovery />
-        <text textAlign=center>Book Session</text>
-      </box>
-    </grid-item>
-    <grid-item>
-      <box background=surface radius=xl padding=3 align=center gap=2>
-        <icon name=music color=discovery />
-        <text textAlign=center>My Projects</text>
-      </box>
-    </grid-item>
-    <grid-item>
-      <box background=surface radius=xl padding=3 align=center gap=2>
-        <icon name=wallet color=discovery />
-        <text textAlign=center>Wallet</text>
-      </box>
-    </grid-item>
-  </grid>
-
-  <box background=surface radius=xl padding=3 gap=3>
-    <row justify=between align=center>
-      <title size=md>Recommended Producers</title>
-      <text size=sm>See all</text>
-    </row>
-
-    <box background=surface-secondary radius=lg padding=3 gap=2 border=1>
-      <row justify=between align=center>
-        <box gap=0>
-          <text strong>FOSKY Studio</text>
-          <row gap=1 align=center wrap=wrap>
-            <icon name=map-pin color=secondary />
-            <text size=sm>Ikorodu, Lagos</text>
-          </row>
-        </box>
-        <badge label="Verified" color=discovery />
-      </row>
-
-      <row justify=between align=center>
-        <box gap=0>
-          <text size=sm>Vocal Recording</text>
-          <title size=sm>₦50,000</title>
-        </box>
-        <button size=sm>Book Now</button>
-      </row>
-    </box>
-  </box>
-
-  <box background=surface radius=xl padding=3 gap=3>
-    <title size=md>Recent Bookings</title>
-
-    <box background=surface-secondary radius=lg padding=3 gap=1 border=1 align=center>
-      <icon name=calendar color=secondary />
-      <text>No bookings yet.</text>
-      <text size=sm>Your upcoming sessions will appear here.</text>
-    </box>
-  </box>
-
-  <button block color=danger variant=outline id="logoutBtn">Log Out</button>
-
-</main>
-
-<box background="#111111" border={{top:{size:1,color:"#222"}}} padding=3>
-  <row justify=between align=center>
-    <box align=center gap=1>
-      <icon name=home color=discovery />
-      <text size=xs>Home</text>
-    </box>
-    <box align=center gap=1>
-      <icon name=search color=secondary />
-      <text size=xs>Explore</text>
-    </box>
-    <box align=center gap=1>
-      <icon name=calendar color=secondary />
-      <text size=xs>Bookings</text>
-    </box>
-    <box align=center gap=1>
-      <icon name=wallet color=secondary />
-      <text size=xs>Wallet</text>
-    </box>
-    <box align=center gap=1>
-      <icon name=circle-user color=secondary />
-      <text size=xs>Profile</text>
-    </box>
-  </row>
-</box>
-
-<script type="module">
-import { supabase } from './supabase.js';
-
-const { data: { user } } = await supabase.auth.getUser();
-
-if(!user){
-  window.location.href='login.html';
+body{
+background:#0b0b0f;
+color:white;
+font-family:Arial,sans-serif;
+margin:0;
 }
 
-const { data: profile } = await supabase
+.header{
+padding:30px 20px;
+background:linear-gradient(180deg,#7C3AED,#1b132e);
+}
+
+.profile{
+display:flex;
+align-items:center;
+gap:15px;
+}
+
+.avatar{
+width:80px;
+height:80px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #9F67FF;
+background:#222;
+}
+
+h2{
+font-weight:500;
+margin:0;
+}
+
+.username{
+color:#b8b8b8;
+font-size:14px;
+}
+
+.verified{
+display:inline-flex;
+align-items:center;
+gap:6px;
+padding:6px 12px;
+background:rgba(124,58,237,.15);
+border:1px solid #7C3AED;
+border-radius:999px;
+font-size:13px;
+margin-top:8px;
+}
+
+.verify-dot{
+width:18px;
+height:18px;
+background:#7C3AED;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:12px;
+}
+
+.section{
+padding:20px;
+}
+
+.card{
+background:#15151d;
+padding:18px;
+border-radius:18px;
+margin-bottom:15px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.action{
+background:#1b1b25;
+padding:18px;
+border-radius:18px;
+text-align:center;
+font-size:14px;
+}
+
+button{
+background:#7C3AED;
+color:white;
+border:none;
+padding:12px;
+border-radius:12px;
+font-size:15px;
+cursor:pointer;
+width:100%;
+}
+
+.bottom{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#111;
+display:flex;
+justify-content:space-around;
+padding:14px;
+border-top:1px solid #2a2a2a;
+}
+
+.bottom div{
+font-size:12px;
+text-align:center;
+color:#bbb;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<div class="profile">
+
+<img id="avatar" class="avatar"
+src="https://placehold.co/80x80/222/fff?text=A">
+
+<div>
+
+<h2 id="artistName">Loading...</h2>
+
+<div id="artistTag" class="username">@artist</div>
+
+<div class="verified">
+
+<div class="verify-dot">✓</div>
+
+Verified
+
+</div>
+
+</div>
+
+</div>
+
+<input
+type="file"
+id="avatarInput"
+accept="image/*"
+hidden>
+
+<div style="margin-top:18px;">
+
+<button onclick="document.getElementById('avatarInput').click()">
+
+Change Profile Picture
+
+</button>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<div class="grid">
+
+<div class="action">🎙️ Find Producers</div>
+
+<div class="action">📅 Book Session</div>
+
+<div class="action">🎵 My Songs</div>
+
+<div class="action">💳 Wallet</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h3 style="font-weight:500;">Nearby Producers</h3>
+
+<div class="card">
+
+<strong>FOSKY Studio</strong>
+
+<div style="color:#999;font-size:13px;margin-top:5px;">
+
+📍 Calculating distance...
+
+</div>
+
+<div class="verified" style="width:max-content;margin-top:12px;">
+
+<div class="verify-dot">✓</div>
+
+Verified
+
+</div>
+
+<div style="margin-top:12px;">
+
+<button>Book Now</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h3 style="font-weight:500;">Song Showcase</h3>
+
+<div class="card">
+
+<strong>No songs yet</strong>
+
+<div style="color:#999;font-size:13px;margin:8px 0 15px;">
+
+Upload up to 3 songs for producers to hear your sound.
+
+</div>
+
+<button>Upload Song</button>
+
+</div>
+
+</div>
+
+<div class="section" style="padding-bottom:90px;">
+
+<button id="logoutBtn" style="background:#222;">Log Out</button>
+
+</div>
+
+<div class="bottom">
+
+<div>🏠<br>Home</div>
+
+<div>🔍<br>Explore</div>
+
+<div>📅<br>Bookings</div>
+
+<div>💳<br>Wallet</div>
+
+<div>👤<br>Profile</div>
+
+</div>
+
+<script type="module">
+
+import { supabase } from './supabase.js';
+
+const { data:{user} } = await supabase.auth.getUser();
+
+if(!user){
+
+window.location='login.html';
+
+}
+
+const { data:profile }=await supabase
+
 .from('profiles')
+
 .select('*')
-.eq('id', user.id)
+
+.eq('id',user.id)
+
 .single();
 
 if(profile){
-  document.getElementById('artistName').textContent =
-      profile.artist_name || profile.full_name || 'Artist';
 
-  document.getElementById('artistTag').textContent =
-      '@' + (profile.artist_name || 'artist')
-      .replace(/\s+/g,'')
-      .toLowerCase();
+document.getElementById('artistName').textContent=
+
+profile.artist_name||profile.full_name||'Artist';
+
+document.getElementById('artistTag').textContent='@'+
+
+(profile.artist_name||'artist')
+
+.replace(/\s+/g,'')
+
+.toLowerCase();
+
+if(profile.avatar_url){
+
+document.getElementById('avatar').src=profile.avatar_url;
+
 }
 
-document.getElementById('logoutBtn').onclick = async ()=>{
-  await supabase.auth.signOut();
-  localStorage.clear();
-  window.location.href='login.html';
 }
+
+document.getElementById('avatarInput')
+
+.addEventListener('change',async(e)=>{
+
+const file=e.target.files[0];
+
+if(!file)return;
+
+const path=`${user.id}/avatar`;
+
+await supabase.storage
+
+.from('avatars')
+
+.upload(path,file,{upsert:true});
+
+const { data }=supabase.storage
+
+.from('avatars')
+
+.getPublicUrl(path);
+
+await supabase
+
+.from('profiles')
+
+.update({avatar_url:data.publicUrl})
+
+.eq('id',user.id);
+
+document.getElementById('avatar').src=data.publicUrl;
+
+});
+
+navigator.geolocation.getCurrentPosition((pos)=>{
+
+document.querySelector('.card div').textContent=
+
+`📍 Around your location`;
+
+});
+
+document.getElementById('logoutBtn').onclick=async()=>{
+
+await supabase.auth.signOut();
+
+localStorage.clear();
+
+window.location='login.html';
+
+};
+
 </script>
 
 </body>
