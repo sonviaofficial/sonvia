@@ -313,29 +313,30 @@ const file=e.target.files[0];
 
 if(!file)return;
 
-const path=`${user.id}/avatar`;
+const fileExt = file.name.split('.').pop();
+const path = `${user.id}/avatar.${fileExt}`;
 
-await supabase.storage
+const { error: uploadError } = await supabase.storage
+  .from('avatars')
+  .upload(path, file, { upsert: true });
 
-.from('avatars')
+if (uploadError) {
+  alert(uploadError.message);
+  return;
+}
 
-.upload(path,file,{upsert:true});
-
-const { data }=supabase.storage
-
-.from('avatars')
-
-.getPublicUrl(path);
+const { data } = supabase.storage
+  .from('avatars')
+  .getPublicUrl(path);
 
 await supabase
+  .from('profiles')
+  .update({ avatar_url: data.publicUrl })
+  .eq('id', user.id);
 
-.from('profiles')
-
-.update({avatar_url:data.publicUrl})
-
-.eq('id',user.id);
-
-document.getElementById('avatar').src=data.publicUrl;
+// Force refresh so the browser doesn't use the old image
+document.getElementById('avatar').src =
+  data.publicUrl + '?t=' + Date.now();
 
 });
 
