@@ -1,428 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <title>SONVIA – Artist Dashboard</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #0b0b0f;
-            color: #ffffff;
-        }
-
-        header {
-            padding: 22px 20px;
-            background: #111116;
-            border-bottom: 1px solid #22222a;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 25px;
-            letter-spacing: 1px;
-        }
-
-        header p {
-            margin: 5px 0 0;
-            color: #9999a5;
-            font-size: 14px;
-        }
-
-        main {
-            padding: 20px;
-            padding-bottom: 100px;
-            max-width: 700px;
-            margin: auto;
-        }
-
-        /* Welcome */
-
-        .welcome {
-            padding: 22px;
-            border-radius: 18px;
-            background: linear-gradient(135deg, #191922, #101015);
-            border: 1px solid #292933;
-            margin-bottom: 20px;
-        }
-
-        .welcome h2 {
-            margin: 0 0 8px;
-            font-size: 23px;
-        }
-
-        .welcome p {
-            margin: 0;
-            color: #aaaab5;
-            line-height: 1.5;
-        }
-
-        /* Quick action */
-
-        .section-title {
-            font-size: 17px;
-            margin: 25px 0 12px;
-        }
-
-        .action-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .action {
-            text-decoration: none;
-            color: #fff;
-            background: #15151c;
-            border: 1px solid #282832;
-            border-radius: 16px;
-            padding: 20px 16px;
-            transition: 0.2s;
-        }
-
-        .action:active {
-            transform: scale(0.97);
-        }
-
-        .action-icon {
-            font-size: 28px;
-            margin-bottom: 10px;
-        }
-
-        .action-title {
-            font-size: 15px;
-            font-weight: bold;
-        }
-
-        .action-text {
-            font-size: 12px;
-            color: #8f8f9b;
-            margin-top: 5px;
-            line-height: 1.4;
-        }
-
-        /* Booking */
-
-        .booking-card {
-            background: #15151c;
-            border: 1px solid #282832;
-            border-radius: 16px;
-            padding: 20px;
-        }
-
-        .empty-icon {
-            font-size: 35px;
-            margin-bottom: 10px;
-        }
-
-        .booking-card h3 {
-            margin: 0 0 7px;
-            font-size: 16px;
-        }
-
-        .booking-card p {
-            margin: 0;
-            color: #8f8f9b;
-            font-size: 13px;
-            line-height: 1.5;
-        }
-
-        .find-btn {
-            display: inline-block;
-            margin-top: 15px;
-            padding: 11px 17px;
-            border-radius: 10px;
-            background: #ffffff;
-            color: #000000;
-            text-decoration: none;
-            font-size: 13px;
-            font-weight: bold;
-        }
-
-        /* Wallet */
-
-        .wallet-card {
-            background: #15151c;
-            border: 1px solid #282832;
-            border-radius: 16px;
-            padding: 20px;
-        }
-
-        .wallet-label {
-            color: #8f8f9b;
-            font-size: 13px;
-        }
-
-        .wallet-balance {
-            font-size: 28px;
-            font-weight: bold;
-            margin-top: 8px;
-        }
-
-        .wallet-link {
-            display: inline-block;
-            margin-top: 14px;
-            color: #ffffff;
-            text-decoration: none;
-            font-size: 13px;
-        }
-
-        /* Bottom navigation */
-
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 72px;
-            background: rgba(15, 15, 20, 0.97);
-            border-top: 1px solid #25252e;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            z-index: 1000;
-        }
-
-        .nav-item {
-            color: #858591;
-            text-decoration: none;
-            text-align: center;
-            font-size: 11px;
-        }
-
-        .nav-item span {
-            display: block;
-            font-size: 21px;
-            margin-bottom: 3px;
-        }
-
-        .nav-item.active {
-            color: #ffffff;
-        }
-
-        @media (min-width: 600px) {
-            .action-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SONVIA • Artist Dashboard</title>
+<link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-    <!-- HEADER -->
-
-    <header>
-        <h1>SONVIA</h1>
-        <p>Artist Dashboard</p>
-    </header>
-
-
-    <main>
-
-        <!-- WELCOME -->
-
-        <section class="welcome">
-
-            <h2 id="artistName">
-                Welcome, Artist 🎤
-            </h2>
-
-            <p>
-                Find producers, book studio services,
-                and manage your SONVIA activity.
-            </p>
-
-        </section>
-
-
-        <!-- QUICK ACTIONS -->
-
-        <h3 class="section-title">
-            Quick Actions
-        </h3>
-
-        <div class="action-grid">
-
-            <a href="producers.html" class="action">
-
-                <div class="action-icon">🔎</div>
-
-                <div class="action-title">
-                    Find Producers
-                </div>
-
-                <div class="action-text">
-                    Discover producers and studio services.
-                </div>
-
-            </a>
-
-
-            <a href="artist-bookings.html" class="action">
-
-                <div class="action-icon">📅</div>
-
-                <div class="action-title">
-                    Bookings
-                </div>
-
-                <div class="action-text">
-                    View your upcoming and recent bookings.
-                </div>
-
-            </a>
-
-
-            <a href="artist-wallet.html" class="action">
-
-                <div class="action-icon">💰</div>
-
-                <div class="action-title">
-                    Wallet
-                </div>
-
-                <div class="action-text">
-                    View your balance and spending records.
-                </div>
-
-            </a>
-
-
-            <a href="artist-settings.html" class="action">
-
-                <div class="action-icon">⚙️</div>
-
-                <div class="action-title">
-                    Settings
-                </div>
-
-                <div class="action-text">
-                    Manage your SONVIA account.
-                </div>
-
-            </a>
-
-        </div>
-
-
-        <!-- BOOKINGS -->
-
-        <h3 class="section-title">
-            Upcoming Booking
-        </h3>
-
-        <section class="booking-card">
-
-            <div class="empty-icon">
-                📅
-            </div>
-
-            <h3>
-                No upcoming bookings
-            </h3>
-
-            <p>
-                You haven't booked a producer or studio session yet.
-            </p>
-
-            <a href="producers.html" class="find-btn">
-                Find a Producer
-            </a>
-
-        </section>
-
-
-        <!-- WALLET -->
-
-        <h3 class="section-title">
-            Wallet
-        </h3>
-
-        <section class="wallet-card">
-
-            <div class="wallet-label">
-                Available Balance
-            </div>
-
-            <div class="wallet-balance">
-                ₦0.00
-            </div>
-
-            <a href="artist-wallet.html" class="wallet-link">
-                View wallet →
-            </a>
-
-        </section>
-
-    </main>
-
-
-    <!-- BOTTOM NAVIGATION -->
-
-    <nav class="bottom-nav">
-
-        <a href="index.html" class="nav-item active">
-            <span>🏠</span>
-            Home
-        </a>
-
-        <a href="producers.html" class="nav-item">
-            <span>🔎</span>
-            Explore
-        </a>
-
-        <a href="artist-bookings.html" class="nav-item">
-            <span>📅</span>
-            Bookings
-        </a>
-
-        <a href="artist-wallet.html" class="nav-item">
-            <span>💰</span>
-            Wallet
-        </a>
-
-        <a href="artist-settings.html" class="nav-item">
-            <span>⚙️</span>
-            Settings
-        </a>
-
-    </nav>
-
-
-    <!-- ARTIST INFORMATION -->
-
-    <script>
-
-        const artist =
-            JSON.parse(
-                localStorage.getItem("sonviaArtist")
-            );
-
-
-        if (artist) {
-
-            const name =
-                artist.artistName ||
-                artist.fullName ||
-                "Artist";
-
-            document.getElementById("artistName")
-                .textContent =
-                "Welcome, " + name + " 🎤";
-
-        }
-
-    </script>
+<header class="hero">
+  <box gap=1 align=center padding=4>
+    <badge label="🟣 Early Access Member" color=discovery size=md />
+    <title size=xl>SONVIA</title>
+    <text>Artist Dashboard</text>
+  </box>
+</header>
+
+<main class="container">
+
+  <box background=surface radius=2xl padding=3 gap=3>
+    <row align=center gap=3>
+      <box radius="100%" clip background=surface-secondary border=1>
+        <AsyncImage query="default user avatar profile circle" aspectRatio="1:1" maxWidth=72 maxHeight=72/>
+      </box>
+
+      <box gap=1 flex=1>
+        <title id="artistName">Loading...</title>
+        <text id="artistTag">@artist</text>
+        <badge label="Artist" color=discovery />
+      </box>
+    </row>
+
+    <button block variant=outline>📸 Change Profile Picture</button>
+  </box>
+
+  <grid columns=2>
+    <grid-item>
+      <box background=surface radius=xl padding=3 align=center gap=2>
+        <icon name=search color=discovery />
+        <text textAlign=center>Find Producers</text>
+      </box>
+    </grid-item>
+    <grid-item>
+      <box background=surface radius=xl padding=3 align=center gap=2>
+        <icon name=calendar color=discovery />
+        <text textAlign=center>Book Session</text>
+      </box>
+    </grid-item>
+    <grid-item>
+      <box background=surface radius=xl padding=3 align=center gap=2>
+        <icon name=music color=discovery />
+        <text textAlign=center>My Projects</text>
+      </box>
+    </grid-item>
+    <grid-item>
+      <box background=surface radius=xl padding=3 align=center gap=2>
+        <icon name=wallet color=discovery />
+        <text textAlign=center>Wallet</text>
+      </box>
+    </grid-item>
+  </grid>
+
+  <box background=surface radius=xl padding=3 gap=3>
+    <row justify=between align=center>
+      <title size=md>Recommended Producers</title>
+      <text size=sm>See all</text>
+    </row>
+
+    <box background=surface-secondary radius=lg padding=3 gap=2 border=1>
+      <row justify=between align=center>
+        <box gap=0>
+          <text strong>FOSKY Studio</text>
+          <row gap=1 align=center wrap=wrap>
+            <icon name=map-pin color=secondary />
+            <text size=sm>Ikorodu, Lagos</text>
+          </row>
+        </box>
+        <badge label="Verified" color=discovery />
+      </row>
+
+      <row justify=between align=center>
+        <box gap=0>
+          <text size=sm>Vocal Recording</text>
+          <title size=sm>₦50,000</title>
+        </box>
+        <button size=sm>Book Now</button>
+      </row>
+    </box>
+  </box>
+
+  <box background=surface radius=xl padding=3 gap=3>
+    <title size=md>Recent Bookings</title>
+
+    <box background=surface-secondary radius=lg padding=3 gap=1 border=1 align=center>
+      <icon name=calendar color=secondary />
+      <text>No bookings yet.</text>
+      <text size=sm>Your upcoming sessions will appear here.</text>
+    </box>
+  </box>
+
+  <button block color=danger variant=outline id="logoutBtn">Log Out</button>
+
+</main>
+
+<box background="#111111" border={{top:{size:1,color:"#222"}}} padding=3>
+  <row justify=between align=center>
+    <box align=center gap=1>
+      <icon name=home color=discovery />
+      <text size=xs>Home</text>
+    </box>
+    <box align=center gap=1>
+      <icon name=search color=secondary />
+      <text size=xs>Explore</text>
+    </box>
+    <box align=center gap=1>
+      <icon name=calendar color=secondary />
+      <text size=xs>Bookings</text>
+    </box>
+    <box align=center gap=1>
+      <icon name=wallet color=secondary />
+      <text size=xs>Wallet</text>
+    </box>
+    <box align=center gap=1>
+      <icon name=circle-user color=secondary />
+      <text size=xs>Profile</text>
+    </box>
+  </row>
+</box>
+
+<script type="module">
+import { supabase } from './supabase.js';
+
+const { data: { user } } = await supabase.auth.getUser();
+
+if(!user){
+  window.location.href='login.html';
+}
+
+const { data: profile } = await supabase
+.from('profiles')
+.select('*')
+.eq('id', user.id)
+.single();
+
+if(profile){
+  document.getElementById('artistName').textContent =
+      profile.artist_name || profile.full_name || 'Artist';
+
+  document.getElementById('artistTag').textContent =
+      '@' + (profile.artist_name || 'artist')
+      .replace(/\s+/g,'')
+      .toLowerCase();
+}
+
+document.getElementById('logoutBtn').onclick = async ()=>{
+  await supabase.auth.signOut();
+  localStorage.clear();
+  window.location.href='login.html';
+}
+</script>
 
 </body>
-    </html>
+</html>
