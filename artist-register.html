@@ -59,120 +59,43 @@
 </main>
 
 <script type="module">
-
 import { supabase } from './supabase.js';
 
-const artistForm =
-    document.getElementById('artistForm');
+const form = document.getElementById('artistForm');
 
-const registerButton =
-    document.getElementById('registerButton');
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
 
+  const fullName = document.getElementById('fullName').value.trim();
+  const artistName = document.getElementById('artistName').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
 
-artistForm.addEventListener('submit', async function (e) {
-
-    e.preventDefault();
-
-    const fullName =
-        document.getElementById('fullName')
-            .value
-            .trim();
-
-    const artistName =
-        document.getElementById('artistName')
-            .value
-            .trim();
-
-    const email =
-        document.getElementById('email')
-            .value
-            .trim();
-
-    const password =
-        document.getElementById('password')
-            .value;
-
-
-    if (!fullName || !artistName || !email || !password) {
-
-        alert('❌ Please complete all fields.');
-
-        return;
-    }
-
-
-    registerButton.disabled = true;
-    registerButton.textContent = 'Creating account...';
-
-
-    try {
-
-        // CREATE AUTH ACCOUNT
-        const { data, error } = await supabase.auth.signUp({
-    email,
-    password,
-    options: {
-        emailRedirectTo: 'https://sonviaofficial.github.io/sonvia/login.html'
+  try {
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        emailRedirectTo: 'https://sonviaofficial.github.io/sonvia/login.html',
         data: {
-            role: 'artist'
+          role: 'artist',
+          full_name: fullName,
+          artist_name: artistName
         }
-    }
+      }
+    });
+
+    if (error) throw error;
+
+    alert("✅ Artist account created successfully. Verify your email before logging in.");
+    window.location.href = "login.html";
+
+  } catch (err) {
+    alert("❌ " + err.message);
+  }
 });
-
-
-        if (error) {
-
-            throw error;
-
-        }
-
-
-        const user = data.user;
-
-
-        if (!user) {
-
-            throw new Error(
-                'SONVIA could not create your account.'
-            );
-
-        }
-
-        // EVERYTHING SUCCESSFUL
-        alert(
-            '✅ SONVIA artist account created successfully!\n\n' +
-            '📧 A confirmation email has been sent to:\n' +
-            email +
-            '\n\n' +
-            'Please confirm your email before logging in.'
-        );
-
-
-        window.location.href =
-            'login.html';
-
-
-    } catch (error) {
-
-        console.error(
-            'Artist registration error:',
-            error
-        );
-
-        alert(
-            '❌ ' + error.message
-        );
-
-        registerButton.disabled = false;
-
-        registerButton.textContent =
-            'Create Artist Account';
-
-    }
-
-});
-
 </script>
+
 
 </body>
 </html>
