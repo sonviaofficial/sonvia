@@ -349,26 +349,23 @@ return;
 // ==========================================
 
 const artistName =
-profile.artist_name ||
-profile.full_name ||
-'Artist';
-
+    profile.username ||
+    profile.artist_name ||
+    profile.full_name ||
+    'Artist';
 
 document.getElementById('artistName').textContent =
-artistName;
-
+    artistName;
 
 const username =
-(profile.artist_name ||
-profile.full_name ||
-'artist')
-.trim()
-.replace(/\s+/g,'')
-.toLowerCase();
-
+    profile.username ||
+    artistName
+        .trim()
+        .replace(/\s+/g, '')
+        .toLowerCase();
 
 document.getElementById('artistTag').textContent =
-'@' + username;
+    '@' + username;
 
 
 // ==========================================
