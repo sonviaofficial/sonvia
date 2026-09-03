@@ -393,12 +393,41 @@ document.getElementById('artistName').textContent =
 // ==========================================
 
 document.getElementById('changeAvatarBtn')
-.addEventListener('click',()=>{
+.addEventListener('click', () => {
+  document.getElementById('avatarInput').click();
+});
 
-alert(
-'Profile picture upload will be available shortly. ' +
-'We are completing the secure avatar storage setup.'
-);
+document.getElementById('avatarInput')
+.addEventListener('change', async (e) => {
+
+  const file = e.target.files[0];
+  if (!file) return;
+
+  const { data: { user } } = await supabase.auth.getUser();
+
+  const fileExt = file.name.split('.').pop();
+  const path = `${user.id}/avatar.${fileExt}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from('avatars')
+    .upload(path, file, { upsert: true });
+
+  if (uploadError) {
+    alert(uploadError.message);
+    return;
+  }
+
+  const { data } = supabase.storage
+    .from('avatars')
+    .getPublicUrl(path);
+
+  await supabase
+    .from('profiles')
+    .update({ avatar_url: data.publicUrl })
+    .eq('id', user.id);
+
+  document.getElementById('avatar').src =
+    data.publicUrl + '?t=' + Date.now();
 
 });
 
