@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>SONVIA – Profile Settings</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <style>
+        body {
+            background: #0b0b0b;
+            color: #fff;
+            margin: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        .settings-header {
+            padding: 18px;
+            border-bottom: 1px solid #222;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .settings-header a {
+            color: #fff;
+            text-decoration: none;
+            font-size: 26px;
+        }
+
+        .settings-header h2 {
+            margin: 0;
+            font-size: 20px;
+        }
+
+        .settings-container {
+            max-width: 600px;
+            margin: auto;
+            padding: 25px 18px 100px;
+        }
+
+        .profile-picture-box {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .profile-picture-box img {
+            width: 110px;
+            height: 110px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #333;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #bbb;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #333;
+            background: #151515;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            border-color: #777;
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .save-btn {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 10px;
+            background: #16a34a;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        .save-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            display: none;
+            padding: 13px;
+            border-radius: 10px;
+            margin-bottom: 18px;
+            font-size: 14px;
+        }
+
+        .success {
+            display: block;
+            background: #12351f;
+            color: #7dffab;
+        }
+
+        .error {
+            display: block;
+            background: #351212;
+            color: #ff8b8b;
+        }
+
+        .section-title {
+            margin: 30px 0 15px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #222;
+            font-size: 17px;
+        }
+
+        .required {
+            color: #ff5c5c;
+        }
+
+        .profile-note {
+            color: #888;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header class="settings-header">
+
+    <a href="artist-dashboard.html">←</a>
+
+    <h2>Profile Settings</h2>
+
+</header>
+
+
+<main class="settings-container">
+
+    <div id="message" class="message"></div>
+
+
+    <!-- PROFILE PICTURE -->
+
+    <div class="profile-picture-box">
+
+        <img
+            id="profilePicture"
+            src="https://i.pravatar.cc/200"
+            alt="Artist Profile Picture"
+        >
+
+        <p class="profile-note">
+            Your profile picture can be added to your artist profile.
+        </p>
+
+    </div>
+
+
+    <!-- BASIC INFORMATION -->
+
+    <h3 class="section-title">
+        Artist Information
+    </h3>
+
+
+    <div class="form-group">
+
+        <label for="username">
+            Artist Name / Username <span class="required">*</span>
+        </label>
+
+        <input
+            type="text"
+            id="username"
+            placeholder="e.g. FOSKY.J"
+            maxlength="50"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="bio">
+            Bio
+        </label>
+
+        <textarea
+            id="bio"
+            placeholder="Tell people about yourself and your music..."
+            maxlength="500"
+        ></textarea>
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="genre">
+            Genre
+        </label>
+
+        <input
+            type="text"
+            id="genre"
+            placeholder="e.g. Afrobeats"
+            maxlength="100"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="location">
+            Location
+        </label>
+
+        <input
+            type="text"
+            id="location"
+            placeholder="e.g. Lagos, Nigeria"
+            maxlength="100"
+        >
+
+    </div>
+
+
+    <!-- CONTACT -->
+
+    <h3 class="section-title">
+        Contact
+    </h3>
+
+
+    <div class="form-group">
+
+        <label for="phone">
+            Phone Number
+        </label>
+
+        <input
+            type="tel"
+            id="phone"
+            placeholder="e.g. 08012345678"
+            maxlength="20"
+        >
+
+    </div>
+
+
+    <!-- SOCIAL MEDIA -->
+
+    <h3 class="section-title">
+        Social Media
+    </h3>
+
+
+    <div class="form-group">
+
+        <label for="instagram">
+            Instagram
+        </label>
+
+        <input
+            type="text"
+            id="instagram"
+            placeholder="@yourusername"
+            maxlength="100"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="tiktok">
+            TikTok
+        </label>
+
+        <input
+            type="text"
+            id="tiktok"
+            placeholder="@yourusername"
+            maxlength="100"
+        >
+
+    </div>
+
+
+    <div class="form-group">
+
+        <label for="audiomack">
+            Audiomack
+        </label>
+
+        <input
+            type="text"
+            id="audiomack"
+            placeholder="Audiomack profile link or username"
+            maxlength="200"
+        >
+
+    </div>
+
+
+    <button
+        type="button"
+        id="saveBtn"
+        class="save-btn"
+    >
+        Save Profile
+    </button>
+
+</main>
+
+
+<script>
+
+    /* =====================================================
+       SUPABASE CONNECTION
+       ===================================================== */
+
+    const SUPABASE_URL = "https://kuhynelblomedbyjsqhas.supabase.co";
+
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1aHluZWxib21lZGJ5anNxaGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTEyMzYsImV4cCI6MjEwMjIyNzIzNn0.V0AvGoj1_qG2IspiSAyoOnqaSTNlQO8qoS_vaV7ZNl8
+‎";
+
+    const supabaseClient =
+        window.supabase.createClient(
+            SUPABASE_URL,
+            SUPABASE_ANON_KEY
+        );
+
+
+    /* =====================================================
+       ELEMENTS
+       ===================================================== */
+
+    const usernameInput =
+        document.getElementById("username");
+
+    const bioInput =
+        document.getElementById("bio");
+
+    const genreInput =
+        document.getElementById("genre");
+
+    const locationInput =
+        document.getElementById("location");
+
+    const phoneInput =
+        document.getElementById("phone");
+
+    const instagramInput =
+        document.getElementById("instagram");
+
+    const tiktokInput =
+        document.getElementById("tiktok");
+
+    const audiomackInput =
+        document.getElementById("audiomack");
+
+    const saveBtn =
+        document.getElementById("saveBtn");
+
+    const message =
+        document.getElementById("message");
+
+
+    /* =====================================================
+       MESSAGE
+       ===================================================== */
+
+    function showMessage(text, type) {
+
+        message.textContent = text;
+
+        message.className =
+            "message " + type;
+
+    }
+
+
+    /* =====================================================
+       LOAD ARTIST PROFILE
+       ===================================================== */
+
+    async function loadProfile() {
+
+        try {
+
+            const {
+                data: {
+                    user
+                },
+                error: userError
+            } =
+                await supabaseClient.auth.getUser();
+
+
+            if (userError || !user) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            const {
+                data: profile,
+                error
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .select(`
+                        username,
+                        bio,
+                        genre,
+                        location,
+                        phone,
+                        instagram,
+                        tiktok,
+                        audiomack
+                    `)
+                    .eq("id", user.id)
+                    .maybeSingle();
+
+
+            if (error) {
+
+                console.error(error);
+
+                showMessage(
+                    "Unable to load your profile.",
+                    "error"
+                );
+
+                return;
+
+            }
+
+
+            if (!profile) {
+
+                showMessage(
+                    "Your artist profile is ready to be completed.",
+                    "success"
+                );
+
+                return;
+
+            }
+
+
+            usernameInput.value =
+                profile.username || "";
+
+            bioInput.value =
+                profile.bio || "";
+
+            genreInput.value =
+                profile.genre || "";
+
+            locationInput.value =
+                profile.location || "";
+
+            phoneInput.value =
+                profile.phone || "";
+
+            instagramInput.value =
+                profile.instagram || "";
+
+            tiktokInput.value =
+                profile.tiktok || "";
+
+            audiomackInput.value =
+                profile.audiomack || "";
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "Something went wrong while loading your profile.",
+                "error"
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SAVE ARTIST PROFILE
+       ===================================================== */
+
+    async function saveProfile() {
+
+        const username =
+            usernameInput.value.trim();
+
+        if (!username) {
+
+            showMessage(
+                "Please enter your artist name or username.",
+                "error"
+            );
+
+            usernameInput.focus();
+
+            return;
+
+        }
+
+
+        saveBtn.disabled = true;
+
+        saveBtn.textContent =
+            "Saving...";
+
+
+        try {
+
+            const {
+                data: {
+                    user
+                },
+                error: userError
+            } =
+                await supabaseClient.auth.getUser();
+
+
+            if (userError || !user) {
+
+                window.location.href =
+                    "login.html";
+
+                return;
+
+            }
+
+
+            const profileData = {
+
+                id: user.id,
+
+                username:
+                    username,
+
+                bio:
+                    bioInput.value.trim(),
+
+                genre:
+                    genreInput.value.trim(),
+
+                location:
+                    locationInput.value.trim(),
+
+                phone:
+                    phoneInput.value.trim(),
+
+                instagram:
+                    instagramInput.value.trim(),
+
+                tiktok:
+                    tiktokInput.value.trim(),
+
+                audiomack:
+                    audiomackInput.value.trim()
+
+            };
+
+
+            const {
+                error
+            } =
+                await supabaseClient
+                    .from("profiles")
+                    .upsert(
+                        profileData,
+                        {
+                            onConflict: "id"
+                        }
+                    );
+
+
+            if (error) {
+
+                console.error(error);
+
+                throw error;
+
+            }
+
+
+            showMessage(
+                "✅ Profile saved successfully!",
+                "success"
+            );
+
+
+            saveBtn.textContent =
+                "Saved ✓";
+
+
+            setTimeout(() => {
+
+                saveBtn.textContent =
+                    "Save Profile";
+
+            }, 2000);
+
+        }
+
+        catch (error) {
+
+            console.error(error);
+
+            showMessage(
+                "❌ Could not save your profile. Please try again.",
+                "error"
+            );
+
+        }
+
+        finally {
+
+            saveBtn.disabled = false;
+
+        }
+
+    }
+
+
+    /* =====================================================
+       SAVE BUTTON
+       ===================================================== */
+
+    saveBtn.addEventListener(
+        "click",
+        saveProfile
+    );
+
+
+    /* =====================================================
+       START
+       ===================================================== */
+
+    loadProfile();
+
+</script>
+
+</body>
+  </html>
