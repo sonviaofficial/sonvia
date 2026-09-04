@@ -159,57 +159,70 @@ Verified
 <!-- Avatar upload is kept ready but disabled until
      the Supabase Storage policy is completed. -->
 
-<input
-type="file"
-id="avatarInput"
-accept="image/*"
-hidden>
-
-<div style="margin-top:18px;">
-
-<button id="changeAvatarBtn" type="button">
-
-Change Profile Picture
-
-</button>
-
-</div>
-
-</div>
-
-<div class="section">
-
-<div class="grid">
-
-<div class="action">🎙️ Find Producers</div>
-
-<div class="action">📅 Book Session</div>
-
-<div class="action">🎵 My Songs</div>
-
-<div class="action">💳 Wallet</div>
-
-<a
-    href="profile-settings.html"
-    class="action"
-    style="text-decoration:none;color:white;"
->
-    ⚙️ Profile Settings
-</a>
-
-</div>
-
-</div>
-
-<div class="section">
-
-<h3 style="font-weight:500;">Nearby Producers</h3>
-
-<div class="card">
-
-<strong>FOSKY Studio</strong>
-
-<div id="locationText"
+‎<input
+‎type="file"
+‎id="avatarInput"
+‎accept="image/*"
+‎hidden>
+‎
+‎<div style="margin-top:18px;">
+‎
+‎<button id="changeAvatarBtn" type="button">
+‎
+‎Change Profile Picture
+‎
+‎</button>
+‎
+‎</div> <!-- closes margin-top:18px -->
+‎
+‎</div> <!-- closes .header -->
+‎
+‎<div class="section">
+‎
+‎    <div class="card">
+‎
+‎        <div style="font-size:13px;color:#999;">
+‎            Artist Profile
+‎        </div>
+‎
+‎        <div id="artistGenre" style="margin-top:10px;font-size:15px;">
+‎            🎵 Genre not set
+‎        </div>
+‎
+‎        <div id="artistLocation" style="margin-top:8px;font-size:15px;">
+‎            📍 Location not set
+‎        </div>
+‎
+‎    </div>
+‎
+‎    <div class="grid">
+‎
+‎        <div class="action">🎙️ Find Producers</div>
+‎
+‎        <div class="action">📅 Book Session</div>
+‎
+‎        <div class="action">🎵 My Songs</div>
+‎
+‎        <div class="action">💳 Wallet</div>
+‎
+‎        <a href="profile-settings.html"
+‎           class="action"
+‎           style="text-decoration:none;color:white;">
+‎            ⚙️ Profile Settings
+‎        </a>
+‎
+‎</div>
+‎</div>
+‎
+‎<div class="section">
+‎
+‎<h3 style="font-weight:500;">Nearby Producers</h3>
+‎
+‎<div class="card">
+‎
+‎<strong>FOSKY Studio</strong>
+‎
+‎<div id="locationText"
 style="color:#999;font-size:13px;margin-top:5px;">
 
 📍 Calculating distance...
@@ -233,6 +246,8 @@ Verified
 
 </div>
 
+ </div>  
+     
 </div>
 
 <div class="section">
@@ -366,7 +381,11 @@ const username =
 
 document.getElementById('artistTag').textContent =
     '@' + username;
+document.getElementById('artistGenre').textContent =
+    '🎵 ' + (profile.genre || 'Genre not set');
 
+document.getElementById('artistLocation').textContent =
+    '📍 ' + (profile.location || 'Location not set');
 
 // ==========================================
 // LOAD EXISTING AVATAR
