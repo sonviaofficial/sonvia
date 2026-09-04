@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Get Verified • SONVIA</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+    background:#0b0b0f;
+    color:white;
+    font-family:Arial,sans-serif;
+    margin:0;
+    min-height:100vh;
+}
+
+.header{
+    padding:22px 20px;
+    display:flex;
+    align-items:center;
+    gap:15px;
+    border-bottom:1px solid #24242c;
+    background:#111116;
+}
+
+.back{
+    width:42px;
+    height:42px;
+    border-radius:50%;
+    border:1px solid #30303a;
+    background:#1a1a22;
+    color:white;
+    font-size:20px;
+    cursor:pointer;
+}
+
+.header-title{
+    font-size:18px;
+    font-weight:500;
+}
+
+.container{
+    padding:25px 20px 40px;
+    max-width:520px;
+    margin:auto;
+}
+
+.hero{
+    text-align:center;
+    padding:15px 5px 25px;
+}
+
+.badge{
+    width:76px;
+    height:76px;
+    border-radius:50%;
+    background:#7C3AED;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 18px;
+    font-size:38px;
+    font-weight:bold;
+    box-shadow:0 0 30px rgba(124,58,237,.25);
+}
+
+h1{
+    margin:0 0 10px;
+    font-size:28px;
+    font-weight:600;
+}
+
+.hero p{
+    color:#aaa;
+    line-height:1.6;
+    margin:0 auto;
+    max-width:430px;
+}
+
+.card{
+    background:#15151d;
+    border:1px solid #24242d;
+    border-radius:20px;
+    padding:20px;
+    margin-bottom:15px;
+}
+
+.card h3{
+    margin:0 0 15px;
+    font-size:17px;
+    font-weight:500;
+}
+
+.benefit{
+    display:flex;
+    gap:13px;
+    align-items:flex-start;
+    margin:15px 0;
+}
+
+.benefit-icon{
+    width:34px;
+    height:34px;
+    flex-shrink:0;
+    border-radius:10px;
+    background:rgba(124,58,237,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.benefit-text strong{
+    display:block;
+    margin-bottom:4px;
+    font-size:14px;
+}
+
+.benefit-text span{
+    color:#999;
+    font-size:13px;
+    line-height:1.5;
+}
+
+.price-card{
+    text-align:center;
+}
+
+.price-label{
+    color:#999;
+    font-size:13px;
+}
+
+.price{
+    font-size:32px;
+    font-weight:600;
+    margin:8px 0;
+}
+
+.price-note{
+    color:#888;
+    font-size:12px;
+}
+
+button.pay{
+    width:100%;
+    border:none;
+    background:#7C3AED;
+    color:white;
+    padding:15px;
+    border-radius:14px;
+    font-size:16px;
+    font-weight:500;
+    cursor:pointer;
+    margin-top:18px;
+}
+
+button.pay:active{
+    transform:scale(.98);
+}
+
+button.pay:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.note{
+    color:#777;
+    font-size:12px;
+    line-height:1.5;
+    text-align:center;
+    margin-top:18px;
+}
+
+.status{
+    display:none;
+    text-align:center;
+    padding:20px;
+    background:#15151d;
+    border:1px solid #24242d;
+    border-radius:20px;
+    margin-top:15px;
+}
+
+.status-icon{
+    font-size:35px;
+    margin-bottom:10px;
+}
+
+.status h3{
+    margin:0 0 8px;
+    font-weight:500;
+}
+
+.status p{
+    color:#999;
+    font-size:13px;
+    line-height:1.5;
+    margin:0;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- ==========================================
+     HEADER
+========================================== -->
+
+<div class="header">
+
+    <button
+        class="back"
+        type="button"
+        onclick="history.back()"
+    >
+        ‹
+    </button>
+
+    <div class="header-title">
+        SONVIA Verification
+    </div>
+
+</div>
+
+
+<div class="container">
+
+
+<!-- ==========================================
+     HERO
+========================================== -->
+
+<div class="hero">
+
+    <div class="badge">
+        ✓
+    </div>
+
+    <h1>
+        Get Verified
+    </h1>
+
+    <p>
+        Get the official SONVIA verified badge
+        and let artists, producers and other
+        users know that your profile has been
+        verified by SONVIA.
+    </p>
+
+</div>
+
+
+<!-- ==========================================
+     BENEFITS
+========================================== -->
+
+<div class="card">
+
+    <h3>
+        Why get verified?
+    </h3>
+
+
+    <div class="benefit">
+
+        <div class="benefit-icon">
+            ✓
+        </div>
+
+        <div class="benefit-text">
+
+            <strong>
+                Official SONVIA Badge
+            </strong>
+
+            <span>
+                Display the same verified badge
+                used across SONVIA profiles.
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="benefit">
+
+        <div class="benefit-icon">
+            ⭐
+        </div>
+
+        <div class="benefit-text">
+
+            <strong>
+                Build Trust
+            </strong>
+
+            <span>
+                Help other users recognize your
+                profile as verified by SONVIA.
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <div class="benefit">
+
+        <div class="benefit-icon">
+            🚀
+        </div>
+
+        <div class="benefit-text">
+
+            <strong>
+                Stand Out
+            </strong>
+
+            <span>
+                Make your profile easier to
+                recognize across the platform.
+            </span>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     PRICE
+========================================== -->
+
+<div class="card price-card">
+
+    <div class="price-label">
+        Verification application
+    </div>
+
+    <div class="price">
+        ₦5,000
+    </div>
+
+    <div class="price-note">
+        One-time verification fee
+    </div>
+
+
+    <button
+        id="payButton"
+        class="pay"
+        type="button"
+    >
+        Get Verified — ₦5,000
+    </button>
+
+    <div class="note">
+
+        Your payment will be processed securely.
+        Verification is subject to SONVIA approval.
+
+    </div>
+
+</div>
+
+
+<!-- ==========================================
+     STATUS
+========================================== -->
+
+<div
+    id="statusBox"
+    class="status"
+>
+
+    <div class="status-icon">
+        ⏳
+    </div>
+
+    <h3>
+        Verification Request
+    </h3>
+
+    <p>
+        Your verification request will appear
+        here after the payment system is connected.
+    </p>
+
+</div>
+
+
+</div>
+
+
+<!-- ==========================================
+     SUPABASE
+========================================== -->
+
+<script type="module">
+
+import { supabase } from './supabase.js';
+
+
+// ==========================================
+// CHECK USER
+// ==========================================
+
+async function checkUser(){
+
+    const {
+        data: { user },
+        error
+    } = await supabase.auth.getUser();
+
+
+    if(error || !user){
+
+        window.location.href = 'login.html';
+
+        return null;
+
+    }
+
+
+    return user;
+
+}
+
+
+// ==========================================
+// PAYMENT BUTTON
+// ==========================================
+
+document
+.getElementById('payButton')
+.addEventListener('click', async () => {
+
+
+    const button =
+        document.getElementById('payButton');
+
+
+    const user =
+        await checkUser();
+
+
+    if(!user) return;
+
+
+    /*
+       PAYMENT INTEGRATION WILL BE CONNECTED HERE.
+
+       IMPORTANT:
+       Do NOT put Paystack/Flutterwave secret
+       keys or SONVIA bank credentials inside
+       this HTML file.
+
+       Later this button will:
+
+       1. Start the ₦5,000 payment.
+       2. Confirm successful payment.
+       3. Create a verification request.
+       4. Send the request for SONVIA approval.
+       5. After approval, set is_verified = true.
+    */
+
+
+    button.disabled = true;
+
+    button.textContent =
+        'Payment setup coming next...';
+
+
+    document
+        .getElementById('statusBox')
+        .style.display = 'block';
+
+
+    setTimeout(() => {
+
+        button.disabled = false;
+
+        button.textContent =
+            'Get Verified — ₦5,000';
+
+    }, 1800);
+
+});
+
+
+// ==========================================
+// START
+// ==========================================
+
+checkUser();
+
+</script>
+
+
+</body>
+
+</html>
