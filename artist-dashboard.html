@@ -88,11 +88,16 @@ gap:12px;
 }
 
 .action{
+display:flex;
+align-items:center;
+justify-content:center;
 background:#1b1b25;
 padding:18px;
 border-radius:18px;
 text-align:center;
 font-size:14px;
+color:white;
+text-decoration:none;
 }
 
 button{
@@ -132,88 +137,76 @@ color:#bbb;
 
 <div class="header">
 
-<div class="profile">
+    <div class="profile">
 
-<img id="avatar" class="avatar"
-src="https://placehold.co/80x80/222/fff?text=A"
-alt="Artist avatar">
+        <img id="avatar" class="avatar"
+        src="https://placehold.co/80x80/222/fff?text=A"
+        alt="Artist avatar">
 
-<div>
+        <div>
 
-<h2 id="artistName">Loading...</h2>
+            <h2 id="artistName">Artist</h2>
 
-<div id="artistTag" class="username">@artist</div>
+            <div id="artistTag" class="username">@artist</div>
 
-<div class="verified">
+            <div id="artistGenre" class="username">
+                🎵 Genre not set
+            </div>
 
-<div class="verify-dot">✓</div>
+            <div id="artistLocation" class="username">
+                📍 Location not set
+            </div>
 
-Verified
+            <div class="verified">
+
+                <div class="verify-dot">✓</div>
+
+                Verified
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Avatar upload -->
+
+    <input
+    type="file"
+    id="avatarInput"
+    accept="image/*"
+    hidden>
+
+    <div style="margin-top:18px;">
+
+        <button id="changeAvatarBtn" type="button">
+            Change Profile Picture
+        </button>
+
+    </div>
 
 </div>
 
-</div>
+<div class="section">
+
+    <div class="grid">
+
+        <div class="action">🎙️ Find Producers</div>
+
+        <div class="action">📅 Book Session</div>
+
+        <div class="action">🎵 My Songs</div>
+
+        <div class="action">💳 Wallet</div>
+
+        <a href="profile-settings.html" class="action">
+    ⚙️ Profile Settings
+        </a>
+
+    </div>
 
 </div>
-
-<!-- Avatar upload is kept ready but disabled until
-     the Supabase Storage policy is completed. -->
-
-‎<input
-‎type="file"
-‎id="avatarInput"
-‎accept="image/*"
-‎hidden>
-‎
-‎<div style="margin-top:18px;">
-‎
-‎<button id="changeAvatarBtn" type="button">
-‎
-‎Change Profile Picture
-‎
-‎</button>
-‎
-‎</div> <!-- closes margin-top:18px -->
-‎
-‎</div> <!-- closes .header -->
-‎
-‎<div class="section">
-‎
-‎    <div class="card">
-‎
-‎        <div style="font-size:13px;color:#999;">
-‎            Artist Profile
-‎        </div>
-‎
-‎        <div id="artistGenre" style="margin-top:10px;font-size:15px;">
-‎            🎵 Genre not set
-‎        </div>
-‎
-‎        <div id="artistLocation" style="margin-top:8px;font-size:15px;">
-‎            📍 Location not set
-‎        </div>
-‎
-‎    </div>
-‎
-‎    <div class="grid">
-‎
-‎        <div class="action">🎙️ Find Producers</div>
-‎
-‎        <div class="action">📅 Book Session</div>
-‎
-‎        <div class="action">🎵 My Songs</div>
-‎
-‎        <div class="action">💳 Wallet</div>
-‎
-‎        <a href="profile-settings.html"
-‎           class="action"
-‎           style="text-decoration:none;color:white;">
-‎            ⚙️ Profile Settings
-‎        </a>
-‎
-‎</div>
-‎</div>
-‎
+     
 ‎<div class="section">
 ‎
 ‎<h3 style="font-weight:500;">Nearby Producers</h3>
