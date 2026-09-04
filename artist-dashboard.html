@@ -195,8 +195,6 @@ color:#bbb;
 
         <div class="action">📅 Book Session</div>
 
-        <a href="my-songs.html" class="action">🎵 My Songs</a>
-
         <div class="action">💳 Wallet</div>
 
         <a href="profile-settings.html" class="action">
@@ -222,14 +220,7 @@ style="color:#999;font-size:13px;margin-top:5px;">
 
 </div>
 
-<div class="verified"
-style="width:max-content;margin-top:12px;">
-
-<div class="verify-dot">✓</div>
-
-Verified
-
-</div>
+<div id="verificationStatus"></div>
 
 <div style="margin-top:12px;">
 
@@ -257,7 +248,9 @@ Upload up to 3 songs for producers to hear your sound.
 
 </div>
 
-<button type="button">Upload Song</button>
+<a href="my-songs.html" class="action">
+    🎵 My Songs
+</a>
 
 </div>
 
@@ -329,26 +322,22 @@ return;
 // ==========================================
 
 const {
-data: profile,
-error: profileError
+    data: profile,
+    error: profileError
 } = await supabase
-
-.from('profiles')
-.select('*')
-.eq('id', user.id)
-.single();
-
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single();
 
 if(profileError){
 
-console.error('Profile loading error:', profileError);
+    console.error('Profile loading error:', profileError);
 
-document.getElementById('artistName').textContent = 'Artist';
+    document.getElementById('artistName').textContent = 'Artist';
+    document.getElementById('artistTag').textContent = '@artist';
 
-document.getElementById('artistTag').textContent = '@artist';
-
-return;
-
+    return;
 }
 
 
@@ -374,11 +363,63 @@ const username =
 
 document.getElementById('artistTag').textContent =
     '@' + username;
+
 document.getElementById('artistGenre').textContent =
     '🎵 ' + (profile.genre || 'Genre not set');
 
 document.getElementById('artistLocation').textContent =
     '📍 ' + (profile.location || 'Location not set');
+
+
+// ==========================================
+// VERIFICATION STATUS
+// ==========================================
+
+const verificationStatus =
+    document.getElementById('verificationStatus');
+
+if(profile.is_verified === true){
+
+    // Existing SONVIA verified badge
+
+    verificationStatus.innerHTML = `
+
+        <div class="verified">
+
+            <div class="verify-dot">✓</div>
+
+            Verified
+
+        </div>
+
+    `;
+
+}else{
+
+    // Unverified user
+
+    verificationStatus.innerHTML = `
+
+        <a
+            href="get-verified.html"
+            class="verified"
+            style="
+                text-decoration:none;
+                color:white;
+                cursor:pointer;
+            "
+        >
+
+            <div class="verify-dot">✓</div>
+
+            Get Verified →
+
+        </a>
+
+    `;
+
+}
+
 
 // ==========================================
 // LOAD EXISTING AVATAR
@@ -386,8 +427,8 @@ document.getElementById('artistLocation').textContent =
 
 if(profile.avatar_url){
 
-document.getElementById('avatar').src =
-profile.avatar_url;
+    document.getElementById('avatar').src =
+        profile.avatar_url;
 
 }
 
