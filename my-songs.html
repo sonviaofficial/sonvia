@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SONVIA • My Songs</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+background:#0b0b0f;
+color:white;
+font-family:Arial,sans-serif;
+margin:0;
+}
+
+.header{
+display:flex;
+align-items:center;
+gap:15px;
+padding:20px;
+background:linear-gradient(180deg,#7C3AED,#1b132e);
+}
+
+.back{
+color:white;
+text-decoration:none;
+font-size:26px;
+}
+
+.container{
+padding:20px;
+padding-bottom:100px;
+}
+
+.card{
+background:#15151d;
+padding:18px;
+border-radius:18px;
+margin-bottom:16px;
+}
+
+input{
+width:100%;
+padding:14px;
+margin:10px 0;
+border:none;
+border-radius:12px;
+background:#222;
+color:white;
+box-sizing:border-box;
+}
+
+button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#7C3AED;
+color:white;
+font-size:15px;
+cursor:pointer;
+}
+
+button:disabled{
+opacity:.5;
+cursor:not-allowed;
+}
+
+.song{
+background:#181824;
+padding:15px;
+border-radius:14px;
+margin-bottom:14px;
+}
+
+.song h4{
+margin:0 0 10px;
+font-weight:500;
+}
+
+audio{
+width:100%;
+margin-top:8px;
+}
+
+.delete{
+margin-top:10px;
+background:#2b2b2b;
+}
+
+.note{
+font-size:13px;
+color:#aaa;
+margin-top:8px;
+}
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+<a href="artist-dashboard.html" class="back">←</a>
+
+<h2>My Songs</h2>
+
+</div>
+
+<div class="container">
+
+<div class="card">
+
+<h3>Upload Song</h3>
+
+<input
+type="text"
+id="songTitle"
+placeholder="Song title">
+
+<input
+type="file"
+id="songFile"
+accept="audio/*">
+
+<button id="uploadBtn">
+Upload Song
+</button>
+
+<p class="note">
+Maximum 3 songs.
+</p>
+
+</div>
+
+<div id="songsList"></div>
+
+</div>
+
+<script type="module">
+
+import { supabase } from './supabase.js';
+
+const songsList =
+document.getElementById('songsList');
+
+const uploadBtn =
+document.getElementById('uploadBtn');
+
+const titleInput =
+document.getElementById('songTitle');
+
+const fileInput =
+document.getElementById('songFile');
+
+
+// =============================
+// LOAD SONGS
+// =============================
+
+async function loadSongs(){
+
+const {
+data:{user}
+}=await supabase.auth.getUser();
+
+const {
+data:songs
+}=await supabase
+
+.from('songs')
+.select('*')
+.eq('artist_id',user.id)
+.order('created_at',{ascending:false});
+
+songsList.innerHTML='';
+
+if(!songs||songs.length===0){
+
+songsList.innerHTML=`
+<div class="card">
+No songs uploaded yet.
+</div>`;
+return;
+
+}
+
+songs.forEach(song=>{
+
+songsList.innerHTML+=`
+
+<div class="song">
+
+<h4>${song.title}</h4>
+
+<audio controls>
+
+<source src="${song.audio_url}" type="audio/mpeg">
+
+</audio>
+
+<button
+class="delete"
+onclick="deleteSong('${song.id}')">
+
+Delete
+
+</button>
+
+</div>`;
+
+});
+
+uploadBtn.disabled=songs.length>=3;
+
+}
+
+
+// =============================
+// UPLOAD
+// =============================
+
+uploadBtn.addEventListener('click',uploadSong);
+
+async function uploadSong(){
+
+const title=
+titleInput.value.trim();
+
+const file=
+fileInput.files[0];
+
+if(!title||!file){
+
+alert('Enter a title and choose a song.');
+
+return;
+
+}
+
+const {
+data:{user}
+}=await supabase.auth.getUser();
+
+const path=
+`${user.id}/${Date.now()}-${file.name}`;
+
+const {
+error:uploadError
+}=await supabase.storage
+.from('songs')
+.upload(path,file);
+
+if(uploadError){
+
+alert(uploadError.message);
+
+return;
+
+}
+
+const {
+data:urlData
+}=await supabase.storage
+.from('songs')
+.createSignedUrl(path,60*60*24*365);
+
+const {
+error:dbError
+}=await supabase
+.from('songs')
+.insert({
+
+artist_id:user.id,
+title:title,
+audio_url:urlData.signedUrl
+
+});
+
+if(dbError){
+
+alert(dbError.message);
+
+return;
+
+}
+
+titleInput.value='';
+fileInput.value='';
+
+loadSongs();
+
+}
+
+
+// =============================
+// DELETE
+// =============================
+
+window.deleteSong=
+async function(id){
+
+if(!confirm('Delete this song?')) return;
+
+await supabase
+.from('songs')
+.delete()
+.eq('id',id);
+
+loadSongs();
+
+}
+
+
+// =============================
+
+loadSongs();
+
+</script>
+
+</body>
+</html>
