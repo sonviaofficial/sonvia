@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SONVIA Admin</title>
+
+<style>
+
+body{
+background:#0b0b0f;
+color:white;
+font-family:Arial,sans-serif;
+margin:0;
+}
+
+.header{
+padding:22px;
+background:linear-gradient(180deg,#7C3AED,#171020);
+font-size:22px;
+font-weight:600;
+}
+
+.container{
+padding:18px;
+padding-bottom:80px;
+}
+
+.card{
+background:#15151d;
+border:1px solid #262632;
+border-radius:18px;
+padding:18px;
+margin-bottom:15px;
+}
+
+.name{
+font-size:18px;
+font-weight:600;
+margin-bottom:6px;
+}
+
+.small{
+color:#999;
+font-size:13px;
+margin-bottom:6px;
+}
+
+.status{
+display:inline-block;
+padding:6px 12px;
+border-radius:999px;
+background:rgba(124,58,237,.15);
+border:1px solid #7C3AED;
+font-size:12px;
+margin-top:8px;
+}
+
+.actions{
+display:flex;
+gap:10px;
+margin-top:15px;
+}
+
+button{
+flex:1;
+padding:12px;
+border:none;
+border-radius:12px;
+font-size:14px;
+cursor:pointer;
+}
+
+.approve{
+background:#16A34A;
+color:white;
+}
+
+.reject{
+background:#DC2626;
+color:white;
+}
+
+.empty{
+text-align:center;
+color:#888;
+padding:40px 0;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="header">
+🔐 SONVIA Admin
+</div>
+
+<div class="container" id="requests">
+
+<div class="empty">
+Loading verification requests...
+</div>
+
+</div>
+
+<script type="module">
+
+import { supabase } from './supabase.js';
+
+const container=document.getElementById('requests');
+
+async function loadAdmin(){
+
+const {data:{user}}=await supabase.auth.getUser();
+
+if(!user){
+
+window.location.href='login.html';
+
+return;
+
+}
+
+const {data:profile}=await supabase
+.from('profiles')
+.select('is_admin')
+.eq('id',user.id)
+.single();
+
+if(!profile || profile.is_admin!==true){
+
+window.location.href='artist-dashboard.html';
+
+return;
+
+}
+
+loadRequests();
+
+}
+
+async function loadRequests(){
+
+const {data,error}=await supabase
+.from('verification_requests')
+.select(`
+id,
+status,
+payment_amount,
+created_at,
+profiles:user_id(
+id,
+full_name,
+artist_name,
+username,
+role
+)
+`)
+.eq('status','pending')
+.order('created_at',{ascending:false});
+
+if(error){
+
+container.innerHTML='<div class="empty">Unable to load requests.</div>';
+
+return;
+
+}
+
+if(!data.length){
+
+container.innerHTML='<div class="empty">No pending requests.</div>';
+
+return;
+
+}
+
+container.innerHTML='';
+
+data.forEach(request=>{
+
+const profile=request.profiles||{};
+
+const name=
+profile.artist_name||
+profile.full_name||
+profile.username||
+'Unknown User';
+
+const role=profile.role||'user';
+
+const card=document.createElement('div');
+
+card.className='card';
+
+card.innerHTML=`
+<div class="name">${name}</div>
+
+<div class="small">@${profile.username||'user'}</div>
+
+<div class="small">Role: ${role}</div>
+
+<div class="small">₦${request.payment_amount||5000}</div>
+
+<div class="status">Pending</div>
+
+<div class="actions">
+
+<button class="approve">Approve</button>
+
+<button class="reject">Reject</button>
+
+</div>
+`;
+
+card.querySelector('.approve')
+.onclick=()=>approve(request.id,profile.id);
+
+card.querySelector('.reject')
+.onclick=()=>reject(request.id);
+
+container.appendChild(card);
+
+});
+
+}
+
+async function approve(requestId,userId){
+
+const ok=confirm('Approve this verification?');
+
+if(!ok)return;
+
+await supabase
+.from('verification_requests')
+.update({status:'approved'})
+.eq('id',requestId);
+
+await supabase
+.from('profiles')
+.update({
+is_verified:true,
+verification_status:'approved',
+verification_type:'paid'
+})
+.eq('id',userId);
+
+loadRequests();
+
+}
+
+async function reject(requestId){
+
+const ok=confirm('Reject this verification request?');
+
+if(!ok)return;
+
+await supabase
+.from('verification_requests')
+.update({status:'rejected'})
+.eq('id',requestId);
+
+loadRequests();
+
+}
+
+loadAdmin();
+
+</script>
+
+</body>
+</html>
