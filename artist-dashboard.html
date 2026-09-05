@@ -378,48 +378,36 @@ document.getElementById('artistLocation').textContent =
 const verificationStatus =
     document.getElementById('verificationStatus');
 
-if(profile.is_verified === true){
-
-    // Existing SONVIA verified badge
+if (profile.is_verified === true) {
 
     verificationStatus.innerHTML = `
-
         <div class="verified">
-
             <div class="verify-dot">✓</div>
-
             Verified
-
         </div>
-
     `;
 
-}else{
-
-    // Unverified user
+} else if (profile.verification_status === 'pending') {
 
     verificationStatus.innerHTML = `
+        <div class="verified">
+            <div class="verify-dot">⏳</div>
+            Verification Pending
+        </div>
+    `;
 
-        <a
-            href="get-verified.html"
-            class="verified"
-            style="
-                text-decoration:none;
-                color:white;
-                cursor:pointer;
-            "
-        >
+} else {
 
+    verificationStatus.innerHTML = `
+        <a href="get-verified.html"
+           class="verified"
+           style="text-decoration:none;color:white;">
             <div class="verify-dot">✓</div>
-
             Get Verified →
-
         </a>
-
     `;
 
 }
-
 
 // ==========================================
 // LOAD EXISTING AVATAR
