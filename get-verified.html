@@ -444,62 +444,61 @@ async function checkUser(){
 
 
 // ==========================================
-// PAYMENT BUTTON
+// GET VERIFIED (Before Paystack)
 // ==========================================
 
-document
-.getElementById('payButton')
-.addEventListener('click', async () => {
+document.getElementById('payButton').addEventListener('click', async () => {
 
+  const button = document.getElementById('payButton');
+  button.disabled = true;
+  button.textContent = 'Submitting...';
 
-    const button =
-        document.getElementById('payButton');
+  const { data: { user } } = await supabase.auth.getUser();
 
+  if (!user) {
+    window.location.href = 'login.html';
+    return;
+  }
 
-    const user =
-        await checkUser();
+  // Prevent duplicate requests
+  const { data: existing } = await supabase
+    .from('verification_requests')
+    .select('id')
+    .eq('user_id', user.id)
+    .eq('status', 'pending')
+    .maybeSingle();
 
+  if (existing) {
+    alert('You already have a pending verification request.');
+    window.location.href = 'artist-dashboard.html';
+    return;
+  }
 
-    if(!user) return;
+  // Create verification request
+  const { error } = await supabase
+    .from('verification_requests')
+    .insert({
+      user_id: user.id,
+      status: 'pending',
+      payment_amount: 5000
+    });
 
+  if (error) {
+    alert(error.message);
+    button.disabled = false;
+    button.textContent = 'Get Verified — ₦5,000';
+    return;
+  }
 
-    /*
-       PAYMENT INTEGRATION WILL BE CONNECTED HERE.
+  // Update profile status
+  await supabase
+    .from('profiles')
+    .update({ verification_status: 'pending' })
+    .eq('id', user.id);
 
-       IMPORTANT:
-       Do NOT put Paystack/Flutterwave secret
-       keys or SONVIA bank credentials inside
-       this HTML file.
+  alert('Verification request submitted.');
 
-       Later this button will:
-
-       1. Start the ₦5,000 payment.
-       2. Confirm successful payment.
-       3. Create a verification request.
-       4. Send the request for SONVIA approval.
-       5. After approval, set is_verified = true.
-    */
-
-
-    button.disabled = true;
-
-    button.textContent =
-        'Payment setup coming next...';
-
-
-    document
-        .getElementById('statusBox')
-        .style.display = 'block';
-
-
-    setTimeout(() => {
-
-        button.disabled = false;
-
-        button.textContent =
-            'Get Verified — ₦5,000';
-
-    }, 1800);
+  window.location.href = 'artist-dashboard.html';
 
 });
 
