@@ -222,21 +222,37 @@ uploadBtn.disabled=songs.length>=3;
 // UPLOAD
 // =============================
 
+uploadBtn.addEventListener('click', uploadSong);
+
+async function uploadSong(){
+
+const title = titleInput.value.trim();
+const file = fileInput.files[0];
+
+if(!title || !file){
+    alert('Enter a title and choose a song.');
+    return;
+}
+
+uploadBtn.disabled = true;
+uploadBtn.textContent = "Uploading...";
+
 const {
-error: uploadError
-}=await supabase.storage
+    data:{user}
+} = await supabase.auth.getUser();
+
+const path = `${user.id}/${Date.now()}-${file.name}`;
+
+const { error: uploadError } =
+await supabase.storage
 .from('songs')
-.upload(path,file);
+.upload(path, file);
 
 if(uploadError){
-
-uploadBtn.disabled = false;
-uploadBtn.textContent = "Upload Song";
-
-alert(uploadError.message);
-
-return;
-
+    uploadBtn.disabled = false;
+    uploadBtn.textContent = "Upload Song";
+    alert(uploadError.message);
+    return;
 }
 
 const { data: urlData } =
@@ -244,39 +260,34 @@ await supabase.storage
 .from('songs')
 .getPublicUrl(path);
 
-const {
-error: dbError
-}=await supabase
+const { error: dbError } =
+await supabase
 .from('songs')
 .insert({
-
-artist_id:user.id,
-title:title,
-audio_url:urlData.publicUrl,
-storage_path:path
-
+    artist_id: user.id,
+    title: title,
+    audio_url: urlData.publicUrl,
+    storage_path: path
 });
 
 if(dbError){
-
-uploadBtn.disabled = false;
-uploadBtn.textContent = "Upload Song";
-
-alert(dbError.message);
-
-return;
-
+    uploadBtn.disabled = false;
+    uploadBtn.textContent = "Upload Song";
+    alert(dbError.message);
+    return;
 }
 
-titleInput.value='';
-fileInput.value='';
+titleInput.value = '';
+fileInput.value = '';
 
 await loadSongs();
 
 uploadBtn.disabled = false;
 uploadBtn.textContent = "Upload Song";
-  
-  }
+
+alert("✅ Song uploaded successfully!");
+
+}
   
 // =============================
 // DELETE
