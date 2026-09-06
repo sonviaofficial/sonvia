@@ -343,22 +343,8 @@
 </main>
 
 
-<script>
-
-    /* =====================================================
-       SUPABASE CONNECTION
-       ===================================================== */
-
-    const SUPABASE_URL = "https://kuhynelblomedbyjsqhas.supabase.co";
-
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1aHluZWxib21lZGJ5anNxaGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTEyMzYsImV4cCI6MjEwMjIyNzIzNn0.V0AvGoj1_qG2IspiSAyoOnqaSTNlQO8qoS_vaV7ZNl8
-‎";
-
-    const supabaseClient =
-        window.supabase.createClient(
-            SUPABASE_URL,
-            SUPABASE_ANON_KEY
-        );
+<script type="module">
+import { supabase } from './supabase.js';
 
 
     /* =====================================================
@@ -424,7 +410,7 @@
                 },
                 error: userError
             } =
-                await supabaseClient.auth.getUser();
+                await supabase.auth.getUser();
 
 
             if (userError || !user) {
@@ -441,7 +427,7 @@
                 data: profile,
                 error
             } =
-                await supabaseClient
+                await supabase
                     .from("profiles")
                     .select(`
                         username,
@@ -560,7 +546,7 @@
                 },
                 error: userError
             } =
-                await supabaseClient.auth.getUser();
+                await supabase.auth.getUser();
 
 
             if (userError || !user) {
@@ -607,7 +593,7 @@
             const {
                 error
             } =
-                await supabaseClient
+                await supabase
                     .from("profiles")
                     .upsert(
                         profileData,
