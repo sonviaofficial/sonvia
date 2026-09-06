@@ -88,25 +88,56 @@ line-height:1.6;
 }
 
 .illustration{
-
 display:flex;
-
 justify-content:center;
-
 align-items:center;
-
 margin:20px 0;
-
 }
 
-.illustration img{
+.orb{
+width:220px;
+height:220px;
+border-radius:50%;
+background:
+radial-gradient(circle at 30% 30%, #B794F6 0%, #7C3AED 35%, #3B0A73 70%, #12051F 100%);
+box-shadow:
+0 0 40px rgba(124,58,237,.45),
+0 0 80px rgba(124,58,237,.25);
+position:relative;
+overflow:hidden;
+animation:float 4s ease-in-out infinite;
+}
 
-width:100%;
+.orb::before{
+content:"";
+position:absolute;
+width:170px;
+height:170px;
+border-radius:50%;
+background:rgba(255,255,255,.08);
+top:20px;
+left:25px;
+transform:rotate(25deg);
+filter:blur(6px);
+}
 
-max-width:320px;
+.orb::after{
+content:"";
+position:absolute;
+inset:0;
+background:
+linear-gradient(135deg,
+transparent 20%,
+rgba(255,255,255,.18) 35%,
+transparent 55%,
+rgba(255,255,255,.10) 75%,
+transparent);
+mix-blend-mode:screen;
+}
 
-filter:drop-shadow(0 0 25px rgba(124,58,237,.35));
-
+@keyframes float{
+0%,100%{transform:translateY(0);}
+50%{transform:translateY(-10px);}
 }
 
 .bottom{
@@ -186,10 +217,7 @@ and grow your sound.
 </div>
 
 <div class="illustration">
-
-<img src="https://placehold.co/320x260/7C3AED/FFFFFF?text=SONVIA"
-alt="SONVIA">
-
+  <div class="orb"></div>
 </div>
 
 <div class="bottom">
