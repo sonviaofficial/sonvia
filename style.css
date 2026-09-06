@@ -1308,3 +1308,15 @@ body {
     color: #04110a;
     border-radius: 999px;
 }
+.logo{
+cursor:pointer;
+user-select:none;
+transition:.25s ease;
+}
+
+.logo.founder-glow{
+transform:scale(1.03);
+text-shadow:
+0 0 12px rgba(124,58,237,.8),
+0 0 30px rgba(124,58,237,.6);
+}
