@@ -1,134 +1,332 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SONVIA Platform</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="style.css">
-    <link rel="manifest" href="manifest.json">
+<title>SONVIA</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+margin:0;
+font-family:Arial,sans-serif;
+background:#0b0b0f;
+color:white;
+overflow-x:hidden;
+}
+
+.hero{
+
+min-height:100vh;
+
+display:flex;
+
+flex-direction:column;
+
+justify-content:space-between;
+
+background:linear-gradient(180deg,#7C3AED,#0b0b0f);
+
+padding:40px 24px;
+
+box-sizing:border-box;
+
+}
+
+.top{
+
+text-align:center;
+
+margin-top:30px;
+
+}
+
+.logo{
+
+font-size:42px;
+
+font-weight:700;
+
+letter-spacing:2px;
+
+margin:0;
+
+cursor:pointer;
+
+user-select:none;
+
+transition:.25s ease;
+
+}
+
+.logo.founder-glow{
+
+transform:scale(1.03);
+
+text-shadow:
+
+0 0 12px rgba(124,58,237,.8),
+
+0 0 30px rgba(124,58,237,.6);
+
+}
+
+.tagline{
+
+margin-top:15px;
+
+color:#E9D8FD;
+
+font-size:17px;
+
+line-height:1.6;
+
+}
+
+.illustration{
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+margin:20px 0;
+
+}
+
+.illustration img{
+
+width:100%;
+
+max-width:320px;
+
+filter:drop-shadow(0 0 25px rgba(124,58,237,.35));
+
+}
+
+.bottom{
+
+text-align:center;
+
+margin-bottom:30px;
+
+}
+
+button{
+
+width:100%;
+
+max-width:320px;
+
+padding:16px;
+
+border:none;
+
+border-radius:999px;
+
+background:#7C3AED;
+
+color:white;
+
+font-size:17px;
+
+font-weight:600;
+
+cursor:pointer;
+
+transition:.25s ease;
+
+}
+
+button:active{
+
+transform:scale(.98);
+
+}
+
+.note{
+
+margin-top:18px;
+
+color:#B8B8B8;
+
+font-size:13px;
+
+line-height:1.5;
+
+}
+
+</style>
+
 </head>
 
 <body>
 
-<header>
+<div class="hero">
 
-    <div class="logo-area">
-        <div class="logo-circle">🎙️</div>
+<div class="top">
 
-        <h1 id="sonviaLogo" class="logo">SONVIA</h1>
+<h1 id="sonviaLogo" class="logo">SONVIA</h1>
 
-        <p>Music Producer Marketplace</p>
-    </div>
+<p class="tagline">
 
-    <a href="login.html">
-        <button type="button">Login</button>
-    </a>
+Connect with verified producers,
 
-</header>
+book studio sessions,
 
+and grow your sound.
 
-<main>
+</p>
 
-    <div class="welcome">
+</div>
 
-        <h2>Welcome to SONVIA 🎵</h2>
+<div class="illustration">
 
-        <p>
-            Connect artists with producers and
-            book professional studio services.
-        </p>
+<img src="https://placehold.co/320x260/7C3AED/FFFFFF?text=SONVIA"
+alt="SONVIA">
 
-    </div>
+</div>
 
+<div class="bottom">
 
-    <section>
+<button id="getStartedBtn">
 
-        <h3>Create an Account</h3>
+Get Started
 
+</button>
 
-        <a href="register-producer.html">
-            <button type="button">
-                🎙️ Create Producer Account
-            </button>
-        </a>
+<p class="note">
 
+Join artists and producers building
 
-        <a href="artist-register.html">
-            <button type="button">
-                🎤 Create Artist Account
-            </button>
-        </a>
+the future of music together.
 
-    </section>
+</p>
 
-</main>
+</div>
 
-
-<script src="script.js"></script>
+</div>
 
 <script type="module">
+
 import { supabase } from './supabase.js';
 
+
 // ==========================================
-// SONVIA FOUNDER VAULT
+// GET STARTED
 // ==========================================
 
-let founderTaps = 0;
+const startBtn=document.getElementById('getStartedBtn');
+
+startBtn.addEventListener('click',()=>{
+
+startBtn.textContent='Entering SONVIA...';
+
+startBtn.disabled=true;
+
+setTimeout(()=>{
+
+window.location.href='welcome.html';
+
+},600);
+
+});
+
+
+// ==========================================
+// FOUNDER VAULT
+// ==========================================
+
+let founderTaps=0;
 let founderTimer;
 
-const logo = document.getElementById('sonviaLogo');
+const logo=document.getElementById('sonviaLogo');
 
-logo.addEventListener('click', async () => {
+logo.addEventListener('click',async()=>{
 
-  founderTaps++;
-  logo.classList.add('founder-glow');
+founderTaps++;
 
-  clearTimeout(founderTimer);
+logo.classList.add('founder-glow');
 
-  founderTimer = setTimeout(() => {
-    founderTaps = 0;
-    logo.classList.remove('founder-glow');
-  }, 2000);
+clearTimeout(founderTimer);
 
-  if (founderTaps === 5) {
+founderTimer=setTimeout(()=>{
 
-    founderTaps = 0;
-    logo.classList.remove('founder-glow');
+founderTaps=0;
 
-    if (navigator.vibrate) navigator.vibrate(80);
+logo.classList.remove('founder-glow');
 
-    const { data: { user } } = await supabase.auth.getUser();
+},2000);
 
-    if (!user) return;
+if(founderTaps===5){
 
-    const { data: profile } = await supabase
-      .from('profiles')
-      .select('is_admin')
-      .eq('id', user.id)
-      .single();
+founderTaps=0;
 
-    if (profile?.is_admin) {
-      window.location.href = 'admin-verification.html';
-    }
-  }
+logo.classList.remove('founder-glow');
+
+if(navigator.vibrate){
+
+navigator.vibrate(80);
+
+}
+
+const {data:{user}}=await supabase.auth.getUser();
+
+if(!user)return;
+
+const {data:profile}=await supabase
+
+.from('profiles')
+
+.select('is_admin')
+
+.eq('id',user.id)
+
+.single();
+
+if(profile?.is_admin){
+
+window.location.href='admin-verification.html';
+
+}
+
+}
+
 });
+
 </script>
 
 <script>
-if ("serviceWorker" in navigator) {
-    window.addEventListener("load", function () {
-        navigator.serviceWorker
-            .register("./service-worker.js")
-            .then(function () {
-                console.log("SONVIA service worker registered successfully.");
-            })
-            .catch(function (error) {
-                console.error("SONVIA service worker registration failed:", error);
-            });
-    });
+
+if("serviceWorker" in navigator){
+
+window.addEventListener("load",function(){
+
+navigator.serviceWorker
+
+.register("./service-worker.js")
+
+.then(()=>{
+
+console.log("SONVIA service worker registered.");
+
+})
+
+.catch(error=>{
+
+console.error(error);
+
+});
+
+});
+
 }
+
 </script>
 
 </body>
