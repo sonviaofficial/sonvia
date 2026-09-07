@@ -1320,3 +1320,28 @@ text-shadow:
 0 0 12px rgba(124,58,237,.8),
 0 0 30px rgba(124,58,237,.6);
 }
+
+/* ============================= */
+/* SONVIA BOTTOM NAVIGATION */
+/* ============================= */
+
+.nav-item{
+display:flex;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+text-decoration:none;
+color:#fff;
+font-size:12px;
+gap:4px;
+transition:.2s ease;
+}
+
+.nav-item:hover{
+color:#B794F6;
+}
+
+.nav-item svg{
+width:22px;
+height:22px;
+}
