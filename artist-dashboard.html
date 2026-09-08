@@ -3,31 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>SONVIA Artist</title>
-
 <link rel="stylesheet" href="style.css">
-
 <style>
-
 body{
 background:#0b0b0f;
 color:white;
 font-family:Arial,sans-serif;
 margin:0;
 }
-
 .header{
 padding:30px 20px;
 background:linear-gradient(180deg,#7C3AED,#1b132e);
 }
-
 .profile{
 display:flex;
 align-items:center;
 gap:15px;
 }
-
 .avatar{
 width:80px;
 height:80px;
@@ -36,17 +29,14 @@ object-fit:cover;
 border:3px solid #9F67FF;
 background:#222;
 }
-
 h2{
 font-weight:500;
 margin:0;
 }
-
 .username{
 color:#b8b8b8;
 font-size:14px;
 }
-
 .verified{
 display:inline-flex;
 align-items:center;
@@ -58,7 +48,6 @@ border-radius:999px;
 font-size:13px;
 margin-top:8px;
 }
-
 .verify-dot{
 width:18px;
 height:18px;
@@ -69,24 +58,20 @@ align-items:center;
 justify-content:center;
 font-size:12px;
 }
-
 .section{
 padding:20px;
 }
-
 .card{
 background:#15151d;
 padding:18px;
 border-radius:18px;
 margin-bottom:15px;
 }
-
 .grid{
 display:grid;
 grid-template-columns:repeat(2,1fr);
 gap:12px;
 }
-
 .action{
 display:flex;
 align-items:center;
@@ -99,7 +84,6 @@ font-size:14px;
 color:white;
 text-decoration:none;
 }
-
 button{
 background:#7C3AED;
 color:white;
@@ -110,7 +94,6 @@ font-size:15px;
 cursor:pointer;
 width:100%;
 }
-
 .bottom{
 position:fixed;
 bottom:0;
@@ -122,267 +105,334 @@ justify-content:space-around;
 padding:14px;
 border-top:1px solid #2a2a2a;
 }
-
 .bottom div{
 font-size:12px;
 text-align:center;
 color:#bbb;
 }
-
 </style>
-
 </head>
-
 <body>
-
 <div class="header">
+    <div class="profile">
+  <img id="avatar" class="avatar"
+       src="https://placehold.co/80x80/222/fff?text=A"
+       alt="Artist avatar">
+  <div style="flex:1;">
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;">
+      <div>
+<h1 id="artistName">Artist</h1>
+        <div id="artistTag" class="username">@artist</div>
+      </div>
+      <div id="notificationBell"
+     style="position:relative;cursor:pointer;padding:6px;display:inline-flex;">
 
-    <div class="profile">
-
-        <img id="avatar" class="avatar"
-        src="https://placehold.co/80x80/222/fff?text=A"
-        alt="Artist avatar">
-
-        <div>
-
-            <h2 id="artistName">Artist</h2>
-
-            <div id="artistTag" class="username">@artist</div>
-
-            <div id="artistGenre" class="username">
-                🎵 Genre not set
-            </div>
-
-            <div id="artistLocation" class="username">
-                📍 Location not set
-            </div>
-
-            <div class="verified">
-
-                <div class="verify-dot">✓</div>
-
-                Verified
-
-            </div>
-
-        </div>
-
+  <svg width="24" height="24"
+       viewBox="0 0 24 24"
+       fill="none"
+       stroke="currentColor"
+       stroke-width="2">
+    <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"/>
+    <path d="M10 21a2 2 0 0 0 4 0"/>
+  </svg>
+  <span id="notificationCount"
+        style="
+        position:absolute;
+        top:2px;
+        right:2px;
+        min-width:14px;
+        height:14px;
+        padding:0 4px;
+        border-radius:999px;
+        background:#ef4444;
+        color:white;
+        font-size:9px;
+        font-weight:bold;
+        display:none;
+        align-items:center;
+        justify-content:center;">
+  </span>
     </div>
-
-    <!-- Avatar upload -->
-
-    <input
-    type="file"
-    id="avatarInput"
-    accept="image/*"
-    hidden>
-
-    <div style="margin-top:18px;">
-
-        <button id="changeAvatarBtn" type="button">
-            Change Profile Picture
-        </button>
-
+    <div class="verified">
+      <div class="verify-dot">✓</div>
+      Verified
     </div>
-
+    <div id="followersCount"
+         style="margin-top:10px;color:#ddd;font-size:14px;font-weight:500;">
+      0 Followers
+    </div>
+  </div>
 </div>
-
+    
+    <!-- Avatar upload -->
+    <input
+    type="file"
+    id="avatarInput"
+    accept="image/*"
+    hidden>
+    <div style="margin-top:18px;">
+        <button id="changeAvatarBtn" type="button">
+            Change Profile Picture
+        </button>
+    </div>
+</div>
 <div class="section">
+    <div class="grid">
 
-    <div class="grid">
+<a href="explore.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="11" cy="11" r="7"/>
+<path d="M20 20l-3.5-3.5"/>
+</svg>
+Find Producers
+</div>
+</a>
 
-        <div class="action">🎙️ Find Producers</div>
+<div id="bookSessionCard" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="3" y="5" width="18" height="16" rx="2"/>
+<path d="M16 3v4M8 3v4M3 10h18"/>
+</svg>
+Book Session
+</div>
+</div>
 
-        <div class="action">📅 Book Session</div>
+<a href="wallet.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<rect x="2" y="6" width="20" height="12" rx="2"/>
+<path d="M2 10h20"/>
+</svg>
+Wallet
+</div>
+</a>
 
-        <div class="action">💳 Wallet</div>
-
-        <a href="profile-settings.html" class="action">
-    ⚙️ Profile Settings
-        </a>
+<a href="profile-settings.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="8" r="4"/>
+<path d="M4 21c2-4 14-4 16 0"/>
+</svg>
+Profile Settings
+</div>
+</a>
+        
+<a href="chat.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+<svg width="24" height="24"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="2">
+<path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+</svg>
+Chat
+</div>
+</a>
+        
+<a href="meet.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+<svg width="24" height="24"
+viewBox="0 0 24 24"
+fill="none"
+stroke="currentColor"
+stroke-width="2">
+<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+<circle cx="9" cy="7" r="4"/>
+<path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+<path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+</svg>
+Meet
+</div>
+</a>
 
     </div>
-
 </div>
-     
-‎<div class="section">
-‎
-‎<h3 style="font-weight:500;">Nearby Producers</h3>
-‎
-‎<div class="card">
-
+     
+<div class="section">
+<h3 style="font-weight:500;">Nearby Producers</h3>
+<div class="card">
 <strong id="producerName">FOSKY Studio</strong>
-
 <div id="locationText"
 style="color:#999;font-size:13px;margin-top:8px;">
 Calculating distance...
 </div>
-
-<div style="display:flex;align-items:center;gap:6px;margin-top:8px;color:#8B5CF6;">
-    ✓ Verified Producer
+<div style="display:inline-flex;
+align-items:center;
+gap:5px;
+padding:5px 10px;
+background:rgba(124,58,237,.15);
+border:1px solid #7C3AED;
+border-radius:999px;
+font-size:12px;
+margin-top:8px;
+color:#ddd;">
+<div class="verify-dot"
+style="width:15px;height:15px;font-size:10px;">
+✓
 </div>
-
+Verified Producer
+</div>
 <div style="margin-top:14px;padding:12px;border-radius:12px;background:#1b1b27;">
-
-    <div style="font-size:12px;color:#aaa;">
-        Studio Amount
-    </div>
-
-    <div id="studioAmount"
-         style="font-size:22px;font-weight:bold;margin-top:4px;">
-        ₦50,000
-    </div>
-
+    <div style="font-size:12px;color:#aaa;">
+        Studio Amount
+    </div>
+    <div id="studioAmount"
+         style="font-size:22px;font-weight:bold;margin-top:4px;">
+        ₦50,000
+    </div>
 </div>
-
 <div style="margin-top:14px;">
-
 <button id="bookNowBtn" type="button">
 Book Now
 </button>
-
 </div>
-
 </div>
-
- </div>  
-     
+</div>  
+   
+</div>
+<div class="section">
+<h2 style="font-weight:500;">Song Showcase</h2>
+<div id="songShowcase" class="card">
+Loading songs...
+</div>
 </div>
 
 <div class="section">
 
-<h2 style="font-weight:500;">Song Showcase</h2>
-
-<div id="songShowcase" class="card">
-Loading songs...
-</div>
-
-</div>
-
-Upload up to 3 songs for producers to hear your sound.
-
-</div>
-
-<a href="my-songs.html" class="action">
-    🎵 My Songs
-</a>
-
-</div>
+  <a href="my-songs.html" class="action">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M9 18V5l12-2v13"/>
+        <circle cx="6" cy="18" r="3"/>
+        <circle cx="18" cy="16" r="3"/>
+      </svg>
+      My Songs
+    </div>
+  </a>
 
 </div>
 
 <div class="section" style="padding-bottom:90px;">
-
-<button id="logoutBtn" style="background:#222;" type="button">
-
-Log Out
-
-</button>
-
+  <button id="logoutBtn" style="background:#222;" type="button">
+    Log Out
+  </button>
 </div>
 
 <div class="bottom">
-
+  ...
+</div>
+  <a href="artist-dashboard.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M3 10.5L12 3l9 7.5"/>
+      <path d="M5 9.5V21h14V9.5"/>
+    </svg>
+    Home
+  </a>
+</div>
 <div>
-  <a href="artist-dashboard.html" class="nav-item">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <path d="M3 10.5L12 3l9 7.5"/>
-      <path d="M5 9.5V21h14V9.5"/>
-    </svg>
-    Home
-  </a>
+  <a href="explore.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="7"/>
+      <path d="M20 20l-3.5-3.5"/>
+    </svg>
+    Explore
+  </a>
 </div>
-
 <div>
-  <a href="explore.html" class="nav-item">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="11" cy="11" r="7"/>
-      <path d="M20 20l-3.5-3.5"/>
-    </svg>
-    Explore
-  </a>
+  <a href="bookings.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="3" y="5" width="18" height="16" rx="2"/>
+      <path d="M16 3v4M8 3v4M3 10h18"/>
+    </svg>
+    Bookings
+  </a>
 </div>
-
 <div>
-  <a href="bookings.html" class="nav-item">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <rect x="3" y="5" width="18" height="16" rx="2"/>
-      <path d="M16 3v4M8 3v4M3 10h18"/>
-    </svg>
-    Bookings
-  </a>
+  <a href="wallet.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <rect x="2" y="6" width="20" height="12" rx="2"/>
+      <path d="M2 10h20"/>
+    </svg>
+    Wallet
+  </a>
 </div>
-
 <div>
-  <a href="wallet.html" class="nav-item">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <rect x="2" y="6" width="20" height="12" rx="2"/>
-      <path d="M2 10h20"/>
-    </svg>
-    Wallet
-  </a>
+  <a href="profile-settings.html" class="nav-item">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="12" cy="8" r="4"/>
+      <path d="M4 21c2-4 14-4 16 0"/>
+    </svg>
+    Profile
+  </a>
 </div>
-
-<div>
-  <a href="profile-settings.html" class="nav-item">
-    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-      <circle cx="12" cy="8" r="4"/>
-      <path d="M4 21c2-4 14-4 16 0"/>
-    </svg>
-    Profile
-  </a>
 </div>
-
-</div>
-
 <script type="module">
-
 import { supabase } from './supabase.js';
+function formatFollowers(count){
+  if(count===1) return "1 Follower";
+  if(count<1000) return `${count} Followers`;
+  if(count<1000000){
+    const value=(count/1000).toFixed(count>=10000?0:1);
+    return `${value.replace(".0","")}K Followers`;
+  }
+  const value=(count/1000000).toFixed(count>=10000000?0:1);
+  return `${value.replace(".0","")}M Followers`;
+}
+    function updateNotificationBadge(count){
+const badge=document.getElementById("notificationCount");
+if(count<=0){
+badge.style.display="none";
+return;
+}
+badge.style.display="flex";
+badge.textContent=count>99?"99+":count;
+}
+// Example
+updateNotificationBadge(0);
+    document.getElementById("followersCount").textContent =
+formatFollowers(0);
+    document.getElementById('notificationBell')
+.addEventListener('click', () => {
+  window.location.href = 'notifications.html';
+});
 // ==========================================
 // BOOKING PREVIEW
 // ==========================================
-
 document
 .getElementById('bookNowBtn')
 .addEventListener('click', () => {
-
 alert(
 `Booking Preview
-
 Producer: FOSKY Studio
-
 Studio Amount: ₦50,000
-
 Location: Ikorodu, Lagos
-
 Booking payments are coming soon.`
 );
-
 });
- // =============================
+    document.getElementById('bookSessionCard')
+.addEventListener('click', () => {
+  document.getElementById('bookNowBtn').click();
+});
+// =============================
 // SONG SHOWCASE
 // =============================
-
 async function loadSongShowcase(){
-
 const {
 data:{user}
 }=await supabase.auth.getUser();
-
 const {
-data:songs
-}=await supabase
+data:songs}=await supabase
 .from('songs')
 .select('*')
 .eq('artist_id',user.id)
 .order('created_at',{ascending:false})
 .limit(3);
-
 const showcase=
 document.getElementById('songShowcase');
-
 if(!songs||songs.length===0){
-
 showcase.innerHTML=`
 <h3>No songs yet</h3>
 <p>Upload up to 3 songs for producers to hear your sound.</p>
@@ -390,287 +440,160 @@ showcase.innerHTML=`
 <button>My Songs</button>
 </a>`;
 return;
-
 }
-
 showcase.innerHTML=songs.map(song=>`
 <div class="song" style="margin-bottom:15px;">
-
 <h4>${song.title}</h4>
-
 <audio controls>
 <source src="${song.audio_url}">
 </audio>
-
 </div>
 `).join('')+
-
 `<a href="my-songs.html">
 <button style="margin-top:12px;">View All Songs</button>
 </a>`;
-
-}   
-
+}   
 // ==========================================
 // LOAD LOGGED-IN ARTIST
 // ==========================================
-
 async function loadArtist(){
-
 try{
-
 const {
 data: { user },
 error: authError
 } = await supabase.auth.getUser();
-
 if(authError){
-
 console.error('Authentication error:', authError);
-
 window.location.href = 'login.html';
-
 return;
-
 }
-
 if(!user){
-
 window.location.href = 'login.html';
-
 return;
-
 }
-
-
 // ==========================================
 // GET ARTIST PROFILE
 // ==========================================
-
 const {
-    data: profile,
-    error: profileError
+    data: profile,
+    error: profileError
 } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', user.id)
-    .single();
-
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single();
 if(profileError){
 
-    console.error('Profile loading error:', profileError);
+console.error('Profile loading error:', profileError);
 
-    document.getElementById('artistName').textContent = 'Artist';
-    document.getElementById('artistTag').textContent = '@artist';
-
-    return;
-}
-
-
-// ==========================================
-// DISPLAY ARTIST INFORMATION
-// ==========================================
-
-const artistName =
-    profile.username ||
-    profile.artist_name ||
-    profile.full_name ||
-    'Artist';
-
-document.getElementById('artistName').textContent =
-    artistName;
-
-const username =
-    profile.username ||
-    artistName
-        .trim()
-        .replace(/\s+/g, '')
-        .toLowerCase();
-
-document.getElementById('artistTag').textContent =
-    '@' + username;
-
-document.getElementById('artistGenre').textContent =
-    '🎵 ' + (profile.genre || 'Genre not set');
-
-document.getElementById('artistLocation').textContent =
-    '📍 ' + (profile.location || 'Location not set');
-
-
-// ==========================================
-// VERIFICATION STATUS
-// ==========================================
-
-const verificationStatus =
-    document.getElementById('verificationStatus');
-
-if (profile.is_verified === true) {
-
-    verificationStatus.innerHTML = `
-        <div class="verified">
-            <div class="verify-dot">✓</div>
-            Verified
-        </div>
-    `;
-
-} else if (profile.verification_status === 'pending') {
-
-    verificationStatus.innerHTML = `
-        <div class="verified">
-            <div class="verify-dot">⏳</div>
-            Verification Pending
-        </div>
-    `;
-
-} else {
-
-    verificationStatus.innerHTML = `
-        <a href="get-verified.html"
-           class="verified"
-           style="text-decoration:none;color:white;">
-            <div class="verify-dot">✓</div>
-            Get Verified
-        </a>
-    `;
-
-}
-
-// ==========================================
-// LOAD EXISTING AVATAR
-// ==========================================
-
-if(profile.avatar_url){
-
-    document.getElementById('avatar').src =
-        profile.avatar_url;
-
-}
-
-}
-
-catch(error){
-
-console.error('Dashboard error:', error);
-
-document.getElementById('artistName').textContent =
-'Artist';
-
-}
-
-}
-
-
-// ==========================================
-// AVATAR BUTTON
-// ==========================================
-
-document.getElementById('changeAvatarBtn')
-.addEventListener('click', () => {
-  document.getElementById('avatarInput').click();
-});
-
-document.getElementById('avatarInput')
-.addEventListener('change', async (e) => {
-
-  const file = e.target.files[0];
-  if (!file) return;
-
-  const { data: { user } } = await supabase.auth.getUser();
-
-  const fileExt = file.name.split('.').pop();
-  const path = `${user.id}/avatar.${fileExt}`;
-
-  const { error: uploadError } = await supabase.storage
-    .from('avatars')
-    .upload(path, file, { upsert: true });
-
-  if (uploadError) {
-    alert(uploadError.message);
-    return;
-  }
-
-  const { data } = supabase.storage
-    .from('avatars')
-    .getPublicUrl(path);
-
-  await supabase
-    .from('profiles')
-    .update({ avatar_url: data.publicUrl })
-    .eq('id', user.id);
-
-  document.getElementById('avatar').src =
-    data.publicUrl + '?t=' + Date.now();
-
-});
-
-
-// ==========================================
-// LOCATION
-// ==========================================
-
-if(navigator.geolocation){
-
-navigator.geolocation.getCurrentPosition(
-
-()=>{
-
-document.getElementById('locationText').textContent =
-'📍 Around your location';
-
-},
-
-()=>{
-
-document.getElementById('locationText').textContent =
-'📍 Location unavailable';
-
-}
-
-);
-
-}else{
-
-document.getElementById('locationText').textContent =
-'📍 Location unavailable';
-
-}
-
-
-// ==========================================
-// LOGOUT
-// ==========================================
-
-document.getElementById('logoutBtn')
-.addEventListener('click',async()=>{
-
-const {
-error
-} = await supabase.auth.signOut();
-
-if(error){
-
-console.error('Logout error:',error);
-
-alert('Unable to log out. Please try again.');
+document.getElementById('artistName').textContent='Artist';
+document.getElementById('artistTag').textContent='@artist';
 
 return;
 
 }
-
-localStorage.clear();
-
-window.location.href = 'login.html';
-
+// ==========================================
+// DISPLAY ARTIST INFORMATION
+// ==========================================
+const artistName =
+    profile.username ||
+    profile.artist_name ||
+    profile.full_name ||
+    'Artist';
+document.getElementById('artistName').textContent =
+    artistName;
+const username =
+    profile.username ||
+    artistName
+        .trim()
+        .replace(/\s+/g, '')
+        .toLowerCase();
+document.getElementById('artistTag').textContent =
+    '@' + username;
+// ==========================================
+// LOAD EXISTING AVATAR
+// ==========================================
+if(profile.avatar_url){
+    document.getElementById('avatar').src =
+        profile.avatar_url;
+}
+}
+catch(error){
+console.error('Dashboard error:', error);
+document.getElementById('artistName').textContent =
+'Artist';
+}
+}
+// ==========================================
+// AVATAR BUTTON
+// ==========================================
+document.getElementById('changeAvatarBtn')
+.addEventListener('click', () => {
+  document.getElementById('avatarInput').click();
 });
-
-
+document.getElementById('avatarInput')
+.addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const { data: { user } } = await supabase.auth.getUser();
+  const fileExt = file.name.split('.').pop();
+  const path = `${user.id}/avatar.${fileExt}`;
+  const { error: uploadError } = await supabase.storage
+    .from('avatars')
+    .upload(path, file, { upsert: true });
+  if (uploadError) {
+    alert(uploadError.message);
+    return;
+  }
+  const { data } = supabase.storage
+    .from('avatars')
+    .getPublicUrl(path);
+  await supabase
+    .from('profiles')
+    .update({ avatar_url: data.publicUrl })
+    .eq('id', user.id);
+  document.getElementById('avatar').src =
+    data.publicUrl + '?t=' + Date.now();
+});
+// ==========================================
+// LOCATION
+// ==========================================
+if(navigator.geolocation){
+navigator.geolocation.getCurrentPosition(
+()=>{
+document.getElementById('locationText').textContent =
+'Near your location'
+},
+()=>{
+document.getElementById('locationText').textContent =
+'Location unavailable'
+}
+);
+}else{
+document.getElementById('locationText').textContent =
+'Location unavailable'
+};
+// ==========================================
+// LOGOUT
+// ==========================================
+document.getElementById('logoutBtn')
+.addEventListener('click',async()=>{
+const {
+error
+} = await supabase.auth.signOut();
+if(error){
+console.error('Logout error:',error);
+alert('Unable to log out. Please try again.');
+return;
+}
+localStorage.clear();
+window.location.href = 'login.html';
+});
 // ==========================================
 // START DASHBOARD
 // ==========================================
-
 loadArtist();
 await loadSongShowcase();
 </script>
-
 </body>
-</html>
+    </html>
