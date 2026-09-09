@@ -343,19 +343,25 @@ style="width:44px;height:44px;border-radius:50%;">
 
 <strong>FOSKY Studio</strong>
 
-<div class="verify-dot"
-style="width:14px;height:14px;font-size:9px;">
-✓
-</div>
+
+  <div class="price-card">
+
+<div class="price-label">Studio Amount</div>
+
+<div id="studioTotal" class="price-total">₦60,000</div>
+
+<label class="beat-option">
+
+<input type="checkbox" id="includeBeat">
+
+<span>Include Beat (+₦20,000)</span>
+
+</label>
+
+  </div>
 
 </div>
-
-<div style="font-size:12px;color:#aaa;">
-Studio Amount • ₦50,000
-</div>
-
-</div>
-
+  
 </div>
 
 <div style="
@@ -524,18 +530,37 @@ badge.textContent=count>99?"99+":count;
 updateNotificationBadge(0);
 
 document.getElementById("notificationBell")
-.addEventListener("click",()=>{
-
-window.location.href="notifications.html";
-
+.addEventListener("click", () => {
+  window.location.href = "notifications.html";
 });
 
-document.getElementById("studioAvatar")
-.addEventListener("click",()=>{
+// Producer avatar opens public profile
+const producerAvatar = document.getElementById("producerAvatar");
 
-document.getElementById("studioAvatarInput").click();
+if (producerAvatar) {
+  producerAvatar.addEventListener("click", () => {
+    window.location.href = "profile.html?id=PRODUCER_ID";
+  });
+}
+// ==========================================
+// INCLUDE BEAT PRICE TOGGLE
+// ==========================================
 
-});
+const studioPrice = 60000;
+const beatPrice = 20000;
+
+const total = document.getElementById("studioTotal");
+const beat = document.getElementById("includeBeat");
+
+if (total && beat) {
+  beat.addEventListener("change", () => {
+    const amount = beat.checked
+      ? studioPrice + beatPrice
+      : studioPrice;
+
+    total.textContent = "₦" + amount.toLocaleString();
+  });
+}
 </script>
 
 </body>
