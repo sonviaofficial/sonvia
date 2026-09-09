@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SONVIA Producer</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+margin:0;
+background:#0b0b0f;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+.header{
+padding:30px 20px;
+background:linear-gradient(180deg,#7C3AED,#1b132e);
+}
+
+.profile{
+display:flex;
+gap:15px;
+align-items:center;
+}
+
+.avatar{
+width:80px;
+height:80px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #9F67FF;
+background:#222;
+cursor:pointer;
+}
+
+.username{
+color:#bbb;
+font-size:14px;
+}
+
+.verified{
+display:inline-flex;
+align-items:center;
+gap:6px;
+padding:5px 10px;
+background:rgba(124,58,237,.15);
+border:1px solid #7C3AED;
+border-radius:999px;
+font-size:12px;
+}
+
+.verify-dot{
+width:15px;
+height:15px;
+background:#7C3AED;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:9px;
+}
+
+.section{
+padding:20px;
+}
+
+.card{
+background:#15151d;
+padding:18px;
+border-radius:18px;
+margin-bottom:15px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+}
+
+.action{
+display:flex;
+align-items:center;
+justify-content:center;
+background:#1b1b25;
+padding:18px;
+border-radius:18px;
+text-decoration:none;
+color:white;
+}
+
+button{
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+background:#7C3AED;
+color:white;
+font-size:15px;
+cursor:pointer;
+}
+
+.bottom{
+position:fixed;
+bottom:0;
+left:0;
+right:0;
+background:#111;
+display:flex;
+justify-content:space-around;
+padding:12px 8px;
+border-top:1px solid #222;
+}
+
+.bottom>div{
+flex:1;
+display:flex;
+justify-content:center;
+}
+
+.nav-item{
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:4px;
+text-decoration:none;
+color:#bbb;
+font-size:11px;
+}
+</style>
+</head>
+
+<body>
+
+<div class="header">
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;">
+
+<a href="producer-settings.html" style="color:white;">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="12" r="3"/>
+<path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>
+</svg>
+</a>
+
+<div id="notificationBell"
+style="position:relative;cursor:pointer;padding:6px;display:inline-flex;">
+
+<svg width="24" height="24" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"/>
+<path d="M10 21a2 2 0 0 0 4 0"/>
+</svg>
+
+<span id="notificationCount"
+style="
+position:absolute;
+top:2px;
+right:2px;
+min-width:14px;
+height:14px;
+padding:0 4px;
+border-radius:999px;
+background:#ef4444;
+color:white;
+font-size:9px;
+font-weight:bold;
+display:none;
+align-items:center;
+justify-content:center;">
+</span>
+
+</div>
+
+</div>
+
+<div class="profile">
+
+<img id="studioAvatar"
+class="avatar"
+src="https://placehold.co/80x80/222/fff?text=S">
+
+<div style="flex:1;">
+
+<div style="display:flex;justify-content:space-between;align-items:center;">
+
+<h1 id="studioName"
+style="margin:0;font-size:26px;">
+FOSKY Studio
+</h1>
+
+<div class="verified">
+<div class="verify-dot">✓</div>
+Verified
+</div>
+
+</div>
+
+<div id="studioTag"
+class="username">
+@foskystudio
+</div>
+
+<div id="followersCount"
+style="margin-top:8px;color:#ddd;font-size:13px;">
+0 Followers
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<input
+type="file"
+id="studioAvatarInput"
+accept="image/*"
+hidden>
+
+<div class="section">
+
+<div class="grid">
+
+<a href="explore-artists.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+
+<svg width="24" height="24" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="11" cy="11" r="7"/>
+<path d="M20 20l-3.5-3.5"/>
+</svg>
+
+Find Artists
+
+</div>
+</a>
+
+<a href="producer-bookings.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+
+<svg width="24" height="24" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<rect x="3" y="5" width="18" height="16" rx="2"/>
+<path d="M16 3v4M8 3v4M3 10h18"/>
+</svg>
+
+Bookings
+
+</div>
+</a>
+
+<a href="producer-wallet.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+
+<svg width="24" height="24" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<rect x="2" y="6" width="20" height="12" rx="2"/>
+<path d="M2 10h20"/>
+</svg>
+
+Wallet
+
+</div>
+</a>
+
+<a href="studio-settings.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+
+<svg width="24" height="24" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="12" r="3"/>
+<path d="M12 2v2M12 20v2"/>
+</svg>
+
+Studio Settings
+
+</div>
+</a>
+
+<a href="chat.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+
+<svg width="24" height="24" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<path d="M21 15a2 2 0 0 1-2 2H8l-5 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+</svg>
+
+Chat
+
+</div>
+</a>
+
+<a href="meet.html" class="action">
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;">
+
+<svg width="24" height="24" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+<circle cx="9" cy="7" r="4"/>
+<path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+<path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+</svg>
+
+Meet
+
+</div>
+</a>
+
+</div>
+
+</div>
+
+<div class="section">
+
+<h2 style="font-weight:500;">Studio Feed</h2>
+
+<div class="card">
+
+<div style="display:flex;align-items:center;gap:12px;">
+
+<img
+src="https://placehold.co/44x44/333/fff?text=S"
+style="width:44px;height:44px;border-radius:50%;">
+
+<div>
+
+<div style="display:flex;align-items:center;gap:6px;">
+
+<strong>FOSKY Studio</strong>
+
+<div class="verify-dot"
+style="width:14px;height:14px;font-size:9px;">
+✓
+</div>
+
+</div>
+
+<div style="font-size:12px;color:#aaa;">
+Studio Amount • ₦50,000
+</div>
+
+</div>
+
+</div>
+
+<div style="
+margin-top:16px;
+border-radius:16px;
+background:#222;
+height:280px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:#777;">
+
+Studio Video Preview
+
+</div>
+
+<div style="margin-top:16px;display:flex;justify-content:space-between;gap:10px;">
+
+<button style="flex:1;">
+Book Session
+</button>
+
+<button
+style="flex:1;background:transparent;border:1px solid #7C3AED;">
+Follow
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<div class="section" style="padding-bottom:100px;">
+
+<button id="logoutBtn"
+style="background:#222;">
+Log Out
+</button>
+
+</div>
+
+<div class="bottom">
+
+<div>
+<a href="producer-dashboard.html" class="nav-item">
+
+<svg width="22" height="22" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<path d="M3 10.5L12 3l9 7.5"/>
+<path d="M5 9.5V21h14V9.5"/>
+</svg>
+
+Home
+
+</a>
+</div>
+
+<div>
+<a href="explore-artists.html" class="nav-item">
+
+<svg width="22" height="22" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="11" cy="11" r="7"/>
+<path d="M20 20l-3.5-3.5"/>
+</svg>
+
+Explore
+
+</a>
+</div>
+
+<div>
+
+<a href="post.html"
+style="
+width:58px;
+height:58px;
+margin-top:-18px;
+background:#7C3AED;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 8px 25px rgba(124,58,237,.45);">
+
+<svg width="28" height="28" viewBox="0 0 24 24"
+fill="none" stroke="white" stroke-width="2">
+<path d="M12 5v14M5 12h14"/>
+</svg>
+
+</a>
+
+</div>
+
+<div>
+<a href="producer-bookings.html" class="nav-item">
+
+<svg width="22" height="22" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<rect x="3" y="5" width="18" height="16" rx="2"/>
+<path d="M16 3v4M8 3v4M3 10h18"/>
+</svg>
+
+Bookings
+
+</a>
+</div>
+
+<div>
+<a href="studio-settings.html" class="nav-item">
+
+<svg width="22" height="22" viewBox="0 0 24 24"
+fill="none" stroke="currentColor" stroke-width="2">
+<circle cx="12" cy="8" r="4"/>
+<path d="M4 21c2-4 14-4 16 0"/>
+</svg>
+
+Profile
+
+</a>
+</div>
+
+</div>
+
+<script>
+function formatFollowers(count){
+
+if(count===1)return"1 Follower";
+
+if(count<1000)return`${count} Followers`;
+
+if(count<1000000){
+
+const value=(count/1000).toFixed(count>=10000?0:1);
+
+return`${value.replace(".0","")}K Followers`;
+
+}
+
+const value=(count/1000000).toFixed(count>=10000000?0:1);
+
+return`${value.replace(".0","")}M Followers`;
+
+}
+
+document.getElementById("followersCount").textContent=
+formatFollowers(0);
+
+function updateNotificationBadge(count){
+
+const badge=document.getElementById("notificationCount");
+
+if(count<=0){
+
+badge.style.display="none";
+return;
+
+}
+
+badge.style.display="flex";
+badge.textContent=count>99?"99+":count;
+
+}
+
+updateNotificationBadge(0);
+
+document.getElementById("notificationBell")
+.addEventListener("click",()=>{
+
+window.location.href="notifications.html";
+
+});
+
+document.getElementById("studioAvatar")
+.addEventListener("click",()=>{
+
+document.getElementById("studioAvatarInput").click();
+
+});
+</script>
+
+</body>
+  </html>
