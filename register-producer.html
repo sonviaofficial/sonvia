@@ -33,11 +33,11 @@
 
             <input type="url" id="tiktokLink" placeholder="TikTok Profile Link" required>
 
-            <input type="number" id="recordingPrice" placeholder="Recording Price" required>
-
-            <input type="number" id="mixingPrice" placeholder="Mixing Price" required>
-
-            <input type="number" id="masteringPrice" placeholder="Mastering Price" required>
+            <input
+type="number"
+id="studioAmount"
+placeholder="Studio Amount (₦50,000)"
+required>
 
             <button type="button" id="verifyTikTokBtn">
                 Verify TikTok
@@ -91,15 +91,13 @@ document.getElementById('producerForm').addEventListener('submit', async functio
     const password = document.getElementById('password').value;
     const tiktokUsername = document.getElementById('tiktokUsername').value.trim();
     const tiktokLink = document.getElementById('tiktokLink').value.trim();
-    const recordingPrice = Number(document.getElementById('recordingPrice').value);
-    const mixingPrice = Number(document.getElementById('mixingPrice').value);
-    const masteringPrice = Number(document.getElementById('masteringPrice').value);
+    const studioAmount = Number(document.getElementById('studioAmount').value);
 
     const { data, error } = await supabase.auth.signUp({
   email,
   password,
   options: {
-    emailRedirectTo: 'https://sonviaofficial.github.io/sonvia/login.html',
+    emailRedirectTo: `${window.location.origin}/sonvia/login.html`,
     data: {
       role: 'producer'
     }
@@ -128,11 +126,9 @@ document.getElementById('producerForm').addEventListener('submit', async functio
         });
 
         await supabase.from('producer_services').insert({
-            producer_id: user.id,
-            recording_price: recordingPrice,
-            mixing_price: mixingPrice,
-            mastering_price: masteringPrice
-        });
+    producer_id: user.id,
+    studio_amount: studioAmount
+});
     }
 
     alert('📧 Verification email sent! Please verify your email before logging in.');
