@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SONVIA Users</title>
+<link rel="stylesheet" href="style.css">
+
+<style>
+body{
+background:#0b0b0f;
+color:white;
+font-family:Arial,sans-serif;
+margin:0;
+}
+
+.header{
+padding:20px;
+background:#111;
+position:sticky;
+top:0;
+z-index:10;
+border-bottom:1px solid #222;
+}
+
+.search{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:none;
+background:#1b1b25;
+color:white;
+margin-top:15px;
+}
+
+.list{
+padding:20px;
+}
+
+.user-card{
+display:flex;
+align-items:center;
+gap:14px;
+padding:16px;
+background:#15151d;
+border-radius:18px;
+margin-bottom:14px;
+}
+
+.avatar{
+width:60px;
+height:60px;
+border-radius:50%;
+object-fit:cover;
+background:#333;
+}
+
+.info{
+flex:1;
+min-width:0;
+}
+
+.name-row{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
+}
+
+.name{
+font-size:18px;
+font-weight:bold;
+}
+
+.verify{
+display:flex;
+align-items:center;
+gap:4px;
+padding:3px 8px;
+border-radius:999px;
+border:1px solid #7C3AED;
+background:rgba(124,58,237,.15);
+font-size:11px;
+}
+
+.role{
+color:#aaa;
+font-size:13px;
+margin-top:4px;
+}
+
+.follow-btn{
+background:#7C3AED;
+color:white;
+border:none;
+padding:10px 18px;
+border-radius:10px;
+cursor:pointer;
+}
+
+.following{
+background:#333;
+}
+</style>
+</head>
+<body>
+
+<div class="header">
+
+<a href="producer-dashboard.html" style="color:white;text-decoration:none;">← Back</a>
+
+<h2 style="margin-top:15px;">Users</h2>
+
+<input id="searchInput" class="search" placeholder="Search users...">
+
+</div>
+
+<div id="userList" class="list">
+
+Loading users...
+
+</div>
+
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+async function loadUsers(){
+
+const { data } = await supabase
+.from("profiles")
+.select("*")
+.order("username");
+
+const list=document.getElementById("userList");
+
+if(!data || data.length===0){
+
+list.innerHTML="<p>No users found.</p>";
+
+return;
+
+}
+
+list.innerHTML=data.map(user=>`
+
+<div class="user-card">
+
+<img class="avatar"
+
+src="${user.avatar_url || 'https://placehold.co/60x60/333/fff?text=U'}"
+
+onclick="window.location='profile.html?id=${user.id}'">
+
+<div class="info">
+
+<div class="name-row">
+
+<div class="name">${user.username || "User"}</div>
+
+${user.verified ? `
+
+<div class="verify">
+
+✓ Verified
+
+</div>
+
+` : ""}
+
+</div>
+
+<div class="role">
+
+${user.role==="producer" ? "Producer" : "Artist"}
+
+${user.location ? " • "+user.location : ""}
+
+</div>
+
+</div>
+
+<button class="follow-btn"
+
+onclick="followUser('${user.id}',this)">
+
+Follow
+
+</button>
+
+</div>
+
+`).join("");
+
+}
+
+window.followUser=async function(id,btn){
+
+const { data:{user} }=await supabase.auth.getUser();
+
+if(!user) return;
+
+await supabase
+
+.from("followers")
+
+.insert({
+
+follower_id:user.id,
+
+following_id:id
+
+});
+
+btn.textContent="Following";
+
+btn.classList.add("following");
+
+}
+
+document.getElementById("searchInput")
+
+.addEventListener("input",e=>{
+
+const value=e.target.value.toLowerCase();
+
+document.querySelectorAll(".user-card")
+
+.forEach(card=>{
+
+card.style.display=
+
+card.innerText.toLowerCase().includes(value)
+
+? "flex"
+
+: "none";
+
+});
+
+});
+
+loadUsers();
+
+</script>
+
+</body>
+</html>
