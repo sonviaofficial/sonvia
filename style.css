@@ -1358,3 +1358,39 @@ font-size:12px;
 .nav-item:hover{
 color:#9F67FF;
 }
+.price-card{
+background:rgba(20,20,28,.85);
+border:1px solid rgba(124,58,237,.35);
+border-radius:16px;
+padding:14px;
+margin:16px 0;
+backdrop-filter:blur(8px);
+}
+
+.price-label{
+font-size:12px;
+color:#aaa;
+margin-bottom:6px;
+}
+
+.price-total{
+font-size:24px;
+font-weight:bold;
+color:white;
+margin-bottom:12px;
+}
+
+.beat-option{
+display:flex;
+align-items:center;
+gap:10px;
+color:#ddd;
+font-size:14px;
+cursor:pointer;
+}
+
+.beat-option input{
+accent-color:#7C3AED;
+width:18px;
+height:18px;
+}
