@@ -92,12 +92,22 @@ document.getElementById('producerForm').addEventListener('submit', async functio
     const tiktokUsername = document.getElementById('tiktokUsername').value.trim();
     const tiktokLink = document.getElementById('tiktokLink').value.trim();
     const studioAmount = Number(document.getElementById('studioAmount').value);
+const username = tiktokUsername.toLowerCase().replace(/\s+/g, '');
 
+const { data: existingUser } = await supabase
+.from('profiles')
+.select('id')
+.eq('username', username)
+.maybeSingle();
+
+if(existingUser){
+  alert('❌ Username already taken. Choose another username.');
+  return;
+}
     const { data, error } = await supabase.auth.signUp({
   email,
   password,
   options: {
-    emailRedirectTo: `${window.location.origin}/sonvia/login.html`,
     data: {
       role: 'producer'
     }
@@ -114,16 +124,17 @@ document.getElementById('producerForm').addEventListener('submit', async functio
     if (user) {
 
         await supabase.from('profiles').insert({
-            id: user.id,
-            role: 'producer',
-            producer_name: producerName,
-            studio_name: studioName,
-            studio_location: studioLocation,
-            email: email,
-            tiktok_username: tiktokUsername,
-            tiktok_link: tiktokLink,
-            tiktok_verified: true
-        });
+    id: user.id,
+    role: 'producer',
+    producer_name: producerName,
+    studio_name: studioName,
+    studio_location: studioLocation,
+    email: email,
+    username: username,
+    tiktok_username: tiktokUsername,
+    tiktok_link: tiktokLink,
+    tiktok_verified: true
+});
 
         await supabase.from('producer_services').insert({
     producer_id: user.id,
@@ -131,9 +142,9 @@ document.getElementById('producerForm').addEventListener('submit', async functio
 });
     }
 
-    alert('📧 Verification email sent! Please verify your email before logging in.');
+    alert('✅ Producer account created successfully!');
 
-    window.location.href = 'login.html';
+window.location.href = 'producer-dashboard.html';
 });
 
 </script>
