@@ -1,189 +1,61 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SONVIA – Create Post</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Post • SONVIA</title>
+<link rel="stylesheet" href="style.css">
+<style>
+body{margin:0;background:#0b0b0f;color:#fff;font-family:Arial,sans-serif;}
+.header{padding:20px;border-bottom:1px solid #222;background:#111;display:flex;gap:12px;align-items:center;}
+.container{padding:20px;}
+.card{background:#15151d;border-radius:20px;padding:20px;}
+.option{display:flex;justify-content:space-between;align-items:center;padding:14px;border-bottom:1px solid #222;color:#fff;text-decoration:none;}
+.option:last-child{border-bottom:none;}
+.badge{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(124,58,237,.15);border:1px solid #7C3AED;font-size:12px;}
+</style>
 </head>
 <body>
 
-    <header>
-        <div class="top-header">
-            <div class="bell">🔔</div>
-
-            <div class="home-tabs">
-                <span class="active-tab">Create Post</span>
-            </div>
-
-            <img src="https://i.pravatar.cc/80" alt="Profile" class="profile-pic">
-        </div>
-
-        <div class="logo-area">
-            <h1>SONVIA</h1>
-            <p>Share your studio work</p>
-        </div>
-    </header>
-
-    <main class="post-container">
-
-        <section class="post-card">
-
-            <h2>🎬 Upload Studio Preview</h2>
-            <p class="post-note">
-                Only producers can upload studio videos (1–2 minutes).
-            </p>
-
-            <form id="postForm">
-
-                <input type="text" placeholder="Studio Name" required>
-
-                <textarea
-                    placeholder="Write a short caption about your studio session..."
-                    rows="4"
-                    required></textarea>
-
-                <div class="upload-box">
-                    <label for="studioVideo">🎥 Choose Studio Video</label>
-                    <input
-                        type="file"
-                        id="studioVideo"
-                        accept="video/mp4,video/webm,video/ogg"
-                        required>
-                </div>
-
-                
-                        <div class="post-profile">
-    <img id="postProfilePic"
-         src="https://i.pravatar.cc/80"
-         alt="Profile Picture">
-
-    <div>
-        <strong id="postProducerName">FOSKY</strong>
-        <small>Producer</small>
-    </div>
-                        </div>
-                </div>
-
-                <button type="submit">🚀 Publish Post</button>
-
-            </form>
-
-        </section>
-
-        <section class="post-card preview-card">
-
-            <h3>📱 Post Preview</h3>
-
-            <div class="preview-image" id="imagePreview">
-    <p>Studio cover will appear here</p>
+<div class="header">
+<a href="producer-dashboard.html" style="color:white;text-decoration:none;">←</a>
+<h3 style="margin:0;">Create Post</h3>
 </div>
 
-<video controls class="studio-video" id="videoPreview" style="display:none;"></video>
+<div class="container">
 
-            <div class="preview-content">
-                <h4>FOSKY Studio</h4>
-                <p>🎙️ Late night recording session at SONVIA Studio.</p>
-            </div>
+<div class="card">
 
-        </section>
+<div class="badge">Coming Soon</div>
 
-    </main>
+<p style="color:#bbb;">
+Upload 1–5 minute studio videos.
+</p>
 
-    <nav class="bottom-nav">
-        <a href="dashboard.html">
-            <span>🏠</span>
-            <small>Home</small>
-        </a>
+<a href="#" class="option">
+<span>SONVIA Camera</span>
+<span>›</span>
+</a>
 
-        <a href="producer.html">
-            <span>🔍</span>
-            <small>Explore</small>
-        </a>
+<a href="#" class="option">
+<span>Choose from Gallery</span>
+<span>›</span>
+</a>
 
-        <a href="post.html" class="post-btn active">+</a>
+<a href="#" class="option">
+<span>6 Premium Filters</span>
+<span>›</span>
+</a>
 
-        <a href="meet.html">
-            <span>👥</span>
-            <small>Meet</small>
-        </a>
+<a href="#" class="option">
+<span>Auto Trim (1–5 min)</span>
+<span>›</span>
+</a>
 
-        <a href="earnings.html">
-            <span>💰</span>
-            <small>Earnings</small>
-        </a>
-    </nav>
-<script>
-const imageInput = document.getElementById("studioImage");
-const videoInput = document.getElementById("studioVideo");
+</div>
 
-const imagePreview = document.getElementById("imagePreview");
-const videoPreview = document.getElementById("videoPreview");
+</div>
 
-// Image preview
-imageInput.addEventListener("change", function () {
-    const file = this.files[0];
-
-    if (file) {
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-            imagePreview.innerHTML =
-                `<img src="${e.target.result}" class="preview-photo">`;
-        };
-
-        reader.readAsDataURL(file);
-    }
-});
-
-// Video preview
-videoInput.addEventListener("change", function () {
-    const file = this.files[0];
-
-    if (file) {
-        const videoURL = URL.createObjectURL(file);
-
-        videoPreview.src = videoURL;
-        videoPreview.style.display = "block";
-    }
-});
-// Publish post
-document.getElementById("postForm").addEventListener("submit", function (e) {
-    e.preventDefault();
-
-    const studioName = this.querySelector("input[type='text']").value;
-    const caption = this.querySelector("textarea").value;
-
-    const post = {
-        studio: studioName,
-        caption: caption,
-        image: imagePreview.innerHTML,
-        video: videoPreview.src || "",
-        time: new Date().toLocaleString()
-    };
-
-    const posts = JSON.parse(localStorage.getItem("sonviaPosts")) || [];
-
-    posts.unshift(post);
-
-    localStorage.setItem("sonviaPosts", JSON.stringify(posts));
-
-    alert("🎉 Post published successfully!");
-
-    window.location.href = "dashboard.html";
-});
-
-</script>
-    <script>
-
-const savedProfilePic =
-    localStorage.getItem("sonviaProfilePic");
-
-if (savedProfilePic) {
-    document.getElementById("postProfilePic").src =
-        savedProfilePic;
-}
-
-    </script>
 </body>
 </html>
