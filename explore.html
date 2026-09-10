@@ -9,49 +9,57 @@
 
 <body>
 
-<header class="feed-header">
-<a href="artist-dashboard.html" class="back-btn">←</a>
+<header class="explore-header">
+
+<a href="artist-dashboard.html" class="back-link">
+← Back
+</a>
+
 <h1>Explore</h1>
+
 </header>
 
-<main class="feed-screen">
+<main class="explore-feed">
 
-<div class="video-feed-card">
+<div class="explore-card">
 
-<div class="feed-top">
+<div class="explore-top">
 
 <img id="producerAvatar"
 src="https://placehold.co/44x44/333/fff?text=S"
-class="feed-avatar">
+class="producer-avatar">
 
-<div>
-<div class="feed-name">
-FOSKY Studio
-<span class="verify-dot">✓</span>
+<div class="producer-info">
+
+<div class="producer-name-row">
+
+<strong>FOSKY Studio</strong>
+
+<div class="verify-dot">✓</div>
+
 </div>
 
-<div class="feed-username">@foskystudio</div>
-</div>
+<div class="producer-tag">@foskystudio</div>
 
 </div>
 
-<div class="feed-video">
+</div>
 
-Studio Video Preview
+<div class="video-area" id="videoArea">
 
-<div class="floating-actions">
+<div class="video-actions">
 
-<button class="float-icon">
-♡
-<small>1.2K</small>
+<button id="likeBtn" class="icon-btn">
+🤍
+<small id="likeCount">1.2K</small>
 </button>
 
-<button class="float-icon">
+<button id="commentBtn" class="icon-btn">
 💬
 <small>120</small>
 </button>
 
-<button class="float-icon">
+<button id="shareBtn" class="icon-btn">
 ↗
 <small>Share</small>
 </button>
@@ -71,8 +79,11 @@ Studio Amount
 </div>
 
 <label class="beat-option">
+
 <input type="checkbox" id="includeBeat">
+
 <span>Include Beat (+₦20,000)</span>
+
 </label>
 
 </div>
@@ -121,7 +132,42 @@ Profile
 
 </nav>
 
+<div id="commentSheet" class="comment-sheet">
+
+<div class="comment-panel">
+
+<div class="comment-bar"></div>
+
+<h3>Comments</h3>
+
+<div class="comment-list">
+
+<div class="comment-item">
+<strong>fosky.j</strong>
+<p>Crazy setup 🔥</p>
+</div>
+
+</div>
+
+<div class="comment-input">
+
+<input
+id="commentInput"
+type="text"
+placeholder="Write a comment...">
+
+<button id="sendComment">
+Send
+</button>
+
+</div>
+
+</div>
+
+</div>
+
 <script>
+
 const studioPrice=60000;
 const beatPrice=20000;
 
@@ -144,6 +190,67 @@ document.getElementById("producerAvatar")
 window.location.href="profile.html";
 
 });
+
+let liked=false;
+
+const likeBtn=document.getElementById("likeBtn");
+const likeCount=document.getElementById("likeCount");
+
+likeBtn.addEventListener("click",()=>{
+
+liked=!liked;
+
+if(liked){
+
+likeBtn.firstChild.textContent="💜";
+likeCount.textContent="1,201";
+
+}else{
+
+likeBtn.firstChild.textContent="🤍";
+likeCount.textContent="1.2K";
+
+}
+
+});
+
+const sheet=document.getElementById("commentSheet");
+
+document.getElementById("commentBtn")
+.addEventListener("click",()=>{
+
+sheet.classList.add("show");
+
+document.getElementById("commentInput").focus();
+
+});
+
+sheet.addEventListener("click",(e)=>{
+
+if(e.target===sheet){
+
+sheet.classList.remove("show");
+
+}
+
+});
+
+document.getElementById("shareBtn")
+.addEventListener("click",()=>{
+
+if(navigator.share){
+
+navigator.share({
+
+title:"SONVIA",
+text:"Check out this producer on SONVIA"
+
+});
+
+}
+
+});
+
 </script>
 
 </body>
