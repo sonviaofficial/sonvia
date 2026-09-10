@@ -3,181 +3,147 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>SONVIA • Explore Producers</title>
-
+<title>SONVIA Explore</title>
 <link rel="stylesheet" href="style.css">
-
-<style>
-body{
-background:#0b0b0f;
-color:white;
-font-family:Arial,sans-serif;
-margin:0;
-}
-
-.header{
-display:flex;
-align-items:center;
-gap:15px;
-padding:20px;
-background:linear-gradient(180deg,#7C3AED,#1b132e);
-}
-
-.back{
-color:white;
-text-decoration:none;
-font-size:26px;
-}
-
-.container{
-padding:20px;
-padding-bottom:100px;
-}
-
-.search{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#181824;
-color:white;
-margin-bottom:20px;
-box-sizing:border-box;
-}
-
-.card{
-background:#15151d;
-padding:18px;
-border-radius:18px;
-margin-bottom:16px;
-}
-
-.price{
-margin-top:14px;
-padding:12px;
-border-radius:12px;
-background:#1b1b27;
-}
-
-button{
-width:100%;
-padding:14px;
-border:none;
-border-radius:12px;
-background:#7C3AED;
-color:white;
-margin-top:16px;
-}
-</style>
-
 </head>
 
 <body>
 
-<div class="header">
+<header class="feed-header">
+<a href="artist-dashboard.html" class="back-btn">←</a>
+<h1>Explore</h1>
+</header>
 
-<a href="artist-dashboard.html" class="back">←</a>
+<main class="feed-screen">
 
-<h2>Explore Producers</h2>
+<div class="video-feed-card">
 
+<div class="feed-top">
+
+<img id="producerAvatar"
+src="https://placehold.co/44x44/333/fff?text=S"
+class="feed-avatar">
+
+<div>
+<div class="feed-name">
+FOSKY Studio
+<span class="verify-dot">✓</span>
 </div>
 
-<div class="container">
-
-<input
-type="text"
-class="search"
-placeholder="Search producers (Coming Soon)">
-
-<div class="card">
-
-<strong>FOSKY Studio</strong>
-
-<div
-style="display:flex;align-items:center;gap:6px;color:#aaa;margin-top:8px;">
-
-<svg width="18" height="18"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2">
-
-<path d="M12 21s-6-5.2-6-10a6 6 0 1 1 12 0c0 4.8-6 10-6 10z"/>
-
-<circle cx="12" cy="11" r="2"/>
-
-</svg>
-
-Ikorodu, Lagos
-
-</div>
-
-<div
-style="display:flex;align-items:center;gap:6px;color:#8B5CF6;margin-top:8px;">
-
-<svg width="18" height="18"
-viewBox="0 0 24 24"
-fill="none"
-stroke="currentColor"
-stroke-width="2">
-
-<path d="M20 6L9 17l-5-5"/>
-
-</svg>
-
-Verified Producer
-
-</div>
-
-<div class="price">
-
-<div
-style="font-size:12px;color:#aaa;">
-
-Studio Amount
-
-</div>
-
-<div
-style="font-size:22px;font-weight:bold;margin-top:4px;">
-
-₦50,000
-
+<div class="feed-username">@foskystudio</div>
 </div>
 
 </div>
 
-<button id="bookBtn">
+<div class="feed-video">
 
-Book Now
+Studio Video Preview
 
+<div class="floating-actions">
+
+<button class="float-icon">
+♡
+<small>1.2K</small>
+</button>
+
+<button class="float-icon">
+💬
+<small>120</small>
+</button>
+
+<button class="float-icon">
+↗
+<small>Share</small>
 </button>
 
 </div>
 
 </div>
 
+<div class="price-card">
+
+<div class="price-label">
+Studio Amount
+</div>
+
+<div id="studioTotal" class="price-total">
+₦60,000
+</div>
+
+<label class="beat-option">
+<input type="checkbox" id="includeBeat">
+<span>Include Beat (+₦20,000)</span>
+</label>
+
+</div>
+
+<div class="feed-buttons">
+
+<button class="book-btn">
+Book Session
+</button>
+
+<button class="follow-btn">
+Follow
+</button>
+
+</div>
+
+</div>
+
+</main>
+
+<nav class="bottom-nav">
+
+<a href="artist-dashboard.html">
+<span>⌂</span>
+Home
+</a>
+
+<a href="explore.html" class="active">
+<span>⌕</span>
+Explore
+</a>
+
+<a href="post.html" class="post-btn">
++
+</a>
+
+<a href="my-bookings.html">
+<span>🗓</span>
+Bookings
+</a>
+
+<a href="profile.html">
+<span>👤</span>
+Profile
+</a>
+
+</nav>
+
 <script>
+const studioPrice=60000;
+const beatPrice=20000;
 
-document
-.getElementById("bookBtn")
-.addEventListener("click",()=>{
+const total=document.getElementById("studioTotal");
+const beat=document.getElementById("includeBeat");
 
-alert(
-`Booking Preview
+beat.addEventListener("change",()=>{
 
-Producer: FOSKY Studio
+const amount=beat.checked
+? studioPrice+beatPrice
+: studioPrice;
 
-Studio Amount: ₦50,000
-
-Location: Ikorodu, Lagos
-
-Booking payments are coming soon.`
-);
+total.textContent="₦"+amount.toLocaleString();
 
 });
 
+document.getElementById("producerAvatar")
+.addEventListener("click",()=>{
+
+window.location.href="profile.html";
+
+});
 </script>
 
 </body>
