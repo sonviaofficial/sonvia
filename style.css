@@ -12,7 +12,7 @@
     --purple-light: #8b5cf6;
     --border: #243041;
 }
-‎* {
+   {
 ‎    box-sizing: border-box;
 ‎    margin: 0;
 ‎    padding: 0;
@@ -65,7 +65,7 @@
 ‎    background: var(--green-dark);
 ‎    transform: translateY(-2px);
 ‎}
-* {
+ {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -119,7 +119,7 @@ button:hover {
     transform: translateY(-2px);
 }
 
-* {
+  {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
@@ -397,13 +397,12 @@ body {
     font-weight: 600;
 }
 
-.file-upload input[type="file"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    background: white;
+.file-upload input[type="file"]{
+    background:var(--surface);
+    color:white;
+    border:1px solid var(--border);
 }
+
 .welcome {
     text-align: center;
     padding: 60px 20px;
@@ -414,9 +413,8 @@ body {
     margin-bottom: 15px;
 }
 
-.welcome p {
-    margin-bottom: 25px;
-    color: #555;
+.welcome p{
+    color:var(--muted);
 }
 
 .welcome button {
@@ -635,7 +633,9 @@ body {
     flex: 1;
     padding: 10px 12px;
     border-radius: 14px;
-    background: var(--surface-2);
+    background: var(--surface-2);.notification-btn{
+    color:var(--purple);
+    }
     color: white;
     font-size: 14px;
 }
@@ -1057,14 +1057,9 @@ body {
 .delete-option {
     color: #ff5555;
 }
-.notification-btn {
-    position: relative;
-    background: transparent;
-    border: none;
-    font-size: 24px;
-    color: #facc15;
-    cursor: pointer;
-    padding: 6px;
+.notification-btn{
+    color:var(--purple);
+}
 }
 
 #notificationCount {
