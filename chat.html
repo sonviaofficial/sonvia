@@ -2,86 +2,273 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Chat • SONVIA</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SONVIA Chat</title>
 <link rel="stylesheet" href="style.css">
+
 <style>
-body{margin:0;background:#0b0b0f;color:#fff;font-family:Arial,sans-serif;}
-.header{
-padding:20px;
+.chat-page{
+background:#050816;
+color:white;
+min-height:100vh;
+display:flex;
+flex-direction:column;
+}
+
+.chat-header{
 display:flex;
 align-items:center;
 gap:12px;
-border-bottom:1px solid #222;
-background:#111;
-}
-.chat-area{
-padding:20px;
-}
-.card{
-background:#15151d;
-padding:18px;
-border-radius:18px;
-}
-.rule{
-display:flex;
-justify-content:space-between;
-padding:10px 0;
-border-bottom:1px solid #222;
-}
-.input{
-position:fixed;
-bottom:0;
-left:0;
-right:0;
 padding:16px;
-background:#111;
-border-top:1px solid #222;
+background:#111827;
+border-bottom:1px solid #243041;
 }
-input{
-width:100%;
-padding:12px;
+
+.chat-header a{
+color:white;
+text-decoration:none;
+font-size:15px;
+}
+
+.chat-avatar{
+width:42px;
+height:42px;
+border-radius:50%;
+background:#333;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:bold;
+}
+
+.chat-header .name{
+display:flex;
+align-items:center;
+gap:6px;
+font-weight:600;
+}
+
+.chat-header .verify{
+width:16px;
+height:16px;
+background:#7C3AED;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:10px;
+}
+
+.messages{
+flex:1;
+padding:18px;
+display:flex;
+flex-direction:column;
+gap:14px;
+overflow-y:auto;
+}
+
+.msg{
+max-width:75%;
+padding:12px 14px;
+border-radius:16px;
+}
+
+.received{
+background:#1f2937;
+align-self:flex-start;
+}
+
+.sent{
+background:#7C3AED;
+align-self:flex-end;
+}
+
+.lock-card{
+background:#111827;
+border:1px solid #243041;
+border-radius:18px;
+padding:16px;
+margin:10px;
+display:none;
+}
+
+.lock-card.show{
+display:block;
+}
+
+.lock-card button{
+background:#7C3AED;
+color:white;
+font-weight:600;
+margin-top:12px;
+}
+
+.chat-input{
+display:flex;
+gap:10px;
+padding:14px;
+background:#111827;
+border-top:1px solid #243041;
+}
+
+.chat-input input{
+flex:1;
+padding:14px;
+background:#1f2937;
 border:none;
-border-radius:12px;
-background:#1b1b25;
+border-radius:999px;
 color:white;
 }
+
+.chat-input button{
+width:auto;
+padding:0 22px;
+background:#22c55e;
+color:black;
+font-weight:600;
+}
+
+.not-sent{
+font-size:12px;
+color:#ef4444;
+margin-top:-8px;
+align-self:flex-end;
+display:none;
+}
 </style>
+
 </head>
+
 <body>
 
-<div class="header">
-<a href="artist-dashboard.html" style="color:white;text-decoration:none;">←</a>
+<div class="chat-page">
+
+<div class="chat-header">
+
+<a href="profile.html">← Back</a>
+
+<div class="chat-avatar" id="profilePic">S</div>
+
 <div>
-<h3 style="margin:0;">Chat</h3>
-<small style="color:#888;">Private Messages</small>
+
+<div class="name">
+
+FOSKY Studio
+
+<div class="verify">✓</div>
+
 </div>
+
+<div style="font-size:13px;color:#9ca3af;">
+@foskystudio
 </div>
 
-<div class="chat-area">
+</div>
 
-<div class="card">
+</div>
 
-<h4 style="margin-top:0;">Coming Soon</h4>
+<div class="messages" id="messages">
 
-<p style="color:#bbb;">
-SONVIA secure messaging is currently under development.
+<div class="msg received">
+Welcome to SONVIA 👋
+</div>
+
+</div>
+
+<div class="not-sent" id="notSent">
+Not sent — Follow this person to continue chatting.
+</div>
+
+<div class="lock-card" id="lockCard">
+
+<h3>🔒 Chat Locked</h3>
+
+<p>
+You have used your one free message.
+Follow this person to continue chatting.
 </p>
 
-<div class="rule"><span>Images</span><span>✅</span></div>
-<div class="rule"><span>Voice Notes</span><span>✅</span></div>
-<div class="rule"><span>Links</span><span>❌</span></div>
-<div class="rule"><span>Phone Numbers</span><span>❌</span></div>
-<div class="rule"><span>Videos</span><span>❌</span></div>
-<div class="rule" style="border:none;"><span>Video Calls</span><span>❌</span></div>
+<button id="followBtn">
+Follow & Unlock Chat
+</button>
+
+</div>
+
+<div class="chat-input">
+
+<input
+id="messageInput"
+placeholder="Type a message...">
+
+<button id="sendBtn">
+Send
+</button>
 
 </div>
 
 </div>
 
-<div class="input">
-<input type="text" placeholder="Secure chat coming soon..." disabled>
-</div>
+<script>
+
+const messages=document.getElementById("messages");
+const input=document.getElementById("messageInput");
+const send=document.getElementById("sendBtn");
+const lock=document.getElementById("lockCard");
+const follow=document.getElementById("followBtn");
+const notSent=document.getElementById("notSent");
+
+let followed=false;
+let freeUsed=false;
+
+document.getElementById("profilePic")
+.addEventListener("click",()=>{
+
+window.location.href="profile.html";
+
+});
+
+send.addEventListener("click",()=>{
+
+const text=input.value.trim();
+
+if(!text)return;
+
+if(!followed&&freeUsed){
+
+notSent.style.display="block";
+return;
+
+}
+
+const bubble=document.createElement("div");
+bubble.className="msg sent";
+bubble.textContent=text;
+messages.appendChild(bubble);
+
+input.value="";
+messages.scrollTop=messages.scrollHeight;
+
+if(!followed&&!freeUsed){
+
+freeUsed=true;
+lock.classList.add("show");
+
+}
+
+});
+
+follow.addEventListener("click",()=>{
+
+followed=true;
+lock.classList.remove("show");
+notSent.style.display="none";
+
+alert("Chat unlocked.");
+
+});
+
+</script>
 
 </body>
 </html>
