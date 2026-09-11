@@ -3,101 +3,403 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SONVIA • Wallet</title>
-
+<title>SONVIA Wallet</title>
 <link rel="stylesheet" href="style.css">
 
 <style>
-body{
-background:#0b0b0f;
+
+.wallet-page{
+background:#050816;
 color:white;
-font-family:Arial,sans-serif;
-margin:0;
-}
-.header{
-display:flex;
-align-items:center;
-gap:15px;
-padding:20px;
-background:linear-gradient(180deg,#7C3AED,#1b132e);
-}
-.back{
-color:white;
-text-decoration:none;
-font-size:26px;
-}
-.container{
-padding:20px;
+min-height:100vh;
 padding-bottom:100px;
 }
-.balance{
-background:linear-gradient(135deg,#7C3AED,#3B0A73);
-padding:24px;
-border-radius:20px;
+
+.wallet-header{
+background:linear-gradient(180deg,#7C3AED,#1b132e);
+padding:18px 20px 28px;
+border-bottom-left-radius:26px;
+border-bottom-right-radius:26px;
+position:relative;
+}
+
+.wallet-header a{
+position:absolute;
+left:18px;
+top:18px;
+color:white;
+text-decoration:none;
+font-size:15px;
+}
+
+.wallet-header h1{
 text-align:center;
-margin-bottom:20px;
+margin-top:18px;
+font-size:32px;
 }
-.balance small{
-opacity:.8;
+
+.wallet-content{
+padding:20px;
 }
-.balance h1{
-margin:8px 0 0;
-font-size:36px;
+
+.balance-card{
+background:#111827;
+border:1px solid rgba(124,58,237,.35);
+border-radius:24px;
+padding:22px;
+margin-bottom:18px;
 }
-.card{
-background:#15151d;
+
+.balance-label{
+color:#9ca3af;
+font-size:14px;
+}
+
+.balance{
+font-size:38px;
+font-weight:bold;
+margin-top:6px;
+}
+
+.wallet-buttons{
+display:flex;
+gap:12px;
+margin-top:20px;
+}
+
+.wallet-buttons button{
+flex:1;
+font-weight:600;
+}
+
+.withdraw-btn{
+background:transparent;
+border:1px solid #7C3AED;
+color:white;
+}
+
+.wallet-id-card{
+background:#111827;
+border-radius:20px;
 padding:18px;
-border-radius:18px;
+margin-bottom:18px;
 }
-button{
+
+.wallet-id-row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:8px;
+}
+
+.wallet-id{
+font-size:28px;
+font-weight:bold;
+letter-spacing:2px;
+}
+
+.copy-btn{
+width:auto;
+padding:8px 14px;
+background:#7C3AED;
+color:white;
+font-size:13px;
+}
+
+.transaction-card{
+background:#111827;
+border-radius:20px;
+padding:18px;
+}
+
+.transaction{
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:14px 0;
+border-bottom:1px solid #222;
+}
+
+.transaction:last-child{
+border-bottom:none;
+}
+
+.transaction-title{
+font-weight:600;
+}
+
+.transaction-time{
+font-size:12px;
+color:#9ca3af;
+margin-top:4px;
+}
+
+.plus{
+color:#22c55e;
+font-weight:bold;
+}
+
+.minus{
+color:#ef4444;
+font-weight:bold;
+}
+
+.popup{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.popup.show{
+display:flex;
+}
+
+.popup-card{
+width:90%;
+max-width:360px;
+background:#111827;
+border-radius:22px;
+padding:22px;
+}
+
+.popup-card h3{
+margin-bottom:12px;
+}
+
+.popup-card input{
 width:100%;
 padding:14px;
+background:#1f2937;
 border:none;
 border-radius:12px;
-background:#2b2b35;
 color:white;
-margin-top:12px;
-cursor:not-allowed;
+margin:14px 0;
 }
-.note{
-color:#aaa;
-font-size:13px;
-margin-top:10px;
+
+.popup-actions{
+display:flex;
+gap:10px;
 }
+
+.popup-actions button{
+flex:1;
+}
+
+.cancel-btn{
+background:#222;
+color:white;
+}
+
 </style>
+
 </head>
 
 <body>
 
-<div class="header">
-<a href="artist-dashboard.html" class="back">←</a>
-<h2>Wallet</h2>
+<div class="wallet-page">
+
+<div class="wallet-header">
+
+<a href="artist-dashboard.html">← Back</a>
+
+<h1>Wallet</h1>
+
 </div>
 
-<div class="container">
+<div class="wallet-content">
+
+<div class="balance-card">
+
+<div class="balance-label">
+Available Balance
+</div>
 
 <div class="balance">
-<small>Available Balance</small>
-<h1>₦0</h1>
+₦0
 </div>
 
-<div class="card">
+<div class="wallet-buttons">
 
-<h3>Wallet Coming Soon</h3>
+<button id="depositBtn">
+Deposit
+</button>
 
-<p>Payments, deposits, withdrawals, and SONVIA earnings will appear here.</p>
+<button id="withdrawBtn" class="withdraw-btn">
+Withdraw
+</button>
 
-<button disabled>Deposit</button>
+</div>
 
-<button disabled>Withdraw</button>
+</div>
 
-<p class="note">
-Wallet features will unlock when booking payments go live.
+<div class="wallet-id-card">
+
+<div style="color:#9ca3af;">
+SONVIA Wallet ID
+</div>
+
+<div class="wallet-id-row">
+
+<div id="walletId" class="wallet-id">
+06456788
+</div>
+
+<button id="copyBtn" class="copy-btn">
+Copy
+</button>
+
+</div>
+
+<div style="margin-top:8px;color:#9ca3af;font-size:12px;">
+Your SONVIA Wallet ID never changes.
+</div>
+
+</div>
+
+<div class="transaction-card">
+
+<h3 style="margin-bottom:14px;">Transactions</h3>
+
+<div class="transaction">
+
+<div>
+
+<div class="transaction-title">
+Wallet Created
+</div>
+
+<div class="transaction-time">
+Today
+</div>
+
+</div>
+
+<div class="plus">
++₦0
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- Deposit Popup -->
+
+<div id="depositPopup" class="popup">
+
+<div class="popup-card">
+
+<h3>Deposit to SONVIA Wallet</h3>
+
+<p style="color:#9ca3af;font-size:14px;">
+Supported Nigerian banks will appear here after Paystack integration.
 </p>
 
+<input
+type="number"
+placeholder="Enter Amount">
+
+<div class="popup-actions">
+
+<button class="cancel-btn" id="closeDeposit">
+Cancel
+</button>
+
+<button id="continueDeposit">
+Continue
+</button>
+
 </div>
 
 </div>
+
+</div>
+
+<!-- Withdraw Popup -->
+
+<div id="withdrawPopup" class="popup">
+
+<div class="popup-card">
+
+<h3>Withdraw</h3>
+
+<p style="color:#9ca3af;font-size:14px;">
+Withdrawals will become available after earnings are received.
+</p>
+
+<div class="popup-actions">
+
+<button class="cancel-btn" id="closeWithdraw">
+Close
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const depositPopup=document.getElementById("depositPopup");
+const withdrawPopup=document.getElementById("withdrawPopup");
+
+document.getElementById("depositBtn")
+.addEventListener("click",()=>{
+
+depositPopup.classList.add("show");
+
+});
+
+document.getElementById("withdrawBtn")
+.addEventListener("click",()=>{
+
+withdrawPopup.classList.add("show");
+
+});
+
+document.getElementById("closeDeposit")
+.addEventListener("click",()=>{
+
+depositPopup.classList.remove("show");
+
+});
+
+document.getElementById("closeWithdraw")
+.addEventListener("click",()=>{
+
+withdrawPopup.classList.remove("show");
+
+});
+
+document.getElementById("continueDeposit")
+.addEventListener("click",()=>{
+
+alert("Paystack bank selection will open here after live payments.");
+
+depositPopup.classList.remove("show");
+
+});
+
+document.getElementById("copyBtn")
+.addEventListener("click",()=>{
+
+const id=document.getElementById("walletId").textContent;
+
+navigator.clipboard.writeText(id);
+
+alert("SONVIA Wallet ID copied.");
+
+});
+
+</script>
 
 </body>
 </html>
