@@ -1607,4 +1607,34 @@ background:transparent;
 border:1px solid #7C3AED;
 color:white;
 }
+.explore-title-row{
+    position:relative;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    height:42px;
+    margin:4px 16px 10px;
+}
 
+.explore-profile{
+    position:absolute;
+    left:0;
+    top:50%;
+    transform:translateY(-50%);
+}
+
+.explore-profile img{
+    width:30px;
+    height:30px;
+    border-radius:50%;
+    object-fit:cover;
+    display:block;
+}
+
+.explore-title{
+    margin:0;
+    color:#fff;
+    font-size:18px;
+    font-weight:700;
+    letter-spacing:1px;
+}
