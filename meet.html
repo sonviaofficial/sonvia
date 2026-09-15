@@ -8,7 +8,11 @@
 </head>
 <body>
 
-    <main class="welcome">
+    <header class="meet-header">
+    <button id="backBtn">← Back</button>
+</header>
+
+<main class="welcome">
         <h2>👥 SONVIA Meet</h2>
      
      
@@ -16,27 +20,44 @@
         <button onclick="playMessageSound()">🔊 Test Message Sound</button>
     </main>
 <nav class="bottom-nav">
-    <a href="dashboard.html"><span>🏠</span><small>Home</small></a>
-    <a href="producer.html"><span>🔍</span><small>Explore</small></a>
-    <a href="post.html" class="post-btn">+</a>
-    <a href="meet.html" class="active"><span>👥</span><small>Meet</small></a>
-    <a href="earnings.html"><span>🏦</span><small>Earnings</small></a>
+    <a id="homeNav" href="#"><span>🏠</span><small>Home</small></a>
+<a href="explore.html"><span>🔍</span><small>Explore</small></a>
+<a href="post.html" class="post-btn">+</a>
+<a href="meet.html" class="active"><span>👥</span><small>Meet</small></a>
+<a id="walletNav" href="#"><span>🏦</span><small>Wallet</small></a>
 </nav>
 <script>
 function playMessageSound() {
     const sound = new Audio('./sounds/sonvia-message.mp3');
-
     sound.volume = 1.0;
 
     sound.play()
-        .then(() => {
-            console.log('SONVIA sound played');
-        })
+        .then(() => console.log('SONVIA sound played'))
         .catch(error => {
             alert('Sound error: ' + error.message);
             console.log(error);
         });
 }
+
+const role = localStorage.getItem("sonviaUserRole");
+
+const homeLink =
+    role === "producer"
+        ? "producer-dashboard.html"
+        : "artist-dashboard.html";
+
+const walletLink =
+    role === "producer"
+        ? "producer-wallet.html"
+        : "wallet.html";
+
+document.getElementById("backBtn").onclick = () => {
+    location.href = homeLink;
+};
+
+document.getElementById("homeNav").href = homeLink;
+document.getElementById("walletNav").href = walletLink;
 </script>
+
 </body>
 </html>
