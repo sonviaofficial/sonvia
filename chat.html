@@ -170,9 +170,6 @@ FOSKY Studio
 
 <div class="messages" id="messages">
 
-<div class="msg received">
-Welcome to SONVIA 👋
-</div>
 
 </div>
 
@@ -209,7 +206,8 @@ Send
 
 </div>
 
-<script>
+<script type="module">
+import { supabase } from "./supabase.js";
 
 const messages=document.getElementById("messages");
 const input=document.getElementById("messageInput");
@@ -221,6 +219,18 @@ const notSent=document.getElementById("notSent");
 let followed=false;
 let freeUsed=false;
 
+ const {
+  data: { user }
+} = await supabase.auth.getUser();
+
+if (!user) {
+  window.location.href = "login.html";
+}
+
+const currentUserId = user.id;
+
+// User we're chatting with
+const chatUserId = new URLSearchParams(window.location.search).get("user"); 
 document.getElementById("profilePic")
 .addEventListener("click",()=>{
 
