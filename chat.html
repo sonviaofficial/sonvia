@@ -152,16 +152,15 @@ display:none;
 
 <div>
 
-<div class="name">
-
-FOSKY Studio
-
-<div class="verify">✓</div>
-
-</div>
-
-<div style="font-size:13px;color:#9ca3af;">
-@foskystudio
+<div class="chat-user">
+  <div class="top-row">
+    <row gap=1 align=center>
+      <h3 id="chatName">FOSKY Studio</h3>
+      <span id="verifiedBadge" style="display:none;"></span>
+    </row>
+    <span id="chatStatus">Active</span>
+  </div>
+  <p id="chatUsername">@foskystudio</p>
 </div>
 
 </div>
@@ -209,6 +208,27 @@ Send
 <script type="module">
 import { supabase } from "./supabase.js";
 
+ function formatLastSeen(time){
+  const diff = Math.floor((Date.now() - new Date(time))/60000);
+
+  if(diff < 1) return "Off now";
+  if(diff < 60) return `Off ${diff}m`;
+
+  const h = Math.floor(diff/60);
+  return `Off ${h}h`;
+}
+
+function updateChatStatus(profile){
+  const status = document.getElementById("chatStatus");
+
+  if(profile.is_online){
+    status.textContent = "Active";
+    status.style.color = "#9F67FF";
+  }else{
+    status.textContent = formatLastSeen(profile.last_seen);
+    status.style.color = "#8b8b8b";
+  }
+     }
 const messages=document.getElementById("messages");
 const input=document.getElementById("messageInput");
 const send=document.getElementById("sendBtn");
