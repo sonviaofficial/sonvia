@@ -1638,3 +1638,19 @@ color:white;
     font-weight:700;
     letter-spacing:1px;
 }
+
+.top-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+}
+
+#chatStatus{
+  font-size:13px;
+  color:#8b8b8b;
+}
+.verified-icon{
+  width:16px;
+  height:16px;
+}
