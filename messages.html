@@ -184,7 +184,7 @@ async function loadConversations(){
     conversationList.innerHTML = `
       <div class="empty-messages">
         <h3>Couldn't load messages</h3>
-        <p>Please try again.</p>
+        <p>${error.message}</p>
       </div>
     `;
 
