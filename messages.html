@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SONVIA Messages</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+.messages-page{
+  background:#050816;
+  color:white;
+  min-height:100vh;
+  padding-bottom:30px;
+}
+
+.messages-header{
+  display:flex;
+  align-items:center;
+  gap:16px;
+  padding:18px 16px;
+  background:#111827;
+  border-bottom:1px solid #243041;
+  position:sticky;
+  top:0;
+  z-index:10;
+}
+
+.messages-header a{
+  color:white;
+  text-decoration:none;
+  font-size:20px;
+}
+
+.messages-header h2{
+  margin:0;
+  font-size:20px;
+}
+
+.conversations{
+  padding:8px 0;
+}
+
+.conversation{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  padding:15px 16px;
+  border-bottom:1px solid #1c2635;
+  cursor:pointer;
+}
+
+.conversation:active{
+  background:#111827;
+}
+
+.conversation-avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#333;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:bold;
+  overflow:hidden;
+  flex-shrink:0;
+}
+
+.conversation-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.conversation-info{
+  flex:1;
+  min-width:0;
+}
+
+.conversation-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+.conversation-name{
+  font-weight:600;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.conversation-status{
+  font-size:12px;
+  color:#8b8b8b;
+  white-space:nowrap;
+}
+
+.conversation-username{
+  margin-top:4px;
+  font-size:13px;
+  color:#999;
+}
+
+.empty-messages{
+  text-align:center;
+  padding:70px 25px;
+  color:#999;
+}
+
+.empty-messages h3{
+  color:white;
+  margin-bottom:8px;
+}
+
+.loading{
+  text-align:center;
+  padding:50px;
+  color:#999;
+}
+</style>
+</head>
+
+<body>
+
+<div class="messages-page">
+
+  <div class="messages-header">
+    <a href="javascript:history.back()">←</a>
+    <h2>MESSAGES</h2>
+  </div>
+
+  <div id="conversationList" class="conversations">
+
+    <div class="loading">
+      Loading conversations...
+    </div>
+
+  </div>
+
+</div>
+
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+const conversationList =
+  document.getElementById("conversationList");
+
+const {
+  data: { user }
+} = await supabase.auth.getUser();
+
+if(!user){
+  window.location.href="login.html";
+}
+
+/*
+  Load conversations belonging to the
+  currently logged-in user.
+*/
+
+async function loadConversations(){
+
+  const { data: conversations, error } =
+    await supabase
+      .from("conversations")
+      .select("*")
+      .or(
+        `user_one_id.eq.${user.id},user_two_id.eq.${user.id}`
+      )
+      .order("created_at", {
+        ascending:false
+      });
+
+  if(error){
+
+    console.error(error);
+
+    conversationList.innerHTML = `
+      <div class="empty-messages">
+        <h3>Couldn't load messages</h3>
+        <p>Please try again.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  if(!conversations || conversations.length === 0){
+
+    conversationList.innerHTML = `
+      <div class="empty-messages">
+        <h3>No conversations yet</h3>
+        <p>Your conversations will appear here.</p>
+      </div>
+    `;
+
+    return;
+  }
+
+  conversationList.innerHTML = "";
+
+  for(const conversation of conversations){
+
+    const otherUserId =
+      conversation.user_one_id === user.id
+        ? conversation.user_two_id
+        : conversation.user_one_id;
+
+    const { data: profile } =
+      await supabase
+        .from("profiles")
+        .select(`
+          id,
+          username,
+          full_name,
+          avatar_url,
+          is_online,
+          last_seen,
+          is_verified
+        `)
+        .eq("id", otherUserId)
+        .single();
+
+    if(!profile) continue;
+
+    const name =
+      profile.full_name ||
+      profile.username ||
+      "SONVIA User";
+
+    const username =
+      profile.username
+        ? "@" + profile.username
+        : "";
+
+    const firstLetter =
+      name.charAt(0).toUpperCase();
+
+    const status =
+      profile.is_online
+        ? "Active"
+        : "Offline";
+
+    const item =
+      document.createElement("div");
+
+    item.className = "conversation";
+
+    item.innerHTML = `
+
+      <div class="conversation-avatar">
+
+        ${
+          profile.avatar_url
+          ? `<img src="${profile.avatar_url}" alt="">`
+          : firstLetter
+        }
+
+      </div>
+
+      <div class="conversation-info">
+
+        <div class="conversation-top">
+
+          <div class="conversation-name">
+
+            ${name}
+
+            ${
+              profile.is_verified
+              ? `<img
+                   src="images/sonvia-verified.png"
+                   style="width:15px;height:15px;vertical-align:middle;"
+                   alt="Verified">
+                 `
+              : ""
+            }
+
+          </div>
+
+          <div class="conversation-status">
+            ${status}
+          </div>
+
+        </div>
+
+        <div class="conversation-username">
+          ${username}
+        </div>
+
+      </div>
+    `;
+
+    item.addEventListener("click", () => {
+
+      window.location.href =
+        `chat.html?user=${otherUserId}`;
+
+    });
+
+    conversationList.appendChild(item);
+  }
+}
+
+await loadConversations();
+
+</script>
+
+</body>
+</html>
