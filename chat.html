@@ -258,7 +258,57 @@ if (!user) {
 const currentUserId = user.id;
 
 // User we're chatting with
-const chatUserId = new URLSearchParams(window.location.search).get("user"); 
+const chatUserId = new URLSearchParams(window.location.search).get("user");
+
+if (!chatUserId) {
+  window.location.href = "messages.html";
+}
+
+let conversationId = null;
+
+async function getOrCreateConversation() {
+
+  // Check if a conversation already exists
+  const { data: existingConversation, error: findError } =
+    await supabase
+      .from("conversations")
+      .select("id")
+      .or(
+        `and(user_one_id.eq.${currentUserId},user_two_id.eq.${chatUserId}),and(user_one_id.eq.${chatUserId},user_two_id.eq.${currentUserId})`
+      )
+      .maybeSingle();
+
+  if (findError) {
+    console.error("Conversation lookup error:", findError);
+    return;
+  }
+
+  // Existing conversation
+  if (existingConversation) {
+    conversationId = existingConversation.id;
+    return;
+  }
+
+  // Create a new conversation
+  const { data: newConversation, error: createError } =
+    await supabase
+      .from("conversations")
+      .insert({
+        user_one_id: currentUserId,
+        user_two_id: chatUserId
+      })
+      .select("id")
+      .single();
+
+  if (createError) {
+    console.error("Conversation creation error:", createError);
+    return;
+  }
+
+  conversationId = newConversation.id;
+}
+
+await getOrCreateConversation();
 document.getElementById("profilePic")
 .addEventListener("click",()=>{
 
