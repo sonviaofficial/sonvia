@@ -139,7 +139,11 @@ if(error){
   alert(error.message);
 }
 
-alert("Profiles returned: " + (data ? data.length : 0));
+alert(
+  data.map(u =>
+    `${u.id} | ${u.username || "NO USERNAME"} | ${u.role || "NO ROLE"}`
+  ).join("\n")
+);
 const list=document.getElementById("userList");
 
 if(!data || data.length===0){
