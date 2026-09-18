@@ -127,10 +127,17 @@ import { supabase } from "./supabase.js";
 
 async function loadUsers(){
 
-const { data } = await supabase
+  const { data, error } = await supabase
 .from("profiles")
 .select("*")
 .order("username");
+
+console.log("USERS DATA:", data);
+console.log("USERS ERROR:", error);
+
+if(error){
+  alert(error.message);
+}
 
 const list=document.getElementById("userList");
 
