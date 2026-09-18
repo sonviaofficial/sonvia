@@ -239,21 +239,24 @@ const notSent=document.getElementById("notSent");
 let followed=false;
 let freeUsed=false;
 
+
  const {
   data: { user }
 } = await supabase.auth.getUser();
 
- await supabase
+if (!user) {
+  window.location.href = "login.html";
+}
+
+const currentUserId = user.id;
+
+await supabase
   .from("profiles")
   .update({
     is_online: true,
     last_seen: new Date().toISOString()
   })
   .eq("id", user.id);
-
-if (!user) {
-  window.location.href = "login.html";
-}
 
 const currentUserId = user.id;
 
@@ -264,6 +267,59 @@ if (!chatUserId) {
   window.location.href = "messages.html";
 }
 
+// Create or find conversation
+async function getOrCreateConversation(){
+
+  if(!chatUserId){
+    console.error("No chat user ID provided.");
+    return null;
+  }
+
+  // Check if conversation already exists
+  const { data: existing, error: findError } =
+    await supabase
+      .from("conversations")
+      .select("id,user_one_id,user_two_id,created_at")
+      .or(
+        `and(user_one_id.eq.${currentUserId},user_two_id.eq.${chatUserId}),and(user_one_id.eq.${chatUserId},user_two_id.eq.${currentUserId})`
+      )
+      .maybeSingle();
+
+  if(findError){
+    console.error("Conversation lookup error:", findError);
+    return null;
+  }
+
+  if(existing){
+    console.log("Existing conversation:", existing.id);
+    return existing.id;
+  }
+
+  // Create a new conversation
+  const { data: created, error: createError } =
+    await supabase
+      .from("conversations")
+      .insert({
+        user_one_id: currentUserId,
+        user_two_id: chatUserId
+      })
+      .select("id,user_one_id,user_two_id,created_at")
+      .single();
+
+  if(createError){
+    console.error("Conversation creation error:", createError);
+    return null;
+  }
+
+  console.log("Conversation created:", created.id);
+
+  return created.id;
+}
+
+const conversationId = await getOrCreateConversation();
+
+console.log("Current conversation ID:", conversationId);
+  
 let conversationId = null;
 
 async function getOrCreateConversation() {
