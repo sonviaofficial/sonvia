@@ -182,13 +182,8 @@ src="https://placehold.co/86x86/333/fff?text=F">
 
 <div class="name-row">
 
-<h2 id="profileName">FOSKY.J</h2>
-
-<div class="verify-dot">✓</div>
-
-</div>
-
-<div id="profileUsername">@foskyj</div>
+<h2 id="profileName">Loading...</h2>
+<div id="profileUsername">@loading</div>
 
 <div class="role">Artist • Ikorodu, Lagos</div>
 
@@ -204,12 +199,7 @@ Verified
 
 </div>
 
-<div class="bio-card">
-
-<p id="profileBio">
-Afrobeats • Amapiano • Street vibes.
-Creating music and connecting with producers on SONVIA.
-</p>
+<p id="profileBio">Loading profile...</p>
 
 </div>
 
@@ -217,7 +207,7 @@ Creating music and connecting with producers on SONVIA.
 
 <div>
 
-<strong id="followersCount">123</strong>
+<strong id="followersCount">0</strong>
 
 <span>Followers</span>
 
@@ -225,7 +215,7 @@ Creating music and connecting with producers on SONVIA.
 
 <div>
 
-<strong id="followingCount">54</strong>
+<strong id="followingCount">0</strong>
 
 <span>Following</span>
 
@@ -326,8 +316,25 @@ if (profile) {
   if (profile.avatar_url) {
     document.getElementById("profileAvatar").src = profile.avatar_url;
   }
+
+  const { count: followersCount } = await supabase
+    .from("followers")
+    .select("*", { count: "exact", head: true })
+    .eq("following_id", profileId);
+
+  const { count: followingCount } = await supabase
+    .from("followers")
+    .select("*", { count: "exact", head: true })
+    .eq("follower_id", profileId);
+
+  document.getElementById("followersCount").textContent = followersCount || 0;
+  document.getElementById("followingCount").textContent = followingCount || 0;
 }
 
+if (profileId !== user.id) {
+  document.querySelector(".song-card").style.display = "none";
+}
+  
 // Hide Follow + Chat on your own profile
 if (profileId === user.id) {
   followBtn.style.display = "none";
