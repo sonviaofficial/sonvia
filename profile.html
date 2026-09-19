@@ -44,8 +44,31 @@ padding:20px;
 
 .profile-top{
 display:flex;
-align-items:center;
+align-items:flex-start;
 gap:16px;
+}
+
+.profile-top>div{
+flex:1;
+min-width:0;
+}
+
+.name-row{
+display:flex;
+align-items:center;
+gap:8px;
+flex-wrap:wrap;
+}
+
+#profileUsername{
+display:block;
+margin-top:4px;
+word-break:break-word;
+}
+
+.role{
+margin-top:6px;
+word-break:break-word;
 }
 
 .profile-avatar{
