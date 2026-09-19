@@ -139,11 +139,6 @@ if(error){
   alert(error.message);
 }
 
-alert(
-  data.map(u =>
-    `${u.id} | ${u.username || "NO USERNAME"} | ${u.role || "NO ROLE"}`
-  ).join("\n")
-);
 const list=document.getElementById("userList");
 
 if(!data || data.length===0){
@@ -168,7 +163,9 @@ onclick="window.location='profile.html?id=${user.id}'">
 
 <div class="name-row">
 
-<div class="name">${user.username || "User"}</div>
+<div class="name">
+  ${user.username || user.full_name || "SONVIA User"}
+</div>
 
 ${user.verified ? `
 
