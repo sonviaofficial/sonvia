@@ -285,45 +285,71 @@ Afrobeats
 
 </div>
 
-<script>
+<script type="module">
+import { supabase } from "./supabase.js";
+import { supabase } from "./supabase.js";
 
-let following=false;
+let following = false;
 
-const followBtn=document.getElementById("followBtn");
-const followers=document.getElementById("followersCount");
+const followBtn = document.getElementById("followBtn");
+const followers = document.getElementById("followersCount");
+const chatBtn = document.getElementById("chatBtn");
 
-followBtn.addEventListener("click",()=>{
+const {
+  data: { user }
+} = await supabase.auth.getUser();
 
-following=!following;
+if (!user) window.location.href = "login.html";
 
-if(following){
+const profileId =
+  new URLSearchParams(window.location.search).get("id") || user.id;
 
-followBtn.classList.add("following");
-followBtn.textContent="✓ Following";
-followers.textContent=Number(followers.textContent)+1;
+const { data: profile } = await supabase
+  .from("profiles")
+  .select("*")
+  .eq("id", profileId)
+  .single();
 
-}else{
+if (profile) {
+  document.getElementById("profileName").textContent =
+    profile.full_name || profile.username || "SONVIA User";
 
-followBtn.classList.remove("following");
-followBtn.textContent="Follow";
-followers.textContent=Number(followers.textContent)-1;
+  document.getElementById("profileUsername").textContent =
+    profile.username ? "@" + profile.username : "@sonviauser";
 
+  document.getElementById("profileBio").textContent =
+    profile.bio || "No bio yet.";
+
+  document.querySelector(".role").textContent =
+    `${profile.role === "producer" ? "Producer" : "Artist"}${profile.location ? " • " + profile.location : ""}`;
+
+  if (profile.avatar_url) {
+    document.getElementById("profileAvatar").src = profile.avatar_url;
+  }
 }
 
+// Hide Follow + Chat on your own profile
+if (profileId === user.id) {
+  followBtn.style.display = "none";
+  chatBtn.style.display = "none";
+}
+
+followBtn.addEventListener("click", () => {
+  following = !following;
+
+  if (following) {
+    followBtn.classList.add("following");
+    followBtn.textContent = "✓ Following";
+    followers.textContent = Number(followers.textContent) + 1;
+  } else {
+    followBtn.classList.remove("following");
+    followBtn.textContent = "Follow";
+    followers.textContent = Number(followers.textContent) - 1;
+  }
 });
 
-document.getElementById("chatBtn")
-.addEventListener("click",()=>{
-
-window.location.href="chat.html";
-
-});
-
-document.getElementById("profileAvatar")
-.addEventListener("click",()=>{
-
-window.location.href="profile.html";
-
+chatBtn.addEventListener("click", () => {
+  window.location.href = `chat.html?user=${profileId}`;
 });
 
 </script>
