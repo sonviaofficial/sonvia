@@ -38,10 +38,6 @@ margin-top:18px;
 font-size:30px;
 }
 
-.profile-content{
-padding:20px;
-}
-
 .profile-top{
 display:flex;
 align-items:flex-start;
@@ -49,6 +45,8 @@ gap:16px;
 }
 
 .profile-top>div{
+display:flex;
+flex-direction:column;
 flex:1;
 min-width:0;
 }
@@ -59,15 +57,18 @@ align-items:center;
 gap:8px;
 flex-wrap:wrap;
 }
-
+  
 #profileUsername{
 display:block;
 margin-top:4px;
+font-size:18px;
+color:#d1d5db;
 word-break:break-word;
 }
 
 .role{
 margin-top:6px;
+color:#9ca3af;
 word-break:break-word;
 }
 
@@ -115,10 +116,11 @@ color:#9ca3af;
 }
 
 .bio-card{
-margin-top:18px;
 background:#111827;
 padding:18px;
 border-radius:20px;
+margin-top:24px;
+clear:both;
 }
 
 .stats{
@@ -325,7 +327,9 @@ const { data: profile } = await supabase
 
 if (profile) {
   document.getElementById("profileName").textContent =
-    profile.full_name || profile.username || "SONVIA User";
+  profile.username ||
+  profile.full_name ||
+  (profile.role === "producer" ? "Producer" : "Artist");
 
   document.getElementById("profileUsername").textContent =
     profile.username ? "@" + profile.username : "@sonviauser";
