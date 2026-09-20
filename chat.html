@@ -146,7 +146,7 @@ display:none;
 
 <div class="chat-header">
 
-<a href="profile.html">← Back</a>
+<a id="backBtn" href="#">← Back</a>
 
 <div class="chat-avatar" id="profilePic">S</div>
 
@@ -262,7 +262,51 @@ const currentUserId = user.id;
 
 // User we're chatting with
 const chatUserId = new URLSearchParams(window.location.search).get("user");
+  document.getElementById("backBtn").href = `profile.html?id=${chatUserId}`;
+// Load the person we're chatting with
+const { data: chatProfile } = await supabase
+  .from("profiles")
+  .select("username, full_name, avatar_url, is_verified, is_online, last_seen, role")
+  .eq("id", chatUserId)
+  .single();
 
+if (chatProfile) {
+  document.getElementById("chatName").textContent =
+    chatProfile.username ||
+    chatProfile.full_name ||
+    (chatProfile.role === "producer" ? "Producer" : "Artist");
+
+  const usernameEl = document.getElementById("chatUsername");
+
+  if (chatProfile.username) {
+    usernameEl.textContent = "@" + chatProfile.username;
+    usernameEl.style.display = "block";
+  } else {
+    usernameEl.style.display = "none";
+  }
+
+  if (chatProfile.avatar_url) {
+    document.getElementById("profilePic").innerHTML =
+      `<img src="${chatProfile.avatar_url}" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">`;
+  } else {
+    document.getElementById("profilePic").textContent =
+      (chatProfile.username || chatProfile.full_name || "S")
+        .charAt(0)
+        .toUpperCase();
+  }
+
+  const badge = document.getElementById("verifiedBadge");
+
+  if (chatProfile.is_verified) {
+    badge.style.display = "inline-flex";
+    badge.innerHTML =
+      `<img src="images/sonvia-verified.png" style="width:15px;height:15px;">`;
+  } else {
+    badge.style.display = "none";
+  }
+
+  updateChatStatus(chatProfile);
+  }
 if (!chatUserId) {
   window.location.href = "messages.html";
 }
@@ -366,10 +410,8 @@ async function getOrCreateConversation() {
 
 await getOrCreateConversation();
 document.getElementById("profilePic")
-.addEventListener("click",()=>{
-
-window.location.href="profile.html";
-
+.addEventListener("click", () => {
+  window.location.href = `profile.html?id=${chatUserId}`;
 });
 
 send.addEventListener("click",()=>{
