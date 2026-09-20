@@ -252,7 +252,7 @@ Chat
 
 </div>
 
-<div class="song-card">
+<div class="song-card" id="songCard" style="display:none;">
 
 <h3>Latest Songs</h3>
 
@@ -323,8 +323,14 @@ if (profile) {
   profile.full_name ||
   (profile.role === "producer" ? "Producer" : "Artist");
 
-  document.getElementById("profileUsername").textContent =
-    profile.username ? "@" + profile.username : "@sonviauser";
+  const usernameEl = document.getElementById("profileUsername");
+
+if (profile.username) {
+  usernameEl.textContent = "@" + profile.username;
+  usernameEl.style.display = "block";
+} else {
+  usernameEl.style.display = "none";
+}
 
   document.getElementById("profileBio").textContent =
     profile.bio || "No bio yet.";
@@ -350,8 +356,8 @@ if (profile) {
   document.getElementById("followingCount").textContent = followingCount || 0;
 }
 
-if (profileId !== user.id) {
-  document.querySelector(".song-card").style.display = "none";
+if (profileId === user.id) {
+  document.getElementById("songCard").style.display = "block";
 }
   
 // Hide Follow + Chat on your own profile
