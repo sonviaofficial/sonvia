@@ -72,6 +72,12 @@ color:#9ca3af;
 word-break:break-word;
 }
 
+#profileBio{
+margin:0;
+word-break:break-word;
+line-height:1.5;
+}
+
 .profile-avatar{
 width:86px;
 height:86px;
@@ -195,37 +201,35 @@ background:#2a1a55;
 </div>
 
 <div class="profile-content">
-
 <div class="profile-top">
 
-<img
-id="profileAvatar"
-class="profile-avatar"
-src="https://placehold.co/86x86/333/fff?text=F">
+  <img
+    id="profileAvatar"
+    class="profile-avatar"
+    src="https://placehold.co/86x86/333/fff?text=F">
 
-<div>
+  <div>
 
-<div class="name-row">
+    <div class="name-row">
+      <h2 id="profileName">Loading...</h2>
+      <div class="verify-dot">✓</div>
+    </div>
 
-<h2 id="profileName">Loading...</h2>
-<div id="profileUsername">@loading</div>
+    <div id="profileUsername">@loading</div>
 
-<div class="role">Artist • Ikorodu, Lagos</div>
+    <div class="role">Artist • Ikorodu, Lagos</div>
 
-<div class="verified-pill">
+    <div class="verified-pill">
+      <div class="verify-dot">✓</div>
+      Verified
+    </div>
 
-<div class="verify-dot">✓</div>
-
-Verified
+  </div>
 
 </div>
 
-</div>
-
-</div>
-
-<p id="profileBio">Loading profile...</p>
-
+<div class="bio-card">
+  <p id="profileBio">Loading profile...</p>
 </div>
 
 <div class="stats">
