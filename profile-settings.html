@@ -479,36 +479,27 @@ let avatarUrl = "";
 
     }
 
-    /* =====================================================
+/* =====================================================
    FEEDBACK
    ===================================================== */
 
-const feedbackBtn =
-    document.getElementById("feedbackBtn");
+const feedbackBtn = document.getElementById("feedbackBtn");
 
-feedbackBtn.addEventListener("click", () => {
+feedbackBtn.onclick = function () {
 
     const feedbackMessage =
-        `Hello SONVIA, I found something that isn't working.
-
-What happened:
-
-Page/feature:
-
-What I expected:
-
-I'm using SONVIA Early Access.`;
+        "Hello SONVIA, I found something that isn't working.\n\n" +
+        "What happened:\n\n" +
+        "Page/feature:\n\n" +
+        "What I expected:\n\n" +
+        "I'm using SONVIA Early Access.";
 
     const whatsappUrl =
-        `https://wa.me/2349026763886?text=${encodeURIComponent(feedbackMessage)}`;
+        "https://wa.me/2349026763886?text=" +
+        encodeURIComponent(feedbackMessage);
 
-    window.open(
-        whatsappUrl,
-        "_blank"
-    );
-
-});
-
+    window.location.href = whatsappUrl;
+};
     /* =====================================================
        LOAD ARTIST PROFILE
        ===================================================== */
