@@ -247,8 +247,7 @@ let freeUsed=false;
 if (!user) {
   window.location.href = "login.html";
 }
-
-const currentUserId = user.id;
+  const currentUserId = user.id;
 
 await supabase
   .from("profiles")
@@ -258,7 +257,6 @@ await supabase
   })
   .eq("id", user.id);
 
-const currentUserId = user.id;
 
 // User we're chatting with
 const chatUserId = new URLSearchParams(window.location.search).get("user");
@@ -272,9 +270,9 @@ const { data: chatProfile } = await supabase
 
 if (chatProfile) {
   document.getElementById("chatName").textContent =
-    chatProfile.username ||
-    chatProfile.full_name ||
-    (chatProfile.role === "producer" ? "Producer" : "Artist");
+  chatProfile.full_name ||
+  chatProfile.username ||
+  (chatProfile.role === "producer" ? "Producer" : "Artist");
 
   const usernameEl = document.getElementById("chatUsername");
 
@@ -363,52 +361,7 @@ async function getOrCreateConversation(){
 const conversationId = await getOrCreateConversation();
 
 console.log("Current conversation ID:", conversationId);
-  
-let conversationId = null;
 
-async function getOrCreateConversation() {
-
-  // Check if a conversation already exists
-  const { data: existingConversation, error: findError } =
-    await supabase
-      .from("conversations")
-      .select("id")
-      .or(
-        `and(user_one_id.eq.${currentUserId},user_two_id.eq.${chatUserId}),and(user_one_id.eq.${chatUserId},user_two_id.eq.${currentUserId})`
-      )
-      .maybeSingle();
-
-  if (findError) {
-    console.error("Conversation lookup error:", findError);
-    return;
-  }
-
-  // Existing conversation
-  if (existingConversation) {
-    conversationId = existingConversation.id;
-    return;
-  }
-
-  // Create a new conversation
-  const { data: newConversation, error: createError } =
-    await supabase
-      .from("conversations")
-      .insert({
-        user_one_id: currentUserId,
-        user_two_id: chatUserId
-      })
-      .select("id")
-      .single();
-
-  if (createError) {
-    console.error("Conversation creation error:", createError);
-    return;
-  }
-
-  conversationId = newConversation.id;
-}
-
-await getOrCreateConversation();
 document.getElementById("profilePic")
 .addEventListener("click", () => {
   window.location.href = `profile.html?id=${chatUserId}`;
