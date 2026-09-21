@@ -370,38 +370,47 @@ document.getElementById("profilePic")
 
 send.addEventListener("click", async () => {
 
-const text = input.value.trim();
+    const text = input.value.trim();
 
-if (!text || !conversationId) return;
+    if (!text || !conversationId) return;
 
-if (!followed && freeUsed) {
-    notSent.style.display = "block";
-    return;
-}
+    if (!followed && freeUsed) {
+        notSent.style.display = "block";
+        return;
+    }
 
-const { error } = await supabase
-    .from("messages")
-    .insert({
-        conversation_id: conversationId,
-        sender_id: currentUserId,
-        message_type: "text",
-        message_text: text,
-        file_url: null
-    });
+    const { error } = await supabase
+        .from("messages")
+        .insert({
+            conversation_id: conversationId,
+            sender_id: currentUserId,
+            message_type: "text",
+            message_text: text,
+            file_url: null
+        });
 
-if (error) {
-    console.error(error);
-    return;
-}
+    if (error) {
+        console.error(error);
+        alert(error.message);
+        return;
+    }
 
-input.value = "";
+    // Show the message immediately
+    const bubble = document.createElement("div");
+    bubble.className = "msg sent";
+    bubble.textContent = text;
+    messages.appendChild(bubble);
+    messages.scrollTop = messages.scrollHeight;
 
-if (!followed && !freeUsed) {
-    freeUsed = true;
-    lock.classList.add("show");
-}
+    input.value = "";
+
+    if (!followed && !freeUsed) {
+        freeUsed = true;
+        lock.classList.add("show");
+    }
 
 });
+
 
 follow.addEventListener("click",()=>{
 
