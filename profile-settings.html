@@ -8,8 +8,6 @@
 
     <link rel="stylesheet" href="style.css">
 
-    <!-- Supabase -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
     <style>
         body {
@@ -172,10 +170,17 @@
     <div class="profile-picture-box">
 
         <img
-            id="profilePicture"
-            src="https://i.pravatar.cc/200"
-            alt="Artist Profile Picture"
-        >
+    id="profilePicture"
+    src="https://i.pravatar.cc/200"
+    alt="Artist Profile Picture"
+    style="cursor:pointer;"
+>
+
+<input
+    type="file"
+    id="avatarInput"
+    accept="image/*"
+    style="display:none;">
 
         <p class="profile-note">
             Your profile picture can be added to your artist profile.
@@ -263,16 +268,34 @@
 
     <div class="form-group">
 
+  <label for="email">
+    Email Address <span class="required">*</span>
+  </label>
+
+  <input
+    type="email"
+    id="email"
+    placeholder="Your account email"
+    readonly
+  >
+
+  <p class="profile-note">
+    This is your SONVIA account email and cannot be changed here.
+  </p>
+
+    </div>
+
         <label for="phone">
-            Phone Number
+  Phone Number <span class="required">*</span>
         </label>
 
         <input
-            type="tel"
-            id="phone"
-            placeholder="e.g. 08012345678"
-            maxlength="20"
-        >
+  type="tel"
+  id="phone"
+  placeholder="e.g. 08012345678"
+  maxlength="20"
+  required
+>
 
     </div>
 
@@ -365,6 +388,9 @@ import { supabase } from './supabase.js';
 
     const phoneInput =
         document.getElementById("phone");
+    
+    const emailInput =
+    document.getElementById("email");
 
     const instagramInput =
         document.getElementById("instagram");
@@ -381,6 +407,13 @@ import { supabase } from './supabase.js';
     const message =
         document.getElementById("message");
 
+    const profilePicture =
+    document.getElementById("profilePicture");
+
+const avatarInput =
+    document.getElementById("avatarInput");
+
+let avatarUrl = "";
 
     /* =====================================================
        MESSAGE
@@ -421,7 +454,7 @@ import { supabase } from './supabase.js';
                 return;
 
             }
-
+emailInput.value = user.email || "";
 
             const {
                 data: profile,
@@ -430,15 +463,16 @@ import { supabase } from './supabase.js';
                 await supabase
                     .from("profiles")
                     .select(`
-                        username,
-                        bio,
-                        genre,
-                        location,
-                        phone,
-                        instagram,
-                        tiktok,
-                        audiomack
-                    `)
+    username,
+    bio,
+    genre,
+    location,
+    phone,
+    instagram,
+    tiktok,
+    audiomack,
+    avatar_url
+`)
                     .eq("id", user.id)
                     .maybeSingle();
 
@@ -493,8 +527,11 @@ import { supabase } from './supabase.js';
             audiomackInput.value =
                 profile.audiomack || "";
 
-        }
+avatarUrl = profile.avatar_url || "";
 
+if (avatarUrl) {
+    profilePicture.src = avatarUrl;
+}
         catch (error) {
 
             console.error(error);
@@ -531,7 +568,19 @@ import { supabase } from './supabase.js';
 
         }
 
+const phone = phoneInput.value.trim();
 
+if (!phone) {
+
+  showMessage(
+    "Please add your phone number before saving your profile. Your SONVIA account email is already linked to this account.",
+    "error"
+  );
+
+  phoneInput.focus();
+
+  return;
+}
         saveBtn.disabled = true;
 
         saveBtn.textContent =
@@ -585,7 +634,10 @@ import { supabase } from './supabase.js';
                     tiktokInput.value.trim(),
 
                 audiomack:
-                    audiomackInput.value.trim()
+    audiomackInput.value.trim(),
+
+avatar_url:
+    avatarUrl
 
             };
 
@@ -644,7 +696,54 @@ alert(error.message);
         }
 
     }
+profilePicture.addEventListener("click", () => {
+    avatarInput.click();
+});
 
+avatarInput.addEventListener("change", async () => {
+
+    const file = avatarInput.files[0];
+
+    if (!file) return;
+
+    const {
+        data: { user }
+    } = await supabase.auth.getUser();
+
+    const ext =
+        file.name.split(".").pop();
+
+    const filePath =
+        `${user.id}.${ext}`;
+
+    const { error: uploadError } =
+        await supabase.storage
+            .from("avatars")
+            .upload(filePath, file, {
+                upsert: true
+            });
+
+    if (uploadError) {
+
+        showMessage(
+            uploadError.message,
+            "error"
+        );
+
+        return;
+    }
+
+    const {
+        data: { publicUrl }
+    } =
+        supabase.storage
+            .from("avatars")
+            .getPublicUrl(filePath);
+
+    avatarUrl = publicUrl;
+
+    profilePicture.src = avatarUrl;
+});
 
     /* =====================================================
        SAVE BUTTON
