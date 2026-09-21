@@ -183,7 +183,7 @@ background:#2a1a55;
 
 <div class="profile-header">
 
-<a href="javascript:history.back()">← Back</a>
+<a id="profileBack" href="#">← Back</a>
 
 <h1>Profile</h1>
 
@@ -311,6 +311,11 @@ const profileId =
   new URLSearchParams(window.location.search).get("id") || user.id;
   console.log("Opening profile:", profileId);
 
+const from = new URLSearchParams(window.location.search).get("from");
+
+document.getElementById("profileBack").href =
+  from === "users" ? "users.html" : "javascript:history.back()";
+  
 const { data: profile } = await supabase
   .from("profiles")
   .select("*")
