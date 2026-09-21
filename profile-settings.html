@@ -146,6 +146,38 @@
             line-height: 1.5;
             margin-top: 8px;
         }
+
+        .feedback-box {
+    margin-top: 30px;
+    padding: 16px;
+    border: 1px solid #292929;
+    border-radius: 12px;
+    background: #111;
+}
+
+.feedback-btn {
+    width: 100%;
+    padding: 14px;
+    border: 1px solid #7C3AED;
+    border-radius: 10px;
+    background: transparent;
+    color: #fff;
+    font-size: 15px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.feedback-btn:active {
+    transform: scale(0.98);
+}
+
+.feedback-note {
+    color: #888;
+    font-size: 13px;
+    line-height: 1.5;
+    margin: 9px 0 0;
+}
+        
     </style>
 </head>
 
@@ -355,13 +387,32 @@
     </div>
 
 
+    <!-- FEEDBACK -->
+
+<div class="feedback-box">
+
     <button
         type="button"
-        id="saveBtn"
-        class="save-btn"
+        id="feedbackBtn"
+        class="feedback-btn"
     >
-        Save Profile
+        Send Feedback
     </button>
+
+    <p class="feedback-note">
+        Something isn't working? Tell us so we can identify and fix it during Early Access.
+    </p>
+
+</div>
+
+
+<button
+    type="button"
+    id="saveBtn"
+    class="save-btn"
+>
+    Save Profile
+</button>
 
 </main>
 
@@ -428,6 +479,35 @@ let avatarUrl = "";
 
     }
 
+    /* =====================================================
+   FEEDBACK
+   ===================================================== */
+
+const feedbackBtn =
+    document.getElementById("feedbackBtn");
+
+feedbackBtn.addEventListener("click", () => {
+
+    const feedbackMessage =
+        `Hello SONVIA, I found something that isn't working.
+
+What happened:
+
+Page/feature:
+
+What I expected:
+
+I'm using SONVIA Early Access.`;
+
+    const whatsappUrl =
+        `https://wa.me/2349026763886?text=${encodeURIComponent(feedbackMessage)}`;
+
+    window.open(
+        whatsappUrl,
+        "_blank"
+    );
+
+});
 
     /* =====================================================
        LOAD ARTIST PROFILE
