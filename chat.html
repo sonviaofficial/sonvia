@@ -260,7 +260,8 @@ await supabase
 
 // User we're chatting with
 const chatUserId = new URLSearchParams(window.location.search).get("user");
-  document.getElementById("backBtn").href = `profile.html?id=${chatUserId}`;
+  document.getElementById("backBtn").href =
+  `profile.html?id=${chatUserId}&from=users`;
 // Load the person we're chatting with
 const { data: chatProfile } = await supabase
   .from("profiles")
