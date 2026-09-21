@@ -171,7 +171,7 @@ list.innerHTML=data.map(user=>`
 
 src="${user.avatar_url || 'https://placehold.co/60x60/333/fff?text=U'}"
 
-onclick="window.location='profile.html?id=${user.id}'">
+onclick="window.location=`profile.html?id=${user.id}&from=users`;
 
 <div class="info">
 
