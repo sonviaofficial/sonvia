@@ -313,8 +313,15 @@ const profileId =
 
 const from = new URLSearchParams(window.location.search).get("from");
 
-document.getElementById("profileBack").href =
-  from === "users" ? "users.html" : "javascript:history.back()";
+if (from === "users") {
+  document.getElementById("profileBack").href = "users.html";
+} else if (from === "chat") {
+  document.getElementById("profileBack").href =
+    `chat.html?user=${profileId}`;
+} else {
+  document.getElementById("profileBack").href =
+    "javascript:history.back()";
+}
   
 const { data: profile } = await supabase
   .from("profiles")
