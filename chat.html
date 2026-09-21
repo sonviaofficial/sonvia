@@ -368,32 +368,37 @@ document.getElementById("profilePic")
   window.location.href = `profile.html?id=${chatUserId}`;
 });
 
-send.addEventListener("click",()=>{
+send.addEventListener("click", async () => {
 
-const text=input.value.trim();
+const text = input.value.trim();
 
-if(!text)return;
+if (!text || !conversationId) return;
 
-if(!followed&&freeUsed){
-
-notSent.style.display="block";
-return;
-
+if (!followed && freeUsed) {
+    notSent.style.display = "block";
+    return;
 }
 
-const bubble=document.createElement("div");
-bubble.className="msg sent";
-bubble.textContent=text;
-messages.appendChild(bubble);
+const { error } = await supabase
+    .from("messages")
+    .insert({
+        conversation_id: conversationId,
+        sender_id: currentUserId,
+        message_type: "text",
+        message_text: text,
+        file_url: null
+    });
 
-input.value="";
-messages.scrollTop=messages.scrollHeight;
+if (error) {
+    console.error(error);
+    return;
+}
 
-if(!followed&&!freeUsed){
+input.value = "";
 
-freeUsed=true;
-lock.classList.add("show");
-
+if (!followed && !freeUsed) {
+    freeUsed = true;
+    lock.classList.add("show");
 }
 
 });
