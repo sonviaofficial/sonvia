@@ -359,9 +359,43 @@ async function getOrCreateConversation(){
   return created.id;
 }
 
+  async function loadMessages() {
+
+  if (!conversationId) return;
+
+  const { data, error } = await supabase
+    .from("messages")
+    .select("*")
+    .eq("conversation_id", conversationId)
+    .order("created_at", { ascending: true });
+
+  if (error) {
+    console.error(error);
+    return;
+  }
+
+  messages.innerHTML = "";
+
+  data.forEach(msg => {
+
+    const bubble = document.createElement("div");
+
+    bubble.className =
+      "msg " + (msg.sender_id === currentUserId ? "sent" : "received");
+
+    bubble.textContent = msg.message_text;
+
+    messages.appendChild(bubble);
+
+  });
+
+  messages.scrollTop = messages.scrollHeight;
+  }
+  
 const conversationId = await getOrCreateConversation();
 
 console.log("Current conversation ID:", conversationId);
+  await loadMessages();
 
 document.getElementById("profilePic")
 .addEventListener("click", () => {
