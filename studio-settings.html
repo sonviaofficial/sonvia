@@ -557,13 +557,10 @@ upsert:true
 
 if (uploadError){
 
-console.error(
-"Avatar upload error:",
-uploadError
-);
+console.error("Avatar upload error:", uploadError);
 
 showMessage(
-"Could not upload studio picture.",
+"Upload failed: " + uploadError.message,
 "error"
 );
 
