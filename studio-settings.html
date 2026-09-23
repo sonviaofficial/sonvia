@@ -1,40 +1,793 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
+
 <title>Studio Settings • SONVIA</title>
+
 <link rel="stylesheet" href="style.css">
+
 <style>
-body{margin:0;background:#0b0b0f;color:white;font-family:Arial,sans-serif;}
-.header{padding:20px;background:#111;border-bottom:1px solid #222;display:flex;gap:12px;align-items:center;}
-.container{padding:20px;}
-.card{background:#15151d;border-radius:18px;padding:18px;}
-.item{padding:12px 0;border-bottom:1px solid #222;display:flex;justify-content:space-between;}
-.item:last-child{border-bottom:none;}
+
+body{
+margin:0;
+background:#0b0b0f;
+color:white;
+font-family:Arial,sans-serif;
+}
+
+.header{
+padding:20px;
+background:#111;
+border-bottom:1px solid #222;
+display:flex;
+gap:12px;
+align-items:center;
+}
+
+.header a{
+color:white;
+text-decoration:none;
+font-size:24px;
+}
+
+.container{
+padding:20px;
+padding-bottom:40px;
+}
+
+.card{
+background:#15151d;
+border-radius:18px;
+padding:18px;
+}
+
+.avatar-section{
+display:flex;
+flex-direction:column;
+align-items:center;
+margin-bottom:25px;
+}
+
+.avatar{
+width:100px;
+height:100px;
+border-radius:50%;
+object-fit:cover;
+border:3px solid #9F67FF;
+background:#222;
+cursor:pointer;
+}
+
+.avatar-hint{
+margin-top:10px;
+font-size:12px;
+color:#9ca3af;
+}
+
+label{
+display:block;
+margin-top:18px;
+margin-bottom:7px;
+font-size:13px;
+color:#bbb;
+}
+
+input,
+textarea{
+width:100%;
+box-sizing:border-box;
+background:#0f0f16;
+border:1px solid #292933;
+border-radius:12px;
+padding:13px;
+color:white;
+font-size:15px;
+outline:none;
+}
+
+input:focus,
+textarea:focus{
+border-color:#7C3AED;
+}
+
+textarea{
+min-height:110px;
+resize:vertical;
+}
+
+.amount-wrap{
+position:relative;
+}
+
+.amount-symbol{
+position:absolute;
+left:13px;
+top:13px;
+color:#9ca3af;
+}
+
+#studioAmount{
+padding-left:32px;
+}
+
+.save-btn{
+margin-top:25px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#7C3AED;
+color:white;
+font-size:15px;
+font-weight:600;
+cursor:pointer;
+}
+
+.save-btn:disabled{
+opacity:.6;
+cursor:not-allowed;
+}
+
+.message{
+display:none;
+margin-top:15px;
+padding:12px;
+border-radius:12px;
+font-size:13px;
+text-align:center;
+}
+
+.success{
+display:block;
+background:rgba(34,197,94,.12);
+border:1px solid rgba(34,197,94,.4);
+color:#86efac;
+}
+
+.error{
+display:block;
+background:rgba(239,68,68,.12);
+border:1px solid rgba(239,68,68,.4);
+color:#fca5a5;
+}
+
+.note{
+margin-top:18px;
+font-size:12px;
+color:#777;
+line-height:1.5;
+}
+
 </style>
+
 </head>
+
 <body>
 
 <div class="header">
-<a href="producer-dashboard.html" style="color:white;text-decoration:none;">←</a>
-<h3 style="margin:0;">Studio Settings</h3>
+
+<a href="producer-dashboard.html">←</a>
+
+<h3 style="margin:0;">
+Studio Settings
+</h3>
+
 </div>
+
 
 <div class="container">
 
 <div class="card">
 
-<div class="item"><span>Studio Logo</span><span>Coming Soon</span></div>
-<div class="item"><span>Studio Amount</span><span>Coming Soon</span></div>
-<div class="item"><span>Username</span><span>Coming Soon</span></div>
-<div class="item"><span>Location</span><span>Coming Soon</span></div>
-<div class="item"><span>Bio</span><span>Coming Soon</span></div>
+
+<!-- STUDIO AVATAR -->
+
+<div class="avatar-section">
+
+<img
+id="studioAvatar"
+class="avatar"
+src="https://placehold.co/100x100/222/fff?text=S"
+alt="Studio">
+
+<input
+type="file"
+id="avatarInput"
+accept="image/*"
+hidden>
+
+<div class="avatar-hint">
+Tap your studio picture to change it
+</div>
+
+</div>
+
+
+<!-- STUDIO NAME -->
+
+<label for="studioName">
+Studio Name
+</label>
+
+<input
+id="studioName"
+type="text"
+placeholder="e.g. FOSKY Studio"
+maxlength="80">
+
+
+<!-- USERNAME -->
+
+<label for="username">
+Username
+</label>
+
+<input
+id="username"
+type="text"
+placeholder="e.g. foskystudio"
+maxlength="30">
+
+
+<!-- LOCATION -->
+
+<label for="studioLocation">
+Studio Location
+</label>
+
+<input
+id="studioLocation"
+type="text"
+placeholder="e.g. Ikorodu, Lagos"
+maxlength="120">
+
+
+<!-- STUDIO AMOUNT -->
+
+<label for="studioAmount">
+Studio Amount
+</label>
+
+<div class="amount-wrap">
+
+<span class="amount-symbol">
+₦
+</span>
+
+<input
+id="studioAmount"
+type="number"
+min="0"
+step="100"
+placeholder="50000">
+
+</div>
+
+
+<!-- BIO -->
+
+<label for="bio">
+Studio Bio
+</label>
+
+<textarea
+id="bio"
+maxlength="500"
+placeholder="Tell artists about your studio..."></textarea>
+
+
+<button
+id="saveBtn"
+class="save-btn">
+
+Save Studio Settings
+
+</button>
+
+
+<div
+id="message"
+class="message">
+</div>
+
+
+<div class="note">
+Your studio information will appear on your producer profile and can be used when artists book a session.
+</div>
+
 
 </div>
 
 </div>
+
+
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+
+// =====================================================
+// ELEMENTS
+// =====================================================
+
+const studioAvatar =
+document.getElementById("studioAvatar");
+
+const avatarInput =
+document.getElementById("avatarInput");
+
+const studioName =
+document.getElementById("studioName");
+
+const username =
+document.getElementById("username");
+
+const studioLocation =
+document.getElementById("studioLocation");
+
+const studioAmount =
+document.getElementById("studioAmount");
+
+const bio =
+document.getElementById("bio");
+
+const saveBtn =
+document.getElementById("saveBtn");
+
+const message =
+document.getElementById("message");
+
+
+// =====================================================
+// MESSAGE
+// =====================================================
+
+function showMessage(text, type){
+
+message.textContent = text;
+
+message.className =
+"message " + type;
+
+}
+
+
+// =====================================================
+// GET LOGGED-IN USER
+// =====================================================
+
+const {
+data: {
+user
+},
+error: userError
+} = await supabase.auth.getUser();
+
+
+if (userError || !user){
+
+window.location.href =
+"login.html";
+
+throw new Error(
+"User not logged in"
+);
+
+}
+
+
+// =====================================================
+// LOAD PRODUCER PROFILE
+// =====================================================
+
+const {
+data: profile,
+error: profileError
+} = await supabase
+.from("profiles")
+.select(`
+id,
+role,
+producer_name,
+studio_name,
+username,
+studio_location,
+bio,
+studio_amount,
+avatar_url
+`)
+.eq("id", user.id)
+.single();
+
+
+if (profileError){
+
+console.error(profileError);
+
+showMessage(
+"Could not load your studio settings.",
+"error"
+);
+
+throw profileError;
+
+}
+
+
+// =====================================================
+// CHECK PRODUCER ACCOUNT
+// =====================================================
+
+if (profile.role !== "producer"){
+
+alert(
+"This page is only available to producer accounts."
+);
+
+window.location.href =
+"artist-dashboard.html";
+
+throw new Error(
+"User is not a producer"
+);
+
+}
+
+
+// =====================================================
+// FILL FORM
+// =====================================================
+
+studioName.value =
+profile.studio_name ||
+profile.producer_name ||
+"";
+
+username.value =
+profile.username ||
+"";
+
+studioLocation.value =
+profile.studio_location ||
+"";
+
+studioAmount.value =
+profile.studio_amount ??
+"";
+
+bio.value =
+profile.bio ||
+"";
+
+
+if (profile.avatar_url){
+
+studioAvatar.src =
+profile.avatar_url;
+
+}
+
+
+// =====================================================
+// AVATAR CLICK
+// =====================================================
+
+studioAvatar.addEventListener(
+"click",
+() => {
+
+avatarInput.click();
+
+});
+
+
+// =====================================================
+// AVATAR UPLOAD
+// =====================================================
+
+avatarInput.addEventListener(
+"change",
+async () => {
+
+const file =
+avatarInput.files[0];
+
+if (!file) return;
+
+
+if (!file.type.startsWith("image/")){
+
+showMessage(
+"Please select an image.",
+"error"
+);
+
+avatarInput.value = "";
+
+return;
+
+}
+
+
+if (
+file.size >
+5 * 1024 * 1024
+){
+
+showMessage(
+"Image must be less than 5MB.",
+"error"
+);
+
+avatarInput.value = "";
+
+return;
+
+}
+
+
+try{
+
+const fileExt =
+file.name
+.split(".")
+.pop()
+.toLowerCase();
+
+const fileName =
+`${user.id}.${fileExt}`;
+
+
+const {
+error: uploadError
+} = await supabase
+.storage
+.from("avatars")
+.upload(
+fileName,
+file,
+{
+upsert:true
+}
+);
+
+
+if (uploadError){
+
+console.error(
+"Avatar upload error:",
+uploadError
+);
+
+showMessage(
+"Could not upload studio picture.",
+"error"
+);
+
+return;
+
+}
+
+
+const {
+data: publicUrlData
+} = supabase
+.storage
+.from("avatars")
+.getPublicUrl(
+fileName
+);
+
+
+const avatarUrl =
+publicUrlData.publicUrl;
+
+
+const {
+error: updateError
+} = await supabase
+.from("profiles")
+.update({
+
+avatar_url:
+avatarUrl,
+
+updated_at:
+new Date().toISOString()
+
+})
+.eq("id", user.id);
+
+
+if (updateError){
+
+console.error(
+"Profile update error:",
+updateError
+);
+
+showMessage(
+"Picture uploaded, but profile could not be updated.",
+"error"
+);
+
+return;
+
+}
+
+
+studioAvatar.src =
+avatarUrl +
+"?t=" +
+Date.now();
+
+
+showMessage(
+"Studio picture updated!",
+"success"
+);
+
+
+avatarInput.value = "";
+
+
+}catch(error){
+
+console.error(error);
+
+showMessage(
+"Something went wrong while uploading.",
+"error"
+);
+
+}
+
+});
+
+
+// =====================================================
+// SAVE STUDIO SETTINGS
+// =====================================================
+
+saveBtn.addEventListener(
+"click",
+async () => {
+
+
+const name =
+studioName.value.trim();
+
+const userName =
+username.value
+.trim()
+.replace(/^@/, "");
+
+const location =
+studioLocation.value.trim();
+
+const amount =
+studioAmount.value;
+
+const description =
+bio.value.trim();
+
+
+if (!name){
+
+showMessage(
+"Please enter your studio name.",
+"error"
+);
+
+return;
+
+}
+
+
+if (!userName){
+
+showMessage(
+"Please enter your username.",
+"error"
+);
+
+return;
+
+}
+
+
+if (!location){
+
+showMessage(
+"Please enter your studio location.",
+"error"
+);
+
+return;
+
+}
+
+
+if (
+!amount ||
+Number(amount) <= 0
+){
+
+showMessage(
+"Please enter a valid studio amount.",
+"error"
+);
+
+return;
+
+}
+
+
+saveBtn.disabled = true;
+
+saveBtn.textContent =
+"Saving...";
+
+
+const {
+error
+} = await supabase
+.from("profiles")
+.update({
+
+studio_name:name,
+
+username:userName,
+
+studio_location:location,
+
+studio_amount:Number(amount),
+
+bio:description,
+
+updated_at:
+new Date().toISOString()
+
+})
+.eq("id", user.id);
+
+
+if (error){
+
+console.error(error);
+
+showMessage(
+"Could not save studio settings.",
+"error"
+);
+
+saveBtn.disabled = false;
+
+saveBtn.textContent =
+"Save Studio Settings";
+
+return;
+
+}
+
+
+showMessage(
+"Studio settings saved successfully!",
+"success"
+);
+
+
+saveBtn.disabled = false;
+
+saveBtn.textContent =
+"Save Studio Settings";
+
+});
+
+</script>
 
 </body>
 </html>
