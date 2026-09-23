@@ -447,8 +447,10 @@ send.addEventListener("click", async () => {
     if (!text || !conversationId) return;
 
     if (!followed && freeUsed) {
-        notSent.style.display = "block";
-        return;
+    lock.classList.add("show");
+    notSent.style.display = "block";
+    input.blur();
+    return;
     }
 
     const { error } = await supabase
