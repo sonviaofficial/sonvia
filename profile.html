@@ -305,7 +305,10 @@ const {
   data: { user }
 } = await supabase.auth.getUser();
 
-if (!user) window.location.href = "login.html";
+if (!user) {
+  window.location.href = "login.html";
+  return;
+}
 
 const profileId =
   new URLSearchParams(window.location.search).get("id") || user.id;
@@ -378,20 +381,23 @@ if (profileId === user.id) {
   chatBtn.style.display = "none";
 }
 
-const { data: existingFollow } = await supabase
-  .from("followers")
-  .select("id")
-  .eq("follower_id", user.id)
-  .eq("following_id", profileId)
-  .maybeSingle();
+// Check whether the logged-in user is already following this profile
+if (profileId !== user.id) {
 
-following = !!existingFollow;
+  const { data: existingFollow } = await supabase
+    .from("followers")
+    .select("id")
+    .eq("follower_id", user.id)
+    .eq("following_id", profileId)
+    .maybeSingle();
 
-if (following) {
-  followBtn.classList.add("following");
-  followBtn.textContent = "✓ Following";
+  following = !!existingFollow;
+
+  if (following) {
+    followBtn.classList.add("following");
+    followBtn.textContent = "✓ Following";
+  }
 }
-  
 followBtn.addEventListener("click", async () => {
 
   if (!following) {
@@ -433,17 +439,6 @@ followBtn.addEventListener("click", async () => {
 
   }
 
-});
-
-  if (following) {
-    followBtn.classList.add("following");
-    followBtn.textContent = "✓ Following";
-    followers.textContent = Number(followers.textContent) + 1;
-  } else {
-    followBtn.classList.remove("following");
-    followBtn.textContent = "Follow";
-    followers.textContent = Number(followers.textContent) - 1;
-  }
 });
 
 chatBtn.addEventListener("click", () => {
