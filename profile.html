@@ -193,15 +193,20 @@ background:#2a1a55;
 <div class="profile-top">
 
   <img
-    id="profileAvatar"
-    class="profile-avatar"
-    src="https://placehold.co/86x86/333/fff?text=F">
+  id="profileAvatar"
+  class="profile-avatar"
+  src="https://placehold.co/86x86/333/fff?text=F">
 
-  <div>
+<input
+  type="file"
+  id="avatarInput"
+  accept="image/*"
+  style="display:none;">
 
-    <div class="name-row">
-      <h2 id="profileName">Loading...</h2>
-    </div>
+<div>
+  <div class="name-row">
+    <h2 id="profileName">Loading...</h2>
+  </div>
 
     <div id="profileUsername">@loading</div>
 
@@ -298,8 +303,10 @@ import { supabase } from "./supabase.js";
 const followBtn = document.getElementById("followBtn");
 const followers = document.getElementById("followersCount");
 const chatBtn = document.getElementById("chatBtn");
-
+const avatar = document.getElementById("profileAvatar");
+const avatarInput = document.getElementById("avatarInput");
 let following = false;
+
 
 const {
   data: { user }
@@ -313,6 +320,82 @@ if (!user) {
 const profileId =
   new URLSearchParams(window.location.search).get("id") || user.id;
   console.log("Opening profile:", profileId);
+
+  // Only allow the owner to change their profile picture
+if (profileId === user.id) {
+
+  avatar.style.cursor = "pointer";
+
+  avatar.addEventListener("click", () => {
+    avatarInput.click();
+  });
+
+  avatarInput.addEventListener("change", async () => {
+
+    const file = avatarInput.files[0];
+
+    if (!file) return;
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image.");
+      return;
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image must be less than 5MB.");
+      return;
+    }
+
+    try {
+
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${user.id}.${fileExt}`;
+
+      const { error: uploadError } = await supabase
+        .storage
+        .from("avatars")
+        .upload(fileName, file, {
+          upsert: true
+        });
+
+      if (uploadError) {
+        console.error("Avatar upload error:", uploadError);
+        alert("Could not upload profile picture.");
+        return;
+      }
+
+      const { data: publicUrlData } = supabase
+        .storage
+        .from("avatars")
+        .getPublicUrl(fileName);
+
+      const avatarUrl = publicUrlData.publicUrl;
+
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({
+          avatar_url: avatarUrl
+        })
+        .eq("id", user.id);
+
+      if (updateError) {
+        console.error("Profile update error:", updateError);
+        alert("Picture uploaded, but profile could not be updated.");
+        return;
+      }
+
+      avatar.src = avatarUrl + "?t=" + Date.now();
+
+      alert("Profile picture updated!");
+
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong while uploading.");
+    }
+
+  });
+
+}
 
 const backBtn = document.getElementById("profileBack");
 
@@ -454,7 +537,98 @@ followBtn.addEventListener("click", async () => {
 chatBtn.addEventListener("click", () => {
   window.location.href = `chat.html?user=${profileId}`;
 });
+  // =====================================================
+// PROFILE PICTURE UPLOAD
+// =====================================================
 
+if (profileId === user.id) {
+
+  avatar.style.cursor = "pointer";
+
+  avatar.addEventListener("click", () => {
+    avatarInput.click();
+  });
+
+  avatarInput.addEventListener("change", async () => {
+
+    const file = avatarInput.files[0];
+
+    if (!file) return;
+
+    // Check that the file is an image
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image.");
+      avatarInput.value = "";
+      return;
+    }
+
+    // Maximum file size: 5MB
+    if (file.size > 5 * 1024 * 1024) {
+      alert("Image must be less than 5MB.");
+      avatarInput.value = "";
+      return;
+    }
+
+    try {
+
+      const fileExt = file.name.split(".").pop().toLowerCase();
+      const fileName = `${user.id}.${fileExt}`;
+
+      // Upload image to Supabase Storage
+      const { error: uploadError } = await supabase
+        .storage
+        .from("avatars")
+        .upload(fileName, file, {
+          upsert: true
+        });
+
+      if (uploadError) {
+        console.error("Avatar upload error:", uploadError);
+        alert("Could not upload profile picture.");
+        return;
+      }
+
+      // Get public image URL
+      const { data: publicUrlData } = supabase
+        .storage
+        .from("avatars")
+        .getPublicUrl(fileName);
+
+      const avatarUrl = publicUrlData.publicUrl;
+
+      // Save URL to profile
+      const { error: updateError } = await supabase
+        .from("profiles")
+        .update({
+          avatar_url: avatarUrl
+        })
+        .eq("id", user.id);
+
+      if (updateError) {
+        console.error("Profile update error:", updateError);
+        alert("Picture uploaded, but profile could not be updated.");
+        return;
+      }
+
+      // Show new picture immediately
+      avatar.src = avatarUrl + "?t=" + Date.now();
+
+      alert("Profile picture updated!");
+
+      // Clear file input
+      avatarInput.value = "";
+
+    } catch (error) {
+
+      console.error("Avatar upload error:", error);
+      alert("Something went wrong while uploading.");
+
+    }
+
+  });
+
+}
+  
 </script>
 
 </body>
