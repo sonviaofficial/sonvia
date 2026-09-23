@@ -295,11 +295,11 @@ Afrobeats
 <script type="module">
 import { supabase } from "./supabase.js";
 
-let following = false;
-
 const followBtn = document.getElementById("followBtn");
 const followers = document.getElementById("followersCount");
 const chatBtn = document.getElementById("chatBtn");
+
+let following = false;
 
 const {
   data: { user }
