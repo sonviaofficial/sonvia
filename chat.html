@@ -391,6 +391,44 @@ async function getOrCreateConversation(){
 
   messages.scrollTop = messages.scrollHeight;
   }
+
+/* =====================================================
+   REALTIME MESSAGES
+   ===================================================== */
+
+function subscribeToMessages() {
+
+  if (!conversationId) return;
+
+  supabase
+    .channel(`chat-${conversationId}`)
+    .on(
+      "postgres_changes",
+      {
+        event: "INSERT",
+        schema: "public",
+        table: "messages",
+        filter: `conversation_id=eq.${conversationId}`
+      },
+      (payload) => {
+
+        const msg = payload.new;
+
+        // Ignore your own message (already shown instantly)
+        if (msg.sender_id === currentUserId) return;
+
+        const bubble = document.createElement("div");
+        bubble.className = "msg received";
+        bubble.textContent = msg.message_text;
+
+        messages.appendChild(bubble);
+        messages.scrollTop = messages.scrollHeight;
+
+      }
+    )
+    .subscribe();
+
+}
   
 const conversationId = await getOrCreateConversation();
 
