@@ -378,8 +378,62 @@ if (profileId === user.id) {
   chatBtn.style.display = "none";
 }
 
-followBtn.addEventListener("click", () => {
-  following = !following;
+const { data: existingFollow } = await supabase
+  .from("followers")
+  .select("id")
+  .eq("follower_id", user.id)
+  .eq("following_id", profileId)
+  .maybeSingle();
+
+following = !!existingFollow;
+
+if (following) {
+  followBtn.classList.add("following");
+  followBtn.textContent = "✓ Following";
+}
+  
+followBtn.addEventListener("click", async () => {
+
+  if (!following) {
+
+    const { error } = await supabase
+      .from("followers")
+      .insert({
+        follower_id: user.id,
+        following_id: profileId
+      });
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    following = true;
+    followBtn.classList.add("following");
+    followBtn.textContent = "✓ Following";
+    followers.textContent = Number(followers.textContent) + 1;
+
+  } else {
+
+    const { error } = await supabase
+      .from("followers")
+      .delete()
+      .eq("follower_id", user.id)
+      .eq("following_id", profileId);
+
+    if (error) {
+      console.error(error);
+      return;
+    }
+
+    following = false;
+    followBtn.classList.remove("following");
+    followBtn.textContent = "Follow";
+    followers.textContent = Number(followers.textContent) - 1;
+
+  }
+
+});
 
   if (following) {
     followBtn.classList.add("following");
