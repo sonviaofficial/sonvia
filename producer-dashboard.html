@@ -337,12 +337,12 @@ Meet
          class="producer-avatar">
 
     <div class="producer-info">
-      <div class="producer-name-row">
-        <strong>FOSKY Studio</strong>
+      <div class="producer-name-row">    
+      <strong id="feedStudioName">FOSKY Studio</strong>
         <div class="verify-dot">✓</div>
       </div>
 
-      <div class="producer-tag">@foskystudio</div>
+<div id="feedStudioTag" class="producer-tag">@foskystudio</div>
     </div>
   </div>
 
@@ -480,8 +480,7 @@ if (!user) {
 
 const { data: profile } = await supabase
   .from("profiles")
-  .select("studio_name, username, avatar_url")
-  .eq("id", user.id)
+  .select("studio_name, username, avatar_url, studio_amount")
   .single();
 
 if (profile) {
@@ -490,6 +489,17 @@ if (profile) {
 
   document.getElementById("studioTag").textContent =
     profile.username ? "@" + profile.username : "";
+
+  document.getElementById("feedStudioName").textContent =
+    profile.studio_name || "My Studio";
+
+  document.getElementById("feedStudioTag").textContent =
+    profile.username ? "@" + profile.username : "";
+
+  const studioPrice = profile.studio_amount || 0;
+
+  document.getElementById("studioTotal").textContent =
+    "₦" + studioPrice.toLocaleString();
 
   if (profile.avatar_url) {
     const url = profile.avatar_url + "?t=" + Date.now();
@@ -619,15 +629,6 @@ studioAvatarInput.value = "";
 
 });
   
-// Producer avatar opens public profile
-const studioAvatar = document.getElementById("studioAvatar");
-const studioAvatarInput = document.getElementById("studioAvatarInput");
-
-if (studioAvatar) {
-  studioAvatar.addEventListener("click", () => {
-    studioAvatarInput.click();
-  });
-}
 // ==========================================
 // INCLUDE BEAT PRICE TOGGLE
 // ==========================================
