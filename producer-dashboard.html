@@ -511,6 +511,18 @@ const feedAvatar = document.getElementById("producerAvatar");
 if (feedAvatar) feedAvatar.src = url;
 const studioAvatar = document.getElementById("studioAvatar");
 const studioAvatarInput = document.getElementById("studioAvatarInput");
+  const feedAvatar = document.getElementById("producerAvatar");
+
+// Make both avatars open the image picker
+[studioAvatar, feedAvatar].forEach(img => {
+  if (!img) return;
+
+  img.style.cursor = "pointer";
+
+  img.addEventListener("click", () => {
+    studioAvatarInput.click();
+  });
+});
 
 function formatFollowers(count){
 
