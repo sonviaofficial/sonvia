@@ -501,15 +501,14 @@ if (profile) {
   document.getElementById("studioTotal").textContent =
     "₦" + studioPrice.toLocaleString();
 
-  if (profile.avatar_url) {
-    const url = profile.avatar_url + "?t=" + Date.now();
+  const url = profile.avatar_url
+  ? profile.avatar_url + "?t=" + Date.now()
+  : "https://placehold.co/80x80/222/fff?text=S";
 
-    document.getElementById("studioAvatar").src = url;
+document.getElementById("studioAvatar").src = url;
 
-    const feedAvatar = document.getElementById("producerAvatar");
-    if (feedAvatar) feedAvatar.src = url;
-  }
-}
+const feedAvatar = document.getElementById("producerAvatar");
+if (feedAvatar) feedAvatar.src = url;
 const studioAvatar = document.getElementById("studioAvatar");
 const studioAvatarInput = document.getElementById("studioAvatarInput");
 
