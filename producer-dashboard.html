@@ -468,7 +468,37 @@ Profile
 
 </div>
 
-<script>
+<script type="module">
+import { supabase } from "./supabase.js";
+
+const { data: { user } } = await supabase.auth.getUser();
+
+if (!user) {
+  window.location.href = "login.html";
+  throw new Error("User not logged in");
+}
+
+const { data: profile } = await supabase
+  .from("profiles")
+  .select("studio_name, username, avatar_url, is_verified")
+  .eq("id", user.id)
+  .single();
+
+if (profile) {
+  document.getElementById("studioName").textContent =
+    profile.studio_name || "My Studio";
+
+  document.getElementById("studioTag").textContent =
+    profile.username ? "@" + profile.username : "";
+
+  if (profile.avatar_url) {
+    document.getElementById("studioAvatar").src =
+      profile.avatar_url + "?t=" + Date.now();
+  }
+}
+const studioAvatar = document.getElementById("studioAvatar");
+const studioAvatarInput = document.getElementById("studioAvatarInput");
+
 function formatFollowers(count){
 
 if(count===1)return"1 Follower";
@@ -515,12 +545,69 @@ document.getElementById("notificationBell")
   window.location.href = "notifications.html";
 });
 
-// Producer avatar opens public profile
-const producerAvatar = document.getElementById("producerAvatar");
+// ==========================================
+// PRODUCER DASHBOARD AVATAR UPLOAD
+// ==========================================
 
-if (producerAvatar) {
-  producerAvatar.addEventListener("click", () => {
-    window.location.href = "profile.html?id=PRODUCER_ID";
+studioAvatar.addEventListener("click", () => {
+  studioAvatarInput.click();
+});
+
+studioAvatarInput.addEventListener("change", async () => {
+
+  const file = studioAvatarInput.files[0];
+  if (!file) return;
+
+  if (!file.type.startsWith("image/")) {
+    alert("Please select an image.");
+    return;
+  }
+
+  if (file.size > 5 * 1024 * 1024) {
+    alert("Image must be less than 5MB.");
+    return;
+  }
+
+  const fileExt = file.name.split(".").pop().toLowerCase();
+  const fileName = `${user.id}/avatar.${fileExt}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("avatars")
+    .upload(fileName, file, { upsert: true });
+
+  if (uploadError) {
+    alert(uploadError.message);
+    return;
+  }
+
+  const { data } = supabase.storage
+    .from("avatars")
+    .getPublicUrl(fileName);
+
+  const avatarUrl = data.publicUrl;
+
+  const { error: updateError } = await supabase
+    .from("profiles")
+    .update({ avatar_url: avatarUrl })
+    .eq("id", user.id);
+
+  if (updateError) {
+    alert(updateError.message);
+    return;
+  }
+
+  studioAvatar.src = avatarUrl + "?t=" + Date.now();
+  studioAvatarInput.value = "";
+
+});
+  
+// Producer avatar opens public profile
+const studioAvatar = document.getElementById("studioAvatar");
+const studioAvatarInput = document.getElementById("studioAvatarInput");
+
+if (studioAvatar) {
+  studioAvatar.addEventListener("click", () => {
+    studioAvatarInput.click();
   });
 }
 // ==========================================
