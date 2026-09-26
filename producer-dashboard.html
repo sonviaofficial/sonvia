@@ -600,9 +600,15 @@ studioAvatarInput.addEventListener("change",async()=>{
   const ext=file.name.split(".").pop().toLowerCase();
   const path=`${user.id}/avatar.${ext}`;
 
-  const { error: uploadError } = await supabase.storage
-    .from("avatars")
-    .upload(path,file,{upsert:true});
+  // Delete the old avatar first (ignore if it doesn't exist)
+await supabase.storage
+  .from("avatars")
+  .remove([path]);
+
+// Upload the new avatar
+const { error: uploadError } = await supabase.storage
+  .from("avatars")
+  .upload(path, file);
 
   if(uploadError){
     alert(uploadError.message);
