@@ -1,0 +1,1109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Send Money • SONVIA</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+    margin:0;
+    background:#050816;
+    color:white;
+    font-family:Arial,sans-serif;
+}
+
+.send-page{
+    min-height:100vh;
+    padding-bottom:50px;
+}
+
+/* HEADER */
+
+.send-header{
+    background:linear-gradient(180deg,#7C3AED,#1b132e);
+    padding:18px 20px 26px;
+    border-bottom-left-radius:26px;
+    border-bottom-right-radius:26px;
+    position:relative;
+}
+
+.send-header a{
+    position:absolute;
+    left:18px;
+    top:18px;
+    color:white;
+    text-decoration:none;
+    font-size:24px;
+}
+
+.send-header h2{
+    text-align:center;
+    margin:3px 0 0;
+    font-size:23px;
+}
+
+/* CONTENT */
+
+.send-container{
+    padding:22px 20px;
+}
+
+/* CARD */
+
+.send-card{
+    background:#111827;
+    border:1px solid rgba(124,58,237,.25);
+    border-radius:22px;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+/* LABEL */
+
+.field-label{
+    display:block;
+    color:#9ca3af;
+    font-size:13px;
+    margin-bottom:8px;
+}
+
+/* INPUT */
+
+.send-input{
+    width:100%;
+    box-sizing:border-box;
+    padding:15px;
+    border:none;
+    outline:none;
+    border-radius:13px;
+    background:#1f2937;
+    color:white;
+    font-size:16px;
+}
+
+.send-input:focus{
+    border:1px solid #7C3AED;
+}
+
+/* RECIPIENT STATUS */
+
+.recipient-status{
+    display:none;
+    margin-top:10px;
+    padding:12px;
+    border-radius:12px;
+    font-size:13px;
+}
+
+.recipient-status.valid{
+    display:block;
+    background:rgba(34,197,94,.12);
+    border:1px solid #22c55e;
+    color:#22c55e;
+}
+
+.recipient-status.invalid{
+    display:block;
+    background:rgba(239,68,68,.12);
+    border:1px solid #ef4444;
+    color:#ef4444;
+}
+
+/* AMOUNT */
+
+.amount-section{
+    margin-top:22px;
+}
+
+.amount-input-wrap{
+    position:relative;
+}
+
+.amount-symbol{
+    position:absolute;
+    left:15px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#9ca3af;
+}
+
+.amount-input{
+    padding-left:34px;
+}
+
+/* FEE */
+
+.fee-box{
+    margin-top:18px;
+    background:#0b1220;
+    border-radius:14px;
+    padding:15px;
+}
+
+.fee-row{
+    display:flex;
+    justify-content:space-between;
+    margin:7px 0;
+    font-size:14px;
+}
+
+.fee-row span:first-child{
+    color:#9ca3af;
+}
+
+.fee-row.total{
+    border-top:1px solid #273244;
+    padding-top:12px;
+    margin-top:12px;
+    font-weight:bold;
+}
+
+.fee-row.total span:first-child{
+    color:white;
+}
+
+/* BUTTON */
+
+.continue-btn{
+    width:100%;
+    margin-top:22px;
+    padding:15px;
+    border:none;
+    border-radius:14px;
+    background:#7C3AED;
+    color:white;
+    font-size:16px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.continue-btn:disabled{
+    opacity:.45;
+    cursor:not-allowed;
+}
+
+/* CONFIRMATION */
+
+.confirm-screen{
+    display:none;
+}
+
+.confirm-card{
+    background:#111827;
+    border-radius:22px;
+    padding:22px;
+}
+
+.confirm-icon{
+    width:60px;
+    height:60px;
+    border-radius:50%;
+    background:rgba(124,58,237,.15);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:0 auto 18px;
+    font-size:28px;
+}
+
+.confirm-title{
+    text-align:center;
+    font-size:21px;
+    font-weight:bold;
+}
+
+.confirm-subtitle{
+    text-align:center;
+    color:#9ca3af;
+    font-size:13px;
+    margin-top:7px;
+}
+
+.confirm-details{
+    background:#0b1220;
+    border-radius:16px;
+    padding:16px;
+    margin-top:22px;
+}
+
+.detail-row{
+    display:flex;
+    justify-content:space-between;
+    padding:9px 0;
+    gap:15px;
+}
+
+.detail-row span:first-child{
+    color:#9ca3af;
+}
+
+.detail-row span:last-child{
+    text-align:right;
+    font-weight:600;
+}
+
+/* PIN */
+
+.pin-screen{
+    display:none;
+}
+
+.pin-title{
+    text-align:center;
+    font-size:20px;
+    font-weight:bold;
+}
+
+.pin-subtitle{
+    text-align:center;
+    color:#9ca3af;
+    font-size:13px;
+    margin:8px 0 20px;
+}
+
+.pin-input{
+    width:100%;
+    box-sizing:border-box;
+    padding:17px;
+    border:none;
+    outline:none;
+    background:#1f2937;
+    color:white;
+    border-radius:14px;
+    text-align:center;
+    font-size:26px;
+    letter-spacing:12px;
+}
+
+.pin-error{
+    display:none;
+    text-align:center;
+    color:#ef4444;
+    font-size:13px;
+    margin-top:12px;
+}
+
+/* SUCCESS */
+
+.success-screen{
+    display:none;
+    text-align:center;
+}
+
+.success-icon{
+    width:75px;
+    height:75px;
+    border-radius:50%;
+    background:rgba(34,197,94,.12);
+    color:#22c55e;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    margin:20px auto;
+    font-size:38px;
+}
+
+.success-screen h2{
+    margin-bottom:8px;
+}
+
+.success-screen p{
+    color:#9ca3af;
+    line-height:1.5;
+}
+
+.done-btn{
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:14px;
+    background:#7C3AED;
+    color:white;
+    font-weight:bold;
+    margin-top:20px;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="send-page">
+
+    <!-- HEADER -->
+
+    <div class="send-header">
+
+        <a href="wallet.html">←</a>
+
+        <h2>Send Money</h2>
+
+    </div>
+
+
+    <div class="send-container">
+
+        <!-- =========================
+             SEND FORM
+        ========================== -->
+
+        <div id="sendForm" class="send-card">
+
+            <label class="field-label">
+                SONVIA Account Number
+            </label>
+
+            <input
+                id="accountInput"
+                class="send-input"
+                type="text"
+                inputmode="numeric"
+                maxlength="8"
+                placeholder="Enter 8-digit account number"
+                autocomplete="off"
+            >
+
+            <div id="recipientStatus" class="recipient-status"></div>
+
+
+            <!-- AMOUNT -->
+
+            <div class="amount-section">
+
+                <label class="field-label">
+                    Amount
+                </label>
+
+                <div class="amount-input-wrap">
+
+                    <span class="amount-symbol">₦</span>
+
+                    <input
+                        id="amountInput"
+                        class="send-input amount-input"
+                        type="number"
+                        min="1000"
+                        placeholder="0.00"
+                    >
+
+                </div>
+
+            </div>
+
+
+            <!-- FEES -->
+
+            <div class="fee-box">
+
+                <div class="fee-row">
+
+                    <span>Send amount</span>
+
+                    <span id="sendAmount">₦0.00</span>
+
+                </div>
+
+                <div class="fee-row">
+
+                    <span>Transfer fee</span>
+
+                    <span>₦20.00</span>
+
+                </div>
+
+                <div class="fee-row total">
+
+                    <span>You pay</span>
+
+                    <span id="totalAmount">₦0.00</span>
+
+                </div>
+
+            </div>
+
+
+            <button
+                id="continueBtn"
+                class="continue-btn"
+                disabled
+            >
+                Continue
+            </button>
+
+        </div>
+
+
+        <!-- =========================
+             CONFIRMATION
+        ========================== -->
+
+        <div id="confirmScreen" class="confirm-screen">
+
+            <div class="confirm-card">
+
+                <div class="confirm-icon">
+                    💸
+                </div>
+
+                <div class="confirm-title">
+                    Confirm Transfer
+                </div>
+
+                <div class="confirm-subtitle">
+                    Please check the details before continuing.
+                </div>
+
+
+                <div class="confirm-details">
+
+                    <div class="detail-row">
+
+                        <span>Recipient</span>
+
+                        <span id="confirmRecipient">
+                            —
+                        </span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span>Account</span>
+
+                        <span id="confirmAccount">
+                            —
+                        </span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span>Amount</span>
+
+                        <span id="confirmAmount">
+                            ₦0.00
+                        </span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span>Fee</span>
+
+                        <span>₦20.00</span>
+
+                    </div>
+
+                    <div class="detail-row">
+
+                        <span>You pay</span>
+
+                        <span id="confirmTotal">
+                            ₦0.00
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <button
+                    id="confirmBtn"
+                    class="continue-btn"
+                >
+                    Confirm & Continue
+                </button>
+
+                <button
+                    id="backToForm"
+                    class="continue-btn"
+                    style="background:#222;"
+                >
+                    Go Back
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             PIN SCREEN
+        ========================== -->
+
+        <div id="pinScreen" class="pin-screen">
+
+            <div class="send-card">
+
+                <div class="pin-title">
+                    Enter Wallet PIN
+                </div>
+
+                <div class="pin-subtitle">
+                    Enter your 4-digit Wallet PIN to authorize this transfer.
+                </div>
+
+                <input
+                    id="pinInput"
+                    class="pin-input"
+                    type="password"
+                    inputmode="numeric"
+                    maxlength="4"
+                    placeholder="••••"
+                    autocomplete="off"
+                >
+
+                <div id="pinError" class="pin-error"></div>
+
+                <button
+                    id="sendMoneyBtn"
+                    class="continue-btn"
+                >
+                    Send Money
+                </button>
+
+                <button
+                    id="backToConfirm"
+                    class="continue-btn"
+                    style="background:#222;"
+                >
+                    Go Back
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             SUCCESS
+        ========================== -->
+
+        <div id="successScreen" class="success-screen">
+
+            <div class="send-card">
+
+                <div class="success-icon">
+                    ✓
+                </div>
+
+                <h2>
+                    Transfer Successful
+                </h2>
+
+                <p>
+                    Your SONVIA wallet transfer has been completed successfully.
+                </p>
+
+                <button
+                    class="done-btn"
+                    onclick="location.href='wallet.html'"
+                >
+                    Done
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script type="module">
+
+import { supabase } from "./supabase.js";
+
+
+/* =========================
+   GET CURRENT USER
+========================= */
+
+const {
+    data:{
+        user
+    },
+    error:userError
+} = await supabase.auth.getUser();
+
+
+if(userError || !user){
+
+    location.href="login.html";
+
+    throw new Error("Not authenticated");
+
+}
+
+
+/* =========================
+   ELEMENTS
+========================= */
+
+const accountInput =
+    document.getElementById("accountInput");
+
+const amountInput =
+    document.getElementById("amountInput");
+
+const recipientStatus =
+    document.getElementById("recipientStatus");
+
+const continueBtn =
+    document.getElementById("continueBtn");
+
+const sendAmount =
+    document.getElementById("sendAmount");
+
+const totalAmount =
+    document.getElementById("totalAmount");
+
+const sendForm =
+    document.getElementById("sendForm");
+
+const confirmScreen =
+    document.getElementById("confirmScreen");
+
+const pinScreen =
+    document.getElementById("pinScreen");
+
+const successScreen =
+    document.getElementById("successScreen");
+
+const pinInput =
+    document.getElementById("pinInput");
+
+const pinError =
+    document.getElementById("pinError");
+
+
+let recipient = null;
+let currentAmount = 0;
+
+const TRANSFER_FEE = 20;
+const MIN_AMOUNT = 1000;
+
+
+/* =========================
+   MONEY FORMAT
+========================= */
+
+function formatMoney(amount){
+
+    return "₦" +
+        Number(amount || 0).toLocaleString(
+            undefined,
+            {
+                minimumFractionDigits:2,
+                maximumFractionDigits:2
+            }
+        );
+
+}
+
+
+/* =========================
+   CHECK RECIPIENT
+========================= */
+
+let lookupTimer;
+
+accountInput.addEventListener("input",()=>{
+
+    clearTimeout(lookupTimer);
+
+    const account =
+        accountInput.value.replace(/\D/g,"");
+
+    accountInput.value = account;
+
+    recipient = null;
+
+    recipientStatus.className =
+        "recipient-status";
+
+    recipientStatus.textContent = "";
+
+    continueBtn.disabled = true;
+
+
+    if(account.length !== 8){
+
+        if(account.length > 0){
+
+            recipientStatus.textContent =
+                "Enter a valid 8-digit SONVIA account number.";
+
+            recipientStatus.classList.add("invalid");
+
+        }
+
+        return;
+
+    }
+
+
+    lookupTimer = setTimeout(
+        checkRecipient,
+        300
+    );
+
+});
+
+
+async function checkRecipient(){
+
+    const account =
+        accountInput.value;
+
+
+    recipientStatus.className =
+        "recipient-status";
+
+    recipientStatus.textContent =
+        "Checking account...";
+
+    recipientStatus.style.display =
+        "block";
+
+
+    const {
+        data,
+        error
+    } = await supabase
+        .from("profiles")
+        .select(`
+            id,
+            username,
+            full_name,
+            role,
+            wallet_account_number
+        `)
+        .eq(
+            "wallet_account_number",
+            account
+        )
+        .maybeSingle();
+
+
+    if(error || !data){
+
+        recipient = null;
+
+        recipientStatus.className =
+            "recipient-status invalid";
+
+        recipientStatus.textContent =
+            "✕ SONVIA account not found.";
+
+        continueBtn.disabled = true;
+
+        return;
+
+    }
+
+
+    if(data.id === user.id){
+
+        recipient = null;
+
+        recipientStatus.className =
+            "recipient-status invalid";
+
+        recipientStatus.textContent =
+            "✕ You cannot send money to your own account.";
+
+        continueBtn.disabled = true;
+
+        return;
+
+    }
+
+
+    recipient = data;
+
+
+    const recipientName =
+        data.username
+            ? "@" + data.username
+            : data.full_name || "SONVIA User";
+
+
+    recipientStatus.className =
+        "recipient-status valid";
+
+    recipientStatus.textContent =
+        "✓ " + recipientName + " found on SONVIA.";
+
+    validateForm();
+
+}
+
+
+/* =========================
+   AMOUNT
+========================= */
+
+amountInput.addEventListener(
+    "input",
+    validateForm
+);
+
+
+function validateForm(){
+
+    const amount =
+        Number(amountInput.value || 0);
+
+
+    sendAmount.textContent =
+        formatMoney(amount);
+
+
+    const total =
+        amount > 0
+            ? amount + TRANSFER_FEE
+            : 0;
+
+
+    totalAmount.textContent =
+        formatMoney(total);
+
+
+    if(
+        recipient &&
+        amount >= MIN_AMOUNT
+    ){
+
+        continueBtn.disabled = false;
+
+    }else{
+
+        continueBtn.disabled = true;
+
+    }
+
+}
+
+
+/* =========================
+   CONTINUE
+========================= */
+
+continueBtn.addEventListener(
+    "click",
+    ()=>{
+
+        currentAmount =
+            Number(amountInput.value);
+
+
+        if(!recipient){
+
+            return;
+
+        }
+
+
+        if(currentAmount < MIN_AMOUNT){
+
+            alert(
+                "Minimum transfer amount is ₦1,000."
+            );
+
+            return;
+
+        }
+
+
+        document.getElementById(
+            "confirmRecipient"
+        ).textContent =
+            recipient.username
+                ? "@" + recipient.username
+                : recipient.full_name || "SONVIA User";
+
+
+        document.getElementById(
+            "confirmAccount"
+        ).textContent =
+            recipient.wallet_account_number;
+
+
+        document.getElementById(
+            "confirmAmount"
+        ).textContent =
+            formatMoney(currentAmount);
+
+
+        document.getElementById(
+            "confirmTotal"
+        ).textContent =
+            formatMoney(
+                currentAmount + TRANSFER_FEE
+            );
+
+
+        sendForm.style.display =
+            "none";
+
+        confirmScreen.style.display =
+            "block";
+
+    }
+);
+
+
+/* =========================
+   BACK TO FORM
+========================= */
+
+document.getElementById(
+    "backToForm"
+).addEventListener(
+    "click",
+    ()=>{
+
+        confirmScreen.style.display =
+            "none";
+
+        sendForm.style.display =
+            "block";
+
+    }
+);
+
+
+/* =========================
+   CONFIRM TRANSFER
+========================= */
+
+document.getElementById(
+    "confirmBtn"
+).addEventListener(
+    "click",
+    ()=>{
+
+        confirmScreen.style.display =
+            "none";
+
+        pinScreen.style.display =
+            "block";
+
+        pinInput.value = "";
+
+        pinError.style.display =
+            "none";
+
+        pinInput.focus();
+
+    }
+);
+
+
+/* =========================
+   BACK TO CONFIRM
+========================= */
+
+document.getElementById(
+    "backToConfirm"
+).addEventListener(
+    "click",
+    ()=>{
+
+        pinScreen.style.display =
+            "none";
+
+        confirmScreen.style.display =
+            "block";
+
+    }
+);
+
+
+/* =========================
+   PIN INPUT
+========================= */
+
+pinInput.addEventListener(
+    "input",
+    ()=>{
+
+        pinInput.value =
+            pinInput.value
+                .replace(/\D/g,"")
+                .slice(0,4);
+
+    }
+);
+
+
+/* =========================
+   SEND MONEY
+========================= */
+
+document.getElementById(
+    "sendMoneyBtn"
+).addEventListener(
+    "click",
+    async()=>{
+
+        const pin =
+            pinInput.value;
+
+
+        if(pin.length !== 4){
+
+            showPinError(
+                "Enter your 4-digit Wallet PIN."
+            );
+
+            return;
+
+        }
+
+
+        /*
+         IMPORTANT:
+
+         The actual wallet deduction,
+         recipient credit and PIN
+         verification should be moved
+         into a Supabase RPC/function.
+
+         Do NOT trust the browser to
+         perform financial transactions.
+
+         This button will be connected
+         to that secure transaction
+         function next.
+        */
+
+        showPinError(
+            "Wallet transfer security is not connected yet."
+        );
+
+    }
+);
+
+
+function showPinError(message){
+
+    pinError.textContent =
+        message;
+
+    pinError.style.display =
+        "block";
+
+}
+
+</script>
+
+</body>
+  </html>
