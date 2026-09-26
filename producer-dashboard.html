@@ -471,6 +471,10 @@ Profile
 <script type="module">
 import { supabase } from "./supabase.js";
 
+// =====================================================
+// AUTH
+// =====================================================
+
 const { data: { user } } = await supabase.auth.getUser();
 
 if (!user) {
@@ -478,13 +482,28 @@ if (!user) {
   throw new Error("User not logged in");
 }
 
-const { data: profile } = await supabase
+// =====================================================
+// ELEMENTS
+// =====================================================
+
+const studioAvatar = document.getElementById("studioAvatar");
+const studioAvatarInput = document.getElementById("studioAvatarInput");
+const feedAvatar = document.getElementById("producerAvatar");
+const total = document.getElementById("studioTotal");
+const beat = document.getElementById("includeBeat");
+
+// =====================================================
+// LOAD PRODUCER PROFILE
+// =====================================================
+
+const { data: profile, error } = await supabase
   .from("profiles")
   .select("studio_name, username, avatar_url, studio_amount")
   .eq("id", user.id)
   .single();
 
-if (profile) {
+if (!error && profile) {
+
   document.getElementById("studioName").textContent =
     profile.studio_name || "My Studio";
 
@@ -497,172 +516,143 @@ if (profile) {
   document.getElementById("feedStudioTag").textContent =
     profile.username ? "@" + profile.username : "";
 
+  const avatarUrl = profile.avatar_url
+    ? profile.avatar_url + "?t=" + Date.now()
+    : "https://placehold.co/80x80/222/fff?text=S";
+
+  studioAvatar.src = avatarUrl;
+  if (feedAvatar) feedAvatar.src = avatarUrl;
+
   const studioPrice = profile.studio_amount || 0;
-
-  document.getElementById("studioTotal").textContent =
-    "₦" + studioPrice.toLocaleString();
-
-  const url = profile.avatar_url
-  ? profile.avatar_url + "?t=" + Date.now()
-  : "https://placehold.co/80x80/222/fff?text=S";
-
-document.getElementById("studioAvatar").src = url;
-
-const feedAvatar = document.getElementById("producerAvatar");
-if (feedAvatar) feedAvatar.src = url;
-  
+  total.textContent = "₦" + studioPrice.toLocaleString();
 }
 
-const studioAvatar = document.getElementById("studioAvatar");
-const studioAvatarInput = document.getElementById("studioAvatarInput");
-const feedAvatar = document.getElementById("producerAvatar");
-
-// Make both avatars open the image picker
-[studioAvatar, feedAvatar].forEach(img => {
-  if (!img) return;
-
-  img.style.cursor = "pointer";
-
-  img.addEventListener("click", () => {
-    studioAvatarInput.click();
-  });
-});
-
-  img.style.cursor = "pointer";
-
-  img.addEventListener("click", () => {
-    studioAvatarInput.click();
-  });
-});
+// =====================================================
+// FOLLOWERS FORMAT
+// =====================================================
 
 function formatFollowers(count){
-
-if(count===1)return"1 Follower";
-
-if(count<1000)return`${count} Followers`;
-
-if(count<1000000){
-
-const value=(count/1000).toFixed(count>=10000?0:1);
-
-return`${value.replace(".0","")}K Followers`;
-
+  if(count===1) return "1 Follower";
+  if(count<1000) return `${count} Followers`;
+  if(count<1000000){
+    const value=(count/1000).toFixed(count>=10000?0:1);
+    return `${value.replace(".0","")}K Followers`;
+  }
+  const value=(count/1000000).toFixed(count>=10000000?0:1);
+  return `${value.replace(".0","")}M Followers`;
 }
 
-const value=(count/1000000).toFixed(count>=10000000?0:1);
+document.getElementById("followersCount").textContent =
+  formatFollowers(0);
 
-return`${value.replace(".0","")}M Followers`;
-
-}
-
-document.getElementById("followersCount").textContent=
-formatFollowers(0);
+// =====================================================
+// NOTIFICATION BELL
+// =====================================================
 
 function updateNotificationBadge(count){
+  const badge=document.getElementById("notificationCount");
 
-const badge=document.getElementById("notificationCount");
+  if(count<=0){
+    badge.style.display="none";
+    return;
+  }
 
-if(count<=0){
-
-badge.style.display="none";
-return;
-
-}
-
-badge.style.display="flex";
-badge.textContent=count>99?"99+":count;
-
+  badge.style.display="flex";
+  badge.textContent=count>99?"99+":count;
 }
 
 updateNotificationBadge(0);
 
 document.getElementById("notificationBell")
-.addEventListener("click", () => {
-  window.location.href = "notifications.html";
+.addEventListener("click",()=>{
+  window.location.href="notifications.html";
 });
 
-// ==========================================
-// PRODUCER DASHBOARD AVATAR UPLOAD
-// ==========================================
+// =====================================================
+// AVATAR UPLOAD
+// =====================================================
 
-if (feedAvatar) {
-  feedAvatar.addEventListener("click", () => {
+[studioAvatar, feedAvatar].forEach(img=>{
+  if(!img) return;
+
+  img.style.cursor="pointer";
+
+  img.addEventListener("click",()=>{
     studioAvatarInput.click();
   });
-}
+});
 
-studioAvatarInput.addEventListener("change", async () => {
+studioAvatarInput.addEventListener("change",async()=>{
 
-  const file = studioAvatarInput.files[0];
-  if (!file) return;
+  const file=studioAvatarInput.files[0];
+  if(!file) return;
 
-  if (!file.type.startsWith("image/")) {
+  if(!file.type.startsWith("image/")){
     alert("Please select an image.");
     return;
   }
 
-  if (file.size > 5 * 1024 * 1024) {
+  if(file.size>5*1024*1024){
     alert("Image must be less than 5MB.");
     return;
   }
 
-  const fileExt = file.name.split(".").pop().toLowerCase();
-  const fileName = `${user.id}/avatar.${fileExt}`;
+  const ext=file.name.split(".").pop().toLowerCase();
+  const path=`${user.id}/avatar.${ext}`;
 
   const { error: uploadError } = await supabase.storage
     .from("avatars")
-    .upload(fileName, file, { upsert: true });
+    .upload(path,file,{upsert:true});
 
-  if (uploadError) {
+  if(uploadError){
     alert(uploadError.message);
     return;
   }
 
   const { data } = supabase.storage
     .from("avatars")
-    .getPublicUrl(fileName);
+    .getPublicUrl(path);
 
-  const avatarUrl = data.publicUrl;
+  const avatarUrl=data.publicUrl;
 
-  const { error: updateError } = await supabase
+  const { error:updateError } = await supabase
     .from("profiles")
-    .update({ avatar_url: avatarUrl })
-    .eq("id", user.id);
+    .update({avatar_url:avatarUrl})
+    .eq("id",user.id);
 
-  if (updateError) {
+  if(updateError){
     alert(updateError.message);
     return;
   }
 
-const url = avatarUrl + "?t=" + Date.now();
+  const fresh=avatarUrl+"?t="+Date.now();
 
-studioAvatar.src = url;
+  studioAvatar.src=fresh;
+  if(feedAvatar) feedAvatar.src=fresh;
 
-const feedAvatar2 = document.getElementById("producerAvatar");
-if (feedAvatar2) feedAvatar2.src = url;
-
-studioAvatarInput.value = "";
-
+  studioAvatarInput.value="";
 });
-  
-// ==========================================
-// INCLUDE BEAT PRICE TOGGLE
-// ==========================================
 
-const studioPrice = 60000;
-const beatPrice = 20000;
+// =====================================================
+// INCLUDE BEAT TOGGLE
+// =====================================================
 
-const total = document.getElementById("studioTotal");
-const beat = document.getElementById("includeBeat");
+const beatPrice=20000;
 
-if (total && beat) {
-  beat.addEventListener("change", () => {
-    const amount = beat.checked
-      ? studioPrice + beatPrice
-      : studioPrice;
+if(total && beat){
 
-    total.textContent = "₦" + amount.toLocaleString();
+  beat.addEventListener("change",()=>{
+
+    const base=profile?.studio_amount || 0;
+
+    const amount=beat.checked
+      ? base+beatPrice
+      : base;
+
+    total.textContent="₦"+amount.toLocaleString();
+
   });
+
 }
 </script>
 
