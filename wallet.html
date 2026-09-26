@@ -201,85 +201,66 @@ color:white;
 <body>
 
 <div class="wallet-page">
-
-<div class="wallet-header">
-
-<a href="artist-dashboard.html">← Back</a>
-
-<h1>Wallet</h1>
-
+<div class="header">
+  <a href="artist-dashboard.html" id="backBtn">←</a>
+  <h3>SONVIA Wallet</h3>
 </div>
 
-<div class="wallet-content">
+<div class="container">
 
-<div class="balance-card">
+  <div class="wallet-card">
 
-<div class="balance-label">
-Available Balance
-</div>
+    <div class="wallet-label">Available Balance</div>
 
-<div class="balance">
-₦0
-</div>
+    <div id="walletBalance" class="wallet-balance">
+      ₦0.00
+    </div>
 
-<div class="wallet-buttons">
+    <div class="account-card">
 
-<button id="depositBtn">
-Deposit
-</button>
+      <div>
+        <div class="wallet-label">SONVIA Account Number</div>
+        <strong id="accountNumber">00000000</strong>
+      </div>
 
-<button id="withdrawBtn" class="withdraw-btn">
-Withdraw
-</button>
+      <button id="copyAccount" class="icon-copy">
+        📋
+      </button>
 
-</div>
+    </div>
 
-</div>
+  </div>
 
-<div class="wallet-id-card">
+  <div id="lockedCard" class="locked-card" style="display:none;">
 
-<div style="color:#9ca3af;">
-SONVIA Wallet ID
-</div>
+    <div class="wallet-label">Locked Balance</div>
 
-<div class="wallet-id-row">
+    <div id="lockedBalance" class="locked-balance">
+      ₦0
+    </div>
 
-<div id="walletId" class="wallet-id">
-06456788
-</div>
+    <small>
+      Waiting for the artist's 6-digit completion code.
+    </small>
 
-<button id="copyBtn" class="copy-btn">
-Copy
-</button>
+  </div>
 
-</div>
+  <div class="actions">
 
-<div style="margin-top:8px;color:#9ca3af;font-size:12px;">
-Your SONVIA Wallet ID never changes.
-</div>
+    <button id="depositBtn">Deposit</button>
 
-</div>
+    <button id="sendBtn">Send</button>
 
-<div class="transaction-card">
+    <button id="withdrawBtn">Withdraw</button>
 
-<h3 style="margin-bottom:14px;">Transactions</h3>
+  </div>
 
-<div class="transaction">
+  <h3>Recent Transactions</h3>
 
-<div>
+  <div id="transactionsList">
+    <p>No transactions yet.</p>
+  </div>
 
-<div class="transaction-title">
-Wallet Created
-</div>
-
-<div class="transaction-time">
-Today
-</div>
-
-</div>
-
-<div class="plus">
-+₦0
 </div>
 
 </div>
@@ -347,55 +328,88 @@ Close
 </div>
 
 <script>
+import { supabase } from "./supabase.js";
 
-const depositPopup=document.getElementById("depositPopup");
-const withdrawPopup=document.getElementById("withdrawPopup");
+const {
+  data:{user}
+}=await supabase.auth.getUser();
 
-document.getElementById("depositBtn")
-.addEventListener("click",()=>{
+if(!user){
+location.href="login.html";
+throw new Error();
+}
 
-depositPopup.classList.add("show");
+let {data:profile}=await supabase
+.from("profiles")
+.select(`
+role,
+wallet_balance,
+locked_balance,
+wallet_account_number
+`)
+.eq("id",user.id)
+.single();
 
+if(profile.role==="producer"){
+document.getElementById("backBtn").href="producer-dashboard.html";
+}
+
+function formatMoney(amount){
+return "₦"+Number(amount||0).toLocaleString(undefined,{
+minimumFractionDigits:2,
+maximumFractionDigits:2
 });
+}
 
-document.getElementById("withdrawBtn")
-.addEventListener("click",()=>{
+if(!profile.wallet_account_number){
 
-withdrawPopup.classList.add("show");
+let account;
 
-});
+while(true){
 
-document.getElementById("closeDeposit")
-.addEventListener("click",()=>{
+account="0"+Math.floor(Math.random()*10000000)
+.toString()
+.padStart(7,"0");
 
-depositPopup.classList.remove("show");
+const {data}=await supabase
+.from("profiles")
+.select("id")
+.eq("wallet_account_number",account);
 
-});
+if(!data.length)break;
 
-document.getElementById("closeWithdraw")
-.addEventListener("click",()=>{
+}
 
-withdrawPopup.classList.remove("show");
+await supabase
+.from("profiles")
+.update({
+wallet_account_number:account
+})
+.eq("id",user.id);
 
-});
+profile.wallet_account_number=account;
 
-document.getElementById("continueDeposit")
-.addEventListener("click",()=>{
+}
 
-alert("Paystack bank selection will open here after live payments.");
+document.getElementById("walletBalance").textContent=
+formatMoney(profile.wallet_balance);
 
-depositPopup.classList.remove("show");
+document.getElementById("accountNumber").textContent=
+profile.wallet_account_number;
 
-});
+if(Number(profile.locked_balance)>0){
 
-document.getElementById("copyBtn")
-.addEventListener("click",()=>{
+document.getElementById("lockedCard").style.display="block";
 
-const id=document.getElementById("walletId").textContent;
+document.getElementById("lockedBalance").textContent=
+formatMoney(profile.locked_balance);
 
-navigator.clipboard.writeText(id);
+}
 
-alert("SONVIA Wallet ID copied.");
+document.getElementById("copyAccount")
+.addEventListener("click",async()=>{
+
+await navigator.clipboard.writeText(profile.wallet_account_number);
 
 });
 
