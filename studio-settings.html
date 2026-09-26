@@ -265,7 +265,26 @@ step="100"
 placeholder="50000">
 
 </div>
+  <div id="earningsCard" style="margin-top:18px;background:#1b132e;border:1px solid #7C3AED;border-radius:14px;padding:14px;">
 
+  <div style="display:flex;justify-content:space-between;">
+    <span>Studio Price</span>
+    <strong id="previewPrice">₦0</strong>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;margin-top:8px;">
+    <span>SONVIA Fee (2.5%)</span>
+    <span id="previewFee">₦0</span>
+  </div>
+
+  <hr style="border-color:#333;margin:14px 0;">
+
+  <div style="display:flex;justify-content:space-between;">
+    <strong>You'll Receive</strong>
+    <strong id="previewReceive" style="color:#9F67FF;">₦0</strong>
+  </div>
+
+  </div>
 
 <!-- BIO -->
 
@@ -457,7 +476,28 @@ profile.studio_location ||
 studioAmount.value =
 profile.studio_amount ??
 "";
+  const originalStudioAmount = profile.studio_amount;
 
+  const previewPrice = document.getElementById("previewPrice");
+const previewFee = document.getElementById("previewFee");
+const previewReceive = document.getElementById("previewReceive");
+
+function updateEarningsPreview(){
+
+  const amount = Number(studioAmount.value) || 0;
+  const fee = amount * 0.025;
+  const receive = amount - fee;
+
+  previewPrice.textContent = "₦" + amount.toLocaleString();
+  previewFee.textContent = "₦" + Math.round(fee).toLocaleString();
+  previewReceive.textContent = "₦" + Math.round(receive).toLocaleString();
+
+}
+
+updateEarningsPreview();
+
+studioAmount.addEventListener("input", updateEarningsPreview);
+  
 bio.value =
 profile.bio ||
 "";
@@ -721,6 +761,25 @@ return;
 
 }
 
+  // First studio amount is free.
+// Every later change costs ₦100.
+
+if (
+  originalStudioAmount !== null &&
+  Number(amount) !== Number(originalStudioAmount)
+) {
+
+  const receive = Number(amount) - Number(amount) * 0.025;
+
+  const confirmed = confirm(
+    `Changing your studio amount costs ₦100.\n\n` +
+    `New Studio Price: ₦${Number(amount).toLocaleString()}\n` +
+    `You'll Receive: ₦${Math.round(receive).toLocaleString()}\n\n` +
+    `Continue?`
+  );
+
+  if (!confirmed) return;
+}
 
 saveBtn.disabled = true;
 
