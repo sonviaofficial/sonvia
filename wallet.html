@@ -7,192 +7,212 @@
 <link rel="stylesheet" href="style.css">
 
 <style>
-
 .wallet-page{
-background:#050816;
-color:white;
-min-height:100vh;
-padding-bottom:100px;
+    background:#050816;
+    color:white;
+    min-height:100vh;
+    padding-bottom:100px;
 }
 
-.wallet-header{
-background:linear-gradient(180deg,#7C3AED,#1b132e);
-padding:18px 20px 28px;
-border-bottom-left-radius:26px;
-border-bottom-right-radius:26px;
-position:relative;
+/* HEADER */
+.header{
+    background:linear-gradient(180deg,#7C3AED,#1b132e);
+    padding:18px 20px 28px;
+    border-bottom-left-radius:26px;
+    border-bottom-right-radius:26px;
+    position:relative;
 }
 
-.wallet-header a{
-position:absolute;
-left:18px;
-top:18px;
-color:white;
-text-decoration:none;
-font-size:15px;
+.header a{
+    position:absolute;
+    left:18px;
+    top:18px;
+    color:white;
+    text-decoration:none;
+    font-size:22px;
 }
 
-.wallet-header h1{
-text-align:center;
-margin-top:18px;
-font-size:32px;
+.header h3{
+    text-align:center;
+    margin:0;
+    padding-top:4px;
+    font-size:24px;
 }
 
-.wallet-content{
-padding:20px;
+/* MAIN CONTENT */
+.container{
+    padding:20px;
+    padding-bottom:90px;
 }
 
-.balance-card{
-background:#111827;
-border:1px solid rgba(124,58,237,.35);
-border-radius:24px;
-padding:22px;
-margin-bottom:18px;
+/* MAIN WALLET CARD */
+.wallet-card{
+    background:linear-gradient(135deg,#7C3AED,#5B21B6);
+    padding:22px;
+    border-radius:22px;
+    margin-bottom:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
 }
 
-.balance-label{
-color:#9ca3af;
-font-size:14px;
+.wallet-label{
+    font-size:12px;
+    color:#e5e7eb;
+    opacity:.85;
 }
 
-.balance{
-font-size:38px;
-font-weight:bold;
-margin-top:6px;
+.wallet-balance{
+    font-size:34px;
+    font-weight:bold;
+    margin:10px 0 20px;
 }
 
-.wallet-buttons{
-display:flex;
-gap:12px;
-margin-top:20px;
+/* ACCOUNT NUMBER */
+.account-card{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    background:rgba(0,0,0,.20);
+    padding:14px 16px;
+    border-radius:16px;
 }
 
-.wallet-buttons button{
-flex:1;
-font-weight:600;
+.account-card strong{
+    display:block;
+    margin-top:5px;
+    font-size:22px;
+    letter-spacing:2px;
 }
 
-.withdraw-btn{
-background:transparent;
-border:1px solid #7C3AED;
-color:white;
+.icon-copy{
+    width:42px;
+    height:42px;
+    border:none;
+    border-radius:12px;
+    background:white;
+    color:#7C3AED;
+    font-size:18px;
+    cursor:pointer;
 }
 
-.wallet-id-card{
-background:#111827;
-border-radius:20px;
-padding:18px;
-margin-bottom:18px;
+/* LOCKED BALANCE */
+.locked-card{
+    background:#111827;
+    border:1px solid rgba(124,58,237,.35);
+    border-radius:20px;
+    padding:18px;
+    margin-bottom:20px;
 }
 
-.wallet-id-row{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-top:8px;
+.locked-balance{
+    font-size:26px;
+    font-weight:bold;
+    margin:8px 0;
 }
 
-.wallet-id{
-font-size:28px;
-font-weight:bold;
-letter-spacing:2px;
+.locked-card small{
+    color:#9ca3af;
+    line-height:1.5;
 }
 
-.copy-btn{
-width:auto;
-padding:8px 14px;
-background:#7C3AED;
-color:white;
-font-size:13px;
+/* ACTION BUTTONS */
+.actions{
+    display:flex;
+    gap:10px;
+    margin-bottom:28px;
 }
 
-.transaction-card{
-background:#111827;
-border-radius:20px;
-padding:18px;
+.actions button{
+    flex:1;
+    border:none;
+    border-radius:14px;
+    padding:13px 8px;
+    background:#7C3AED;
+    color:white;
+    font-weight:600;
+    cursor:pointer;
 }
 
-.transaction{
-display:flex;
-justify-content:space-between;
-align-items:center;
-padding:14px 0;
-border-bottom:1px solid #222;
+.actions button:active{
+    transform:scale(.97);
 }
 
-.transaction:last-child{
-border-bottom:none;
+/* TRANSACTIONS */
+.container > h3{
+    margin-bottom:14px;
 }
 
-.transaction-title{
-font-weight:600;
+#transactionsList{
+    background:#111827;
+    border-radius:20px;
+    padding:18px;
+    min-height:60px;
 }
 
-.transaction-time{
-font-size:12px;
-color:#9ca3af;
-margin-top:4px;
+#transactionsList p{
+    color:#9ca3af;
+    margin:0;
 }
 
-.plus{
-color:#22c55e;
-font-weight:bold;
-}
-
-.minus{
-color:#ef4444;
-font-weight:bold;
-}
-
+/* POPUPS */
 .popup{
-position:fixed;
-inset:0;
-background:rgba(0,0,0,.6);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:9999;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.65);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
 }
 
 .popup.show{
-display:flex;
+    display:flex;
 }
 
 .popup-card{
-width:90%;
-max-width:360px;
-background:#111827;
-border-radius:22px;
-padding:22px;
+    width:90%;
+    max-width:360px;
+    background:#111827;
+    border-radius:22px;
+    padding:22px;
+    box-sizing:border-box;
 }
 
 .popup-card h3{
-margin-bottom:12px;
+    margin-top:0;
+    margin-bottom:12px;
 }
 
 .popup-card input{
-width:100%;
-padding:14px;
-background:#1f2937;
-border:none;
-border-radius:12px;
-color:white;
-margin:14px 0;
+    width:100%;
+    padding:14px;
+    background:#1f2937;
+    border:none;
+    border-radius:12px;
+    color:white;
+    margin:14px 0;
+    box-sizing:border-box;
 }
 
 .popup-actions{
-display:flex;
-gap:10px;
+    display:flex;
+    gap:10px;
 }
 
 .popup-actions button{
-flex:1;
+    flex:1;
+    padding:12px;
+    border:none;
+    border-radius:12px;
+    background:#7C3AED;
+    color:white;
+    font-weight:600;
 }
 
 .cancel-btn{
-background:#222;
-color:white;
+    background:#222 !important;
+    color:white;
 }
+
 
 </style>
 
@@ -265,12 +285,6 @@ color:white;
 
 </div>
 
-</div>
-
-</div>
-
-</div>
-
 <!-- Deposit Popup -->
 
 <div id="depositPopup" class="popup">
@@ -327,7 +341,7 @@ Close
 
 </div>
 
-<script>
+<script type="module">
 import { supabase } from "./supabase.js";
 
 const {
