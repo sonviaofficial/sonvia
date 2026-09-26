@@ -344,16 +344,24 @@ Close
 <script type="module">
 import { supabase } from "./supabase.js";
 
-const {
-  data:{user}
-}=await supabase.auth.getUser();
+// =====================================================
+// GET USER
+// =====================================================
 
-if(!user){
-location.href="login.html";
-throw new Error();
+const { data:{ user }, error:userError } =
+await supabase.auth.getUser();
+
+if (userError || !user){
+  window.location.href="login.html";
+  throw new Error("User not logged in");
 }
 
-let {data:profile}=await supabase
+// =====================================================
+// LOAD PROFILE
+// =====================================================
+
+let { data:profile, error } =
+await supabase
 .from("profiles")
 .select(`
 role,
@@ -364,51 +372,80 @@ wallet_account_number
 .eq("id",user.id)
 .single();
 
-if(profile.role==="producer"){
-document.getElementById("backBtn").href="producer-dashboard.html";
+if(error){
+  console.error(error);
+  alert("Could not load wallet.");
+  throw error;
 }
 
-function formatMoney(amount){
+// =====================================================
+// BACK BUTTON
+// =====================================================
+
+const backBtn=document.getElementById("backBtn");
+
+backBtn.href=
+profile.role==="producer"
+?"producer-dashboard.html"
+:"artist-dashboard.html";
+
+// =====================================================
+// MONEY FORMAT
+// =====================================================
+
+function money(amount){
 return "₦"+Number(amount||0).toLocaleString(undefined,{
 minimumFractionDigits:2,
 maximumFractionDigits:2
 });
 }
 
+// =====================================================
+// GENERATE ACCOUNT NUMBER
+// =====================================================
+
 if(!profile.wallet_account_number){
 
-let account;
+let accountNumber;
 
 while(true){
 
-account="0"+Math.floor(Math.random()*10000000)
+accountNumber=
+"0"+
+Math.floor(Math.random()*10000000)
 .toString()
 .padStart(7,"0");
 
-const {data}=await supabase
+const { data }=await supabase
 .from("profiles")
 .select("id")
-.eq("wallet_account_number",account);
+.eq("wallet_account_number",accountNumber);
 
-if(!data.length)break;
+if(data.length===0)break;
 
 }
 
 await supabase
 .from("profiles")
 .update({
-wallet_account_number:account
+wallet_account_number:accountNumber
 })
 .eq("id",user.id);
 
-profile.wallet_account_number=account;
+profile.wallet_account_number=accountNumber;
 
 }
 
-document.getElementById("walletBalance").textContent=
-formatMoney(profile.wallet_balance);
+// =====================================================
+// UPDATE UI
+// =====================================================
 
-document.getElementById("accountNumber").textContent=
+document.getElementById("walletBalance").textContent=
+money(profile.wallet_balance);
+
+const account=document.getElementById("accountNumber");
+
+account.textContent=
 profile.wallet_account_number;
 
 if(Number(profile.locked_balance)>0){
@@ -416,17 +453,79 @@ if(Number(profile.locked_balance)>0){
 document.getElementById("lockedCard").style.display="block";
 
 document.getElementById("lockedBalance").textContent=
-formatMoney(profile.locked_balance);
+money(profile.locked_balance);
+
+}
+
+// =====================================================
+// COPY ACCOUNT NUMBER
+// =====================================================
+
+async function copyAccount(){
+
+await navigator.clipboard.writeText(
+profile.wallet_account_number
+);
 
 }
 
 document.getElementById("copyAccount")
-.addEventListener("click",async()=>{
+.addEventListener("click",copyAccount);
 
-await navigator.clipboard.writeText(profile.wallet_account_number);
+account.addEventListener("click",copyAccount);
+
+// =====================================================
+// LOAD TRANSACTIONS
+// =====================================================
+
+const list=document.getElementById("transactionsList");
+
+const { data:transactions }=
+await supabase
+.from("wallet_transactions")
+.select("*")
+.eq("user_id",user.id)
+.order("created_at",{ascending:false})
+.limit(15);
+
+if(transactions?.length){
+
+list.innerHTML="";
+
+transactions.forEach(tx=>{
+
+const sign=tx.amount>=0?"+":"-";
+
+const amount=Math.abs(Number(tx.amount));
+
+list.innerHTML+=`
+<div class="transaction-item">
+
+<div>
+
+<div class="transaction-title">
+${tx.description}
+</div>
+
+<div class="transaction-date">
+${new Date(tx.created_at)
+.toLocaleDateString()}
+</div>
+
+</div>
+
+<strong class="${
+tx.amount>=0?"money-in":"money-out"
+}">
+${sign}${money(amount)}
+</strong>
+
+</div>
+`;
 
 });
 
+    }
 </script>
 
 </body>
