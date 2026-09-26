@@ -481,6 +481,7 @@ if (!user) {
 const { data: profile } = await supabase
   .from("profiles")
   .select("studio_name, username, avatar_url, studio_amount")
+  .eq("id", user.id)
   .single();
 
 if (profile) {
@@ -509,13 +510,23 @@ document.getElementById("studioAvatar").src = url;
 
 const feedAvatar = document.getElementById("producerAvatar");
 if (feedAvatar) feedAvatar.src = url;
+  
+}
+
 const studioAvatar = document.getElementById("studioAvatar");
 const studioAvatarInput = document.getElementById("studioAvatarInput");
-  const feedAvatar = document.getElementById("producerAvatar");
+const feedAvatar = document.getElementById("producerAvatar");
 
 // Make both avatars open the image picker
 [studioAvatar, feedAvatar].forEach(img => {
   if (!img) return;
+
+  img.style.cursor = "pointer";
+
+  img.addEventListener("click", () => {
+    studioAvatarInput.click();
+  });
+});
 
   img.style.cursor = "pointer";
 
@@ -573,12 +584,6 @@ document.getElementById("notificationBell")
 // ==========================================
 // PRODUCER DASHBOARD AVATAR UPLOAD
 // ==========================================
-
-const feedAvatar = document.getElementById("producerAvatar");
-
-studioAvatar.addEventListener("click", () => {
-  studioAvatarInput.click();
-});
 
 if (feedAvatar) {
   feedAvatar.addEventListener("click", () => {
