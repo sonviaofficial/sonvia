@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SONVIA Admin PIN</title>
+
+<style>
+
+body{
+    margin:0;
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#0b0b0f;
+    color:white;
+    font-family:Arial,sans-serif;
+    padding:20px;
+    box-sizing:border-box;
+}
+
+.card{
+    width:100%;
+    max-width:380px;
+    background:#15151d;
+    border:1px solid #292936;
+    border-radius:22px;
+    padding:28px 22px;
+    box-sizing:border-box;
+    text-align:center;
+    box-shadow:0 0 35px rgba(124,58,237,.18);
+}
+
+.icon{
+    font-size:42px;
+    margin-bottom:12px;
+}
+
+h1{
+    margin:0 0 8px;
+    font-size:24px;
+}
+
+.subtitle{
+    color:#999;
+    font-size:14px;
+    line-height:1.5;
+    margin-bottom:25px;
+}
+
+label{
+    display:block;
+    text-align:left;
+    color:#bbb;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+input{
+    width:100%;
+    box-sizing:border-box;
+    padding:15px;
+    border-radius:12px;
+    border:1px solid #333340;
+    background:#0b0b0f;
+    color:white;
+    font-size:20px;
+    text-align:center;
+    letter-spacing:8px;
+    outline:none;
+}
+
+input:focus{
+    border-color:#7C3AED;
+}
+
+button{
+    width:100%;
+    margin-top:18px;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:#7C3AED;
+    color:white;
+    font-size:16px;
+    font-weight:600;
+    cursor:pointer;
+}
+
+button:disabled{
+    opacity:.6;
+    cursor:not-allowed;
+}
+
+.message{
+    min-height:20px;
+    margin-top:15px;
+    font-size:13px;
+}
+
+.error{
+    color:#f87171;
+}
+
+.success{
+    color:#4ade80;
+}
+
+.hidden{
+    display:none;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="card">
+
+    <div class="icon">🔐</div>
+
+    <h1 id="title">
+        Admin Security
+    </h1>
+
+    <p class="subtitle" id="subtitle">
+        Checking your founder access...
+    </p>
+
+
+    <!-- SET PIN -->
+
+    <div id="setupSection" class="hidden">
+
+        <label for="newPin">
+            Create 6-digit Admin PIN
+        </label>
+
+        <input
+            id="newPin"
+            type="password"
+            inputmode="numeric"
+            maxlength="6"
+            autocomplete="new-password"
+        >
+
+        <label for="confirmPin" style="margin-top:15px;">
+            Confirm Admin PIN
+        </label>
+
+        <input
+            id="confirmPin"
+            type="password"
+            inputmode="numeric"
+            maxlength="6"
+            autocomplete="new-password"
+        >
+
+        <button id="setPinBtn">
+            Set Admin PIN
+        </button>
+
+    </div>
+
+
+    <!-- VERIFY PIN -->
+
+    <div id="verifySection" class="hidden">
+
+        <label for="pin">
+            Enter your Admin PIN
+        </label>
+
+        <input
+            id="pin"
+            type="password"
+            inputmode="numeric"
+            maxlength="6"
+            autocomplete="current-password"
+        >
+
+        <button id="verifyPinBtn">
+            Unlock Admin
+        </button>
+
+    </div>
+
+
+    <div id="message" class="message"></div>
+
+</div>
+
+
+<script type="module">
+
+import { supabase } from './supabase.js';
+
+
+// ==========================================
+// ELEMENTS
+// ==========================================
+
+const title = document.getElementById('title');
+const subtitle = document.getElementById('subtitle');
+
+const setupSection = document.getElementById('setupSection');
+const verifySection = document.getElementById('verifySection');
+
+const newPin = document.getElementById('newPin');
+const confirmPin = document.getElementById('confirmPin');
+const pin = document.getElementById('pin');
+
+const setPinBtn = document.getElementById('setPinBtn');
+const verifyPinBtn = document.getElementById('verifyPinBtn');
+
+const message = document.getElementById('message');
+
+
+// ==========================================
+// MESSAGE
+// ==========================================
+
+function showMessage(text,type){
+
+    message.textContent = text;
+
+    message.className = 'message ' + type;
+
+}
+
+
+// ==========================================
+// LOAD ADMIN
+// ==========================================
+
+async function loadAdmin(){
+
+    try{
+
+        const {
+            data:{
+                user
+            },
+            error:userError
+        } = await supabase.auth.getUser();
+
+
+        if(userError || !user){
+
+            window.location.href='login.html';
+
+            return;
+
+        }
+
+
+        // ==========================================
+        // CHECK ADMIN
+        // ==========================================
+
+        const {
+            data:profile,
+            error:profileError
+        } = await supabase
+            .from('profiles')
+            .select('is_admin,admin_pin_hash')
+            .eq('id',user.id)
+            .single();
+
+
+        if(
+            profileError ||
+            !profile ||
+            profile.is_admin !== true
+        ){
+
+            window.location.href='artist-dashboard.html';
+
+            return;
+
+        }
+
+
+        // ==========================================
+        // PIN ALREADY EXISTS?
+        // ==========================================
+
+        if(profile.admin_pin_hash){
+
+            showVerifyMode();
+
+        }else{
+
+            showSetupMode();
+
+        }
+
+    }catch(error){
+
+        console.error(error);
+
+        showMessage(
+            'Unable to verify admin access.',
+            'error'
+        );
+
+    }
+
+}
+
+
+// ==========================================
+// SETUP MODE
+// ==========================================
+
+function showSetupMode(){
+
+    title.textContent='Set Admin PIN';
+
+    subtitle.textContent=
+        'Create a 6-digit PIN to protect your Founder Vault.';
+
+    setupSection.classList.remove('hidden');
+
+    verifySection.classList.add('hidden');
+
+}
+
+
+// ==========================================
+// VERIFY MODE
+// ==========================================
+
+function showVerifyMode(){
+
+    title.textContent='Enter Admin PIN';
+
+    subtitle.textContent=
+        'Enter your 6-digit Admin PIN to continue.';
+
+    verifySection.classList.remove('hidden');
+
+    setupSection.classList.add('hidden');
+
+}
+
+
+// ==========================================
+// SET PIN
+// ==========================================
+
+setPinBtn.addEventListener('click',async()=>{
+
+    const firstPin=newPin.value.trim();
+    const secondPin=confirmPin.value.trim();
+
+
+    if(!/^\d{6}$/.test(firstPin)){
+
+        showMessage(
+            'PIN must be exactly 6 digits.',
+            'error'
+        );
+
+        return;
+
+    }
+
+
+    if(firstPin !== secondPin){
+
+        showMessage(
+            'PINs do not match.',
+            'error'
+        );
+
+        return;
+
+    }
+
+
+    setPinBtn.disabled=true;
+
+    setPinBtn.textContent='Saving...';
+
+
+    const {
+        data,
+        error
+    } = await supabase.rpc(
+        'set_admin_pin',
+        {
+            pin:firstPin
+        }
+    );
+
+
+    if(error || data !== true){
+
+        console.error(error);
+
+        showMessage(
+            'Unable to set Admin PIN.',
+            'error'
+        );
+
+        setPinBtn.disabled=false;
+
+        setPinBtn.textContent='Set Admin PIN';
+
+        return;
+
+    }
+
+
+    showMessage(
+        'Admin PIN created successfully.',
+        'success'
+    );
+
+
+    setTimeout(()=>{
+
+        window.location.href='admin-verification.html';
+
+    },700);
+
+});
+
+
+// ==========================================
+// VERIFY PIN
+// ==========================================
+
+verifyPinBtn.addEventListener('click',async()=>{
+
+    const enteredPin=pin.value.trim();
+
+
+    if(!/^\d{6}$/.test(enteredPin)){
+
+        showMessage(
+            'Enter your 6-digit Admin PIN.',
+            'error'
+        );
+
+        return;
+
+    }
+
+
+    verifyPinBtn.disabled=true;
+
+    verifyPinBtn.textContent='Checking...';
+
+
+    const {
+        data,
+        error
+    } = await supabase.rpc(
+        'verify_admin_pin',
+        {
+            pin:enteredPin
+        }
+    );
+
+
+    if(error || data !== true){
+
+        showMessage(
+            'Incorrect Admin PIN.',
+            'error'
+        );
+
+        pin.value='';
+
+        verifyPinBtn.disabled=false;
+
+        verifyPinBtn.textContent='Unlock Admin';
+
+        return;
+
+    }
+
+
+    showMessage(
+        'Access granted.',
+        'success'
+    );
+
+
+    setTimeout(()=>{
+
+        window.location.href='admin-verification.html';
+
+    },500);
+
+});
+
+
+loadAdmin();
+
+</script>
+
+</body>
+  </html>
