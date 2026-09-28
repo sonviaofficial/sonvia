@@ -14,6 +14,7 @@ color:white;
 font-family:Arial,sans-serif;
 margin:0;
 }
+
 .header{
 display:flex;
 align-items:center;
@@ -21,20 +22,29 @@ gap:15px;
 padding:20px;
 background:linear-gradient(180deg,#7C3AED,#1b132e);
 }
+
 .back{
 color:white;
 text-decoration:none;
 font-size:26px;
 }
+
 .container{
 padding:20px;
 padding-bottom:100px;
 }
+
 .card{
 background:#15151d;
 padding:18px;
 border-radius:18px;
+margin-bottom:16px;
 }
+
+.card h3{
+margin-top:0;
+}
+
 .status{
 display:inline-block;
 margin-top:12px;
@@ -44,6 +54,7 @@ background:rgba(124,58,237,.18);
 color:#B794F6;
 font-size:13px;
 }
+
 button{
 width:100%;
 padding:14px;
@@ -52,6 +63,13 @@ border-radius:12px;
 background:#7C3AED;
 color:white;
 margin-top:18px;
+font-size:15px;
+}
+
+.empty{
+color:#aaa;
+text-align:center;
+padding:30px 10px;
 }
 </style>
 </head>
@@ -65,21 +83,415 @@ margin-top:18px;
 
 <div class="container">
 
-<div class="card">
-
-<h3>No bookings yet</h3>
-
-<p>Your upcoming studio sessions will appear here after bookings go live.</p>
-
-<div class="status">Coming Soon</div>
-
-<button onclick="location.href='explore.html'">
-Find Producers
-</button>
+<div id="bookingsList"></div>
 
 </div>
 
-</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<script>
+
+const SUPABASE_URL =
+"https://kuhynelblomedbyjsqhas.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"YOUR_SUPABASE_ANON_KEY";
+
+const supabase =
+window.supabase.createClient(
+SUPABASE_URL,
+SUPABASE_ANON_KEY
+);
+
+const bookingsList =
+document.getElementById("bookingsList");
+
+
+async function loadBookings(){
+
+    try{
+
+        const {
+            data:{
+                user
+            },
+            error:userError
+        } =
+        await supabase.auth.getUser();
+
+
+        if(userError || !user){
+
+            window.location.href =
+            "login.html";
+
+            return;
+        }
+
+
+        const {
+            data:profile,
+            error:profileError
+        } =
+        await supabase
+        .from("profiles")
+        .select("role")
+        .eq("id",user.id)
+        .single();
+
+
+        if(profileError || !profile){
+
+            bookingsList.innerHTML = `
+                <div class="card">
+                    <div class="empty">
+                        Unable to load your profile.
+                    </div>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        let query =
+        supabase
+        .from("bookings")
+        .select("*");
+
+
+        if(profile.role === "producer"){
+
+            query =
+            query.eq(
+                "producer_id",
+                user.id
+            );
+
+        }else{
+
+            query =
+            query.eq(
+                "artist_id",
+                user.id
+            );
+
+        }
+
+
+        const {
+            data:bookings,
+            error
+        } =
+        await query
+        .order(
+            "created_at",
+            {
+                ascending:false
+            }
+        );
+
+
+        if(error){
+
+            console.error(
+                "Booking error:",
+                error
+            );
+
+            bookingsList.innerHTML = `
+                <div class="card">
+                    <div class="empty">
+                        Unable to load bookings.
+                    </div>
+                </div>
+            `;
+
+            return;
+        }
+
+
+        bookingsList.innerHTML = "";
+
+
+        if(!bookings || bookings.length === 0){
+
+            bookingsList.innerHTML = `
+                <div class="card">
+
+                    <h3>No bookings yet</h3>
+
+                    <p>
+                        Your studio bookings will appear here.
+                    </p>
+
+                    <div class="status">
+                        No bookings
+                    </div>
+
+                    <button
+                        onclick="location.href='explore.html'">
+                        Find Producers
+                    </button>
+
+                </div>
+            `;
+
+            return;
+        }
+
+
+        bookings.forEach(
+        booking => {
+
+            const isProducer =
+            profile.role === "producer";
+
+            const isPending =
+            booking.status === "pending";
+
+
+            const card =
+            document.createElement("div");
+
+            card.className = "card";
+
+
+            card.innerHTML = `
+                <h3>
+                    ${booking.service_name || "Studio Session"}
+                </h3>
+
+                <p>
+                    <strong>
+                        ₦${Number(
+                            booking.amount || 0
+                        ).toLocaleString()}
+                    </strong>
+                </p>
+
+                <p>
+                    ${
+                        booking.booking_date
+                        ?
+                        new Date(
+                            booking.booking_date
+                        ).toLocaleDateString()
+                        :
+                        "Date not set"
+                    }
+                </p>
+
+                ${
+                    booking.session_time
+                    ?
+                    `<p>${booking.session_time}</p>`
+                    :
+                    ""
+                }
+
+                ${
+                    booking.booking_code
+                    ?
+                    `<p>
+                        <strong>Reference:</strong>
+                        ${booking.booking_code}
+                    </p>`
+                    :
+                    ""
+                }
+
+                <div class="status">
+                    ${booking.status}
+                </div>
+
+                ${
+                    isProducer && isPending
+                    ?
+                    `
+                    <div style="
+                        display:flex;
+                        gap:10px;
+                        margin-top:16px;
+                    ">
+
+                        <button
+                            class="accept-btn"
+                            data-id="${booking.id}"
+                            style="
+                                flex:1;
+                                margin-top:0;
+                            ">
+                            Accept
+                        </button>
+
+                        <button
+                            class="reject-btn"
+                            data-id="${booking.id}"
+                            style="
+                                flex:1;
+                                margin-top:0;
+                                background:#991B1B;
+                            ">
+                            Reject
+                        </button>
+
+                    </div>
+                    `
+                    :
+                    ""
+                }
+            `;
+
+
+            bookingsList.appendChild(card);
+
+
+            const acceptBtn =
+            card.querySelector(
+                ".accept-btn"
+            );
+
+            const rejectBtn =
+            card.querySelector(
+                ".reject-btn"
+            );
+
+
+            if(acceptBtn){
+
+                acceptBtn.onclick =
+                async()=>{
+
+                    acceptBtn.disabled =
+                    true;
+
+                    acceptBtn.textContent =
+                    "Accepting...";
+
+
+                    const {
+                        error
+                    } =
+                    await supabase
+                    .from("bookings")
+                    .update({
+                        status:"confirmed"
+                    })
+                    .eq(
+                        "id",
+                        booking.id
+                    );
+
+
+                    if(error){
+
+                        console.error(error);
+
+                        alert(
+                            "Unable to accept this booking."
+                        );
+
+                        acceptBtn.disabled =
+                        false;
+
+                        acceptBtn.textContent =
+                        "Accept";
+
+                        return;
+                    }
+
+
+                    location.reload();
+
+                };
+
+            }
+
+
+            if(rejectBtn){
+
+                rejectBtn.onclick =
+                async()=>{
+
+                    const ok =
+                    confirm(
+                        "Reject this booking? The artist will receive a refund."
+                    );
+
+
+                    if(!ok)
+                    return;
+
+
+                    rejectBtn.disabled =
+                    true;
+
+                    rejectBtn.textContent =
+                    "Rejecting...";
+
+
+                    const {
+                        error
+                    } =
+                    await supabase
+                    .from("bookings")
+                    .update({
+                        status:"rejected"
+                    })
+                    .eq(
+                        "id",
+                        booking.id
+                    );
+
+
+                    if(error){
+
+                        console.error(error);
+
+                        alert(
+                            "Unable to reject this booking."
+                        );
+
+                        rejectBtn.disabled =
+                        false;
+
+                        rejectBtn.textContent =
+                        "Reject";
+
+                        return;
+                    }
+
+
+                    location.reload();
+
+                };
+
+            }
+
+        });
+
+
+    }catch(error){
+
+        console.error(error);
+
+        bookingsList.innerHTML = `
+            <div class="card">
+                <div class="empty">
+                    Something went wrong while loading bookings.
+                </div>
+            </div>
+        `;
+
+    }
+
+}
+
+
+loadBookings();
+
+</script>
 
 </body>
 </html>
