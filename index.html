@@ -249,19 +249,19 @@ import { supabase } from './supabase.js';
 // GET STARTED
 // ==========================================
 
-const startBtn=document.getElementById('getStartedBtn');
+const startBtn = document.getElementById('getStartedBtn');
 
-startBtn.addEventListener('click',()=>{
+startBtn.addEventListener('click', () => {
 
-startBtn.textContent='Entering SONVIA...';
+    startBtn.textContent = 'Entering SONVIA...';
 
-startBtn.disabled=true;
+    startBtn.disabled = true;
 
-setTimeout(()=>{
+    setTimeout(() => {
 
-window.location.href='welcome.html';
+        window.location.href = 'welcome.html';
 
-},600);
+    }, 600);
 
 });
 
@@ -270,64 +270,105 @@ window.location.href='welcome.html';
 // FOUNDER VAULT
 // ==========================================
 
-let founderTaps=0;
+let founderTaps = 0;
 let founderTimer;
 
-const logo=document.getElementById('sonviaLogo');
+const logo = document.getElementById('sonviaLogo');
 
-logo.addEventListener('click',async()=>{
+logo.addEventListener('click', async () => {
 
-founderTaps++;
+    founderTaps++;
 
-logo.classList.add('founder-glow');
+    logo.classList.add('founder-glow');
 
-clearTimeout(founderTimer);
+    clearTimeout(founderTimer);
 
-founderTimer=setTimeout(()=>{
+    founderTimer = setTimeout(() => {
 
-founderTaps=0;
+        founderTaps = 0;
 
-logo.classList.remove('founder-glow');
+        logo.classList.remove('founder-glow');
 
-},2000);
+    }, 2000);
 
-if(founderTaps===5){
 
-founderTaps=0;
+    // ==========================================
+    // 5 TAPS
+    // ==========================================
 
-logo.classList.remove('founder-glow');
+    if (founderTaps === 5) {
 
-if(navigator.vibrate){
+        founderTaps = 0;
 
-navigator.vibrate(80);
+        logo.classList.remove('founder-glow');
 
-}
+        try {
 
-const {data:{user}}=await supabase.auth.getUser();
+            // ==========================================
+            // CHECK LOGGED-IN USER
+            // ==========================================
 
-if(!user)return;
+            const {
+                data: { user },
+                error: userError
+            } = await supabase.auth.getUser();
 
-const {data:profile}=await supabase
+            if (userError || !user) {
 
-.from('profiles')
+                return;
 
-.select('is_admin')
+            }
 
-.eq('id',user.id)
 
-.single();
+            // ==========================================
+            // CHECK FOUNDER ACCESS
+            // ==========================================
 
-if(profile?.is_admin){
+            const {
+                data: profile,
+                error: profileError
+            } = await supabase
+                .from('profiles')
+                .select('is_admin')
+                .eq('id', user.id)
+                .single();
 
-window.location.href='admin-verification.html';
 
-}
+            if (profileError || !profile?.is_admin) {
 
-}
+                return;
+
+            }
+
+
+            // ==========================================
+            // FOUNDER ACCESS CONFIRMED
+            // ==========================================
+
+            if (navigator.vibrate) {
+
+                navigator.vibrate(100);
+
+            }
+
+
+            // ==========================================
+            // OPEN ADMIN PIN VERIFICATION
+            // ==========================================
+
+            window.location.href = 'admin-verification.html';
+
+        } catch (error) {
+
+            console.error('Founder Vault error:', error);
+
+        }
+
+    }
 
 });
 
-</script>
+      </script>
 
 <script>
 
