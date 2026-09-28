@@ -220,14 +220,13 @@ body{
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-
 <script>
 
 const SUPABASE_URL =
 "https://kuhynelblomedbyjsqhas.supabase.co";
 
 const SUPABASE_ANON_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1aHluZWxib21lZGJ5anNxaGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTEyMzYsImV4cCI6MjEwMjIyNzIzNn0.V0AvGoj1_qG2IspiSAyoOnqaSTNlQO8qoS_vaV7ZNl8
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1aHluZWxib21lZGJ5anNxaGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTEyMzYsImV4cCI6MjEwMjIyNzIzNn0.V0AvGoj1_qG2IspiSAyoOnqaSTNlQO8qoS_vaV7ZNl8";
 
 const supabase =
 window.supabase.createClient(
@@ -275,3 +274,485 @@ async function checkFounder(){
         data:profile,
         error
     } =
+    await supabase
+    .from("profiles")
+    .select("is_admin")
+    .eq("id",user.id)
+    .single();
+
+
+    if(error){
+
+        console.error(
+            "Founder check error:",
+            error
+        );
+
+        bookingsList.innerHTML = `
+            <div class="error">
+                Unable to verify Founder access.
+                <br><br>
+                ${error.message || ""}
+            </div>
+        `;
+
+        return false;
+    }
+
+
+    if(!profile || profile.is_admin !== true){
+
+        bookingsList.innerHTML = `
+            <div class="error">
+                Founder access only.
+            </div>
+        `;
+
+        return false;
+    }
+
+
+    return true;
+
+}
+
+
+/* =====================================================
+   LOAD BOOKINGS
+   ===================================================== */
+
+async function loadBookings(){
+
+    const allowed =
+    await checkFounder();
+
+
+    if(!allowed)
+    return;
+
+
+    const {
+        data,
+        error
+    } =
+    await supabase
+    .from("bookings")
+    .select(`
+        id,
+        booking_code,
+        artist_id,
+        producer_id,
+        service_name,
+        amount,
+        sonvia_fee,
+        producer_amount,
+        booking_date,
+        session_time,
+        status,
+        created_at
+    `)
+    .order(
+        "created_at",
+        {
+            ascending:false
+        }
+    );
+
+
+    if(error){
+
+        console.error(
+            "Founder Inbox booking error:",
+            error
+        );
+
+        bookingsList.innerHTML = `
+            <div class="error">
+                <strong>
+                    Unable to load bookings.
+                </strong>
+
+                <br><br>
+
+                ${error.message || "Unknown Supabase error"}
+            </div>
+        `;
+
+        return;
+    }
+
+
+    allBookings =
+    data || [];
+
+
+    renderBookings();
+
+}
+
+
+/* =====================================================
+   PENDING COUNTDOWN
+   ===================================================== */
+
+function getPendingCountdown(
+    createdAt
+){
+
+    const created =
+    new Date(
+        createdAt
+    ).getTime();
+
+
+    const deadline =
+    created +
+    (24 * 60 * 60 * 1000);
+
+
+    const remaining =
+    deadline -
+    Date.now();
+
+
+    if(remaining <= 0){
+
+        return "24-hour window expired";
+
+    }
+
+
+    const hours =
+    Math.floor(
+        remaining /
+        (1000 * 60 * 60)
+    );
+
+
+    const minutes =
+    Math.floor(
+        (
+            remaining %
+            (1000 * 60 * 60)
+        ) /
+        (1000 * 60)
+    );
+
+
+    return `${hours}h ${minutes}m remaining`;
+
+}
+
+
+/* =====================================================
+   RENDER BOOKINGS
+   ===================================================== */
+
+function renderBookings(){
+
+    bookingsList.innerHTML = "";
+
+
+    const filtered =
+    allBookings.filter(
+        booking => {
+
+            if(
+                currentFilter ===
+                "all"
+            ){
+
+                return true;
+
+            }
+
+
+            return (
+                booking.status ===
+                currentFilter
+            );
+
+        }
+    );
+
+
+    if(filtered.length === 0){
+
+        bookingsList.innerHTML = `
+            <div class="empty">
+                No ${
+                    currentFilter === "all"
+                    ? ""
+                    : currentFilter + " "
+                }bookings found.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    filtered.forEach(
+        booking => {
+
+            const card =
+            document.createElement(
+                "div"
+            );
+
+
+            card.className =
+            "booking-card";
+
+
+            let details = "";
+
+
+            if(
+                booking.status ===
+                "pending"
+            ){
+
+                details = `
+                    <div class="countdown">
+
+                        ⏱
+
+                        ${getPendingCountdown(
+                            booking.created_at
+                        )}
+
+                    </div>
+                `;
+
+            }
+
+
+            if(
+                booking.status ===
+                "confirmed"
+            ){
+
+                const date =
+                booking.booking_date
+                ?
+                new Date(
+                    booking.booking_date
+                ).toLocaleDateString()
+                :
+                "Date not set";
+
+
+                details = `
+                    <div class="booking-line">
+
+                        Session:
+
+                        <strong>
+                            ${date}
+
+                            ${
+                                booking.session_time
+                                ?
+                                " • " +
+                                booking.session_time
+                                :
+                                ""
+                            }
+                        </strong>
+
+                    </div>
+                `;
+
+            }
+
+
+            if(
+                booking.status ===
+                "missed"
+            ){
+
+                details = `
+                    <div class="booking-line">
+                        Producer action window expired.
+                    </div>
+                `;
+
+            }
+
+
+            if(
+                booking.status ===
+                "completed"
+            ){
+
+                details = `
+                    <div class="booking-line">
+                        Session completed.
+                    </div>
+                `;
+
+            }
+
+
+            card.innerHTML = `
+
+                <div class="booking-code">
+                    ${
+                        booking.booking_code ||
+                        "No reference"
+                    }
+                </div>
+
+
+                <div class="booking-title">
+
+                    ${
+                        booking.service_name ||
+                        "Studio Session"
+                    }
+
+                    •
+
+                    ${
+                        booking.status
+                    }
+
+                </div>
+
+
+                <div class="booking-line">
+
+                    Artist ID:
+
+                    <strong>
+                        ${booking.artist_id}
+                    </strong>
+
+                </div>
+
+
+                <div class="booking-line">
+
+                    Producer ID:
+
+                    <strong>
+                        ${booking.producer_id}
+                    </strong>
+
+                </div>
+
+
+                <div class="booking-line">
+
+                    Amount:
+
+                    <strong>
+                        ₦${
+                            Number(
+                                booking.amount || 0
+                            ).toLocaleString()
+                        }
+                    </strong>
+
+                </div>
+
+
+                ${details}
+
+
+                <div class="status">
+                    ${booking.status}
+                </div>
+
+            `;
+
+
+            bookingsList.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   FILTER BUTTONS
+   ===================================================== */
+
+document
+.querySelectorAll(
+    ".filter-btn"
+)
+.forEach(
+    button => {
+
+        button.onclick =
+        () => {
+
+            document
+            .querySelectorAll(
+                ".filter-btn"
+            )
+            .forEach(
+                btn => {
+
+                    btn.classList.remove(
+                        "active"
+                    );
+
+                }
+            );
+
+
+            button.classList.add(
+                "active"
+            );
+
+
+            currentFilter =
+            button.dataset.filter;
+
+
+            renderBookings();
+
+        };
+
+    }
+);
+
+
+/* =====================================================
+   START
+   ===================================================== */
+
+loadBookings();
+
+
+/* Refresh pending countdown */
+
+setInterval(
+    () => {
+
+        if(
+            currentFilter ===
+            "pending"
+            ||
+            currentFilter ===
+            "all"
+        ){
+
+            renderBookings();
+
+        }
+
+    },
+    60000
+);
+
+</script>
+
+</body>
+</html>
