@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SONVIA • Founder Inbox</title>
+
+<link rel="stylesheet" href="style.css">
+
+<style>
+
+body{
+    margin:0;
+    background:#0b0b0f;
+    color:#fff;
+    font-family:Arial,sans-serif;
+}
+
+.header{
+    padding:20px;
+    background:linear-gradient(
+        180deg,
+        #7C3AED,
+        #1b132e
+    );
+}
+
+.header-top{
+    display:flex;
+    align-items:center;
+    gap:15px;
+}
+
+.back{
+    color:#fff;
+    text-decoration:none;
+    font-size:26px;
+}
+
+.header h2{
+    margin:0;
+}
+
+.container{
+    padding:20px;
+    padding-bottom:100px;
+}
+
+.filters{
+    display:flex;
+    gap:8px;
+    overflow-x:auto;
+    padding-bottom:15px;
+}
+
+.filter-btn{
+    flex:0 0 auto;
+    width:auto;
+    margin:0;
+    padding:9px 14px;
+    border:1px solid #333;
+    border-radius:999px;
+    background:#15151d;
+    color:#aaa;
+    font-size:13px;
+}
+
+.filter-btn.active{
+    background:#7C3AED;
+    border-color:#7C3AED;
+    color:#fff;
+}
+
+.booking-card{
+    background:#15151d;
+    border-radius:18px;
+    padding:18px;
+    margin-bottom:15px;
+    border:1px solid rgba(255,255,255,.05);
+}
+
+.booking-code{
+    color:#B794F6;
+    font-size:13px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.booking-title{
+    font-size:17px;
+    font-weight:bold;
+    margin-bottom:8px;
+}
+
+.booking-line{
+    color:#aaa;
+    font-size:14px;
+    margin:7px 0;
+}
+
+.booking-line strong{
+    color:#fff;
+}
+
+.status{
+    display:inline-block;
+    margin-top:10px;
+    padding:6px 12px;
+    border-radius:999px;
+    background:rgba(124,58,237,.18);
+    color:#B794F6;
+    font-size:12px;
+}
+
+.countdown{
+    margin-top:12px;
+    padding:10px;
+    border-radius:10px;
+    background:rgba(124,58,237,.10);
+    color:#B794F6;
+    font-size:13px;
+}
+
+.empty{
+    text-align:center;
+    color:#888;
+    padding:40px 10px;
+}
+
+.error{
+    color:#f87171;
+    text-align:center;
+    padding:30px 10px;
+}
+
+.loading{
+    text-align:center;
+    color:#aaa;
+    padding:30px 10px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="header">
+
+    <div class="header-top">
+
+        <a
+            href="admin-verification.html"
+            class="back"
+        >
+            ←
+        </a>
+
+        <h2>Founder Inbox</h2>
+
+    </div>
+
+</div>
+
+
+<div class="container">
+
+    <div class="filters">
+
+        <button
+            class="filter-btn active"
+            data-filter="all"
+        >
+            All
+        </button>
+
+        <button
+            class="filter-btn"
+            data-filter="pending"
+        >
+            Pending
+        </button>
+
+        <button
+            class="filter-btn"
+            data-filter="confirmed"
+        >
+            Confirmed
+        </button>
+
+        <button
+            class="filter-btn"
+            data-filter="missed"
+        >
+            Missed
+        </button>
+
+        <button
+            class="filter-btn"
+            data-filter="completed"
+        >
+            Completed
+        </button>
+
+    </div>
+
+
+    <div id="bookingsList">
+
+        <div class="loading">
+            Loading bookings...
+        </div>
+
+    </div>
+
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+
+<script>
+
+const SUPABASE_URL =
+"https://kuhynelblomedbyjsqhas.supabase.co";
+
+const SUPABASE_ANON_KEY =
+"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1aHluZWxib21lZGJ5anNxaGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTEyMzYsImV4cCI6MjEwMjIyNzIzNn0.V0AvGoj1_qG2IspiSAyoOnqaSTNlQO8qoS_vaV7ZNl8
+
+const supabase =
+window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_ANON_KEY
+);
+
+
+const bookingsList =
+document.getElementById(
+    "bookingsList"
+);
+
+
+let allBookings = [];
+
+let currentFilter = "all";
+
+
+/* =====================================================
+   CHECK FOUNDER ACCESS
+   ===================================================== */
+
+async function checkFounder(){
+
+    const {
+        data:{
+            user
+        },
+        error:userError
+    } =
+    await supabase.auth.getUser();
+
+
+    if(userError || !user){
+
+        window.location.href =
+        "login.html";
+
+        return false;
+    }
+
+
+    const {
+        data:profile,
+        error
+    } =
