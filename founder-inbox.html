@@ -208,391 +208,293 @@ body{
 
 
     <div id="bookingsList">
-<p style="color:#7C3AED;font-weight:bold;">
-TEST VERSION 999
-</p>
-        <div class="loading">
-            Loading bookings...
-        </div>
-
+    <p style="color:#aaa;text-align:center;">
+        Loading bookings...
+    </p>
     </div>
-
-</div>
 
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script>
+document.addEventListener("DOMContentLoaded", async () => {
 
-const bookingsList =
-document.getElementById("bookingsList");
+    const bookingsList = document.getElementById("bookingsList");
+    const filterButtons = document.querySelectorAll(".filter-btn");
 
+    let allBookings = [];
+    let currentFilter = "all";
 
-/* =====================================================
-   STEP 1 — CHECK SUPABASE LIBRARY
-   ===================================================== */
-
-if(!window.supabase){
-
-    bookingsList.innerHTML = `
-        <div class="error">
-            Supabase library failed to load.
-        </div>
-    `;
-
-    throw new Error(
-        "Supabase library not loaded"
-    );
-}
-
-
-/* =====================================================
-   SUPABASE
-   ===================================================== */
-
-const SUPABASE_URL =
-"https://kuhynelblomedbyjsqhas.supabase.co";
-
-const SUPABASE_ANON_KEY =
-"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1aHluZWxib21lZGJ5anNxaGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTEyMzYsImV4cCI6MjEwMjIyNzIzNn0.V0AvGoj1_qG2IspiSAyoOnqaSTNlQO8qoS_vaV7ZNl8";
-
-
-const supabase =
-window.supabase.createClient(
-    SUPABASE_URL,
-    SUPABASE_ANON_KEY
-);
-
-
-/* =====================================================
-   STEP 2 — START
-   ===================================================== */
-
-bookingsList.innerHTML = `
-    <div class="loading">
-        Connecting to SONVIA...
-    </div>
-`;
-
-
-async function loadFounderInbox(){
-
-    try{
-
-        /* ---------------------------------------------
-           CHECK LOGIN
-        --------------------------------------------- */
-
+    function showMessage(message, color = "#aaa") {
         bookingsList.innerHTML = `
-            <div class="loading">
-                Checking Founder account...
-            </div>
+            <p style="
+                color:${color};
+                text-align:center;
+                padding:30px 10px;
+            ">
+                ${message}
+            </p>
         `;
+    }
 
+    function renderBookings() {
 
-        const {
-            data:{
-                user
-            },
-            error:userError
-        } =
-        await supabase.auth.getUser();
+        let bookings = allBookings;
 
-
-        if(userError){
-
-            throw new Error(
-                "Auth error: " +
-                userError.message
+        if (currentFilter !== "all") {
+            bookings = allBookings.filter(
+                booking => booking.status === currentFilter
             );
-
         }
 
-
-        if(!user){
-
-            window.location.href =
-            "login.html";
-
+        if (!bookings.length) {
+            showMessage("No bookings found.");
             return;
-
         }
-
-
-        /* ---------------------------------------------
-           CHECK ADMIN
-        --------------------------------------------- */
-
-        bookingsList.innerHTML = `
-            <div class="loading">
-                Verifying Founder access...
-            </div>
-        `;
-
-
-        const {
-            data:profile,
-            error:profileError
-        } =
-        await supabase
-        .from("profiles")
-        .select("is_admin")
-        .eq("id",user.id)
-        .single();
-
-
-        if(profileError){
-
-            throw new Error(
-                "Profile error: " +
-                profileError.message
-            );
-
-        }
-
-
-        if(!profile || profile.is_admin !== true){
-
-            bookingsList.innerHTML = `
-                <div class="error">
-                    Founder access only.
-                </div>
-            `;
-
-            return;
-
-        }
-
-
-        /* ---------------------------------------------
-           LOAD BOOKINGS
-        --------------------------------------------- */
-
-        bookingsList.innerHTML = `
-            <div class="loading">
-                Loading SONVIA bookings...
-            </div>
-        `;
-
-
-        const {
-            data:bookings,
-            error:bookingError
-        } =
-        await supabase
-        .from("bookings")
-        .select(`
-            id,
-            booking_code,
-            artist_id,
-            producer_id,
-            service_name,
-            amount,
-            sonvia_fee,
-            producer_amount,
-            booking_date,
-            session_time,
-            status,
-            created_at
-        `)
-        .order(
-            "created_at",
-            {
-                ascending:false
-            }
-        );
-
-
-        if(bookingError){
-
-            throw new Error(
-                "Bookings error: " +
-                bookingError.message
-            );
-
-        }
-
-
-        /* ---------------------------------------------
-           NO BOOKINGS
-        --------------------------------------------- */
-
-        if(!bookings || bookings.length === 0){
-
-            bookingsList.innerHTML = `
-                <div class="empty">
-                    No bookings found.
-                </div>
-            `;
-
-            return;
-
-        }
-
-
-        /* ---------------------------------------------
-           DISPLAY BOOKINGS
-        --------------------------------------------- */
 
         bookingsList.innerHTML = "";
 
+        bookings.forEach(booking => {
 
-        bookings.forEach(
-            booking => {
+            const date = booking.booking_date
+                ? new Date(booking.booking_date)
+                : null;
 
-                const card =
-                document.createElement(
-                    "div"
-                );
+            const dateText = date
+                ? date.toLocaleDateString()
+                : "No date";
 
+            const timeText = booking.session_time || "No time";
 
-                card.className =
-                "booking-card";
+            const amount = Number(booking.amount || 0)
+                .toLocaleString();
 
+            const card = document.createElement("div");
 
-                const date =
-                booking.booking_date
-                ?
-                new Date(
-                    booking.booking_date
-                ).toLocaleDateString()
-                :
-                "Date not set";
+            card.style.cssText = `
+                background:#111116;
+                border:1px solid #29292f;
+                border-radius:16px;
+                padding:18px;
+                margin-bottom:14px;
+            `;
 
+            card.innerHTML = `
+                <div style="
+                    display:flex;
+                    justify-content:space-between;
+                    align-items:center;
+                    gap:10px;
+                ">
+                    <strong style="color:#fff;font-size:17px;">
+                        ${booking.booking_code || "No booking code"}
+                    </strong>
 
-                card.innerHTML = `
+                    <span style="
+                        color:#9F67FF;
+                        font-size:13px;
+                        font-weight:bold;
+                        text-transform:capitalize;
+                    ">
+                        ${booking.status || "unknown"}
+                    </span>
+                </div>
 
-                    <div class="booking-code">
-                        ${
-                            booking.booking_code ||
-                            "No reference"
-                        }
-                    </div>
+                <p style="color:#ddd;margin:12px 0 5px;">
+                    ${booking.service_name || "Studio Session"}
+                </p>
 
-                    <div class="booking-title">
-                        ${
-                            booking.service_name ||
-                            "Studio Session"
-                        }
-                        •
-                        ${
-                            booking.status
-                        }
-                    </div>
+                <p style="color:#999;margin:5px 0;">
+                    Amount: ₦${amount}
+                </p>
 
-                    <div class="booking-line">
-                        Artist ID:
-                        <strong>
-                            ${booking.artist_id}
-                        </strong>
-                    </div>
+                <p style="color:#999;margin:5px 0;">
+                    Session: ${dateText} • ${timeText}
+                </p>
 
-                    <div class="booking-line">
-                        Producer ID:
-                        <strong>
-                            ${booking.producer_id}
-                        </strong>
-                    </div>
+                <p style="color:#777;margin:5px 0;font-size:13px;">
+                    Artist ID: ${booking.artist_id || "Unknown"}
+                </p>
 
-                    <div class="booking-line">
-                        Amount:
-                        <strong>
-                            ₦${
-                                Number(
-                                    booking.amount || 0
-                                ).toLocaleString()
-                            }
-                        </strong>
-                    </div>
+                <p style="color:#777;margin:5px 0;font-size:13px;">
+                    Producer ID: ${booking.producer_id || "Unknown"}
+                </p>
+            `;
 
-                    ${
-                        booking.status ===
-                        "confirmed"
-                        ?
-                        `
-                        <div class="booking-line">
-                            Session:
-                            <strong>
-                                ${date}
-                                ${
-                                    booking.session_time
-                                    ?
-                                    " • " +
-                                    booking.session_time
-                                    :
-                                    ""
-                                }
-                            </strong>
-                        </div>
-                        `
-                        :
-                        ""
-                    }
-
-                    ${
-                        booking.status ===
-                        "pending"
-                        ?
-                        `
-                        <div class="countdown">
-                            ⏱ Pending booking
-                        </div>
-                        `
-                        :
-                        ""
-                    }
-
-                    <div class="status">
-                        ${booking.status}
-                    </div>
-
-                `;
-
-
-                bookingsList.appendChild(
-                    card
-                );
-
-            }
-        );
-
-    }catch(error){
-
-        console.error(
-            "Founder Inbox:",
-            error
-        );
-
-
-        bookingsList.innerHTML = `
-            <div class="error">
-
-                <strong>
-                    Founder Inbox Error
-                </strong>
-
-                <br><br>
-
-                ${error.message}
-
-            </div>
-        `;
-
+            bookingsList.appendChild(card);
+        });
     }
 
-}
+
+    async function loadFounderInbox() {
+
+        try {
+
+            showMessage("Checking Founder access...", "#9F67FF");
+
+            if (!window.supabase) {
+                showMessage(
+                    "Supabase library failed to load.",
+                    "#ef4444"
+                );
+                return;
+            }
+
+            /*
+             * KEEP YOUR EXISTING SUPABASE URL AND KEY HERE.
+             */
+            const SUPABASE_URL = "https://kuhynelblomedbyjsqhas.supabase.co";
+            const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imt1aHluZWxib21lZGJ5anNxaGFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY2NTEyMzYsImV4cCI6MjEwMjIyNzIzNn0.V0AvGoj1_qG2IspiSAyoOnqaSTNlQO8qoS_vaV7ZNl8
+‎";
+
+            const client = window.supabase.createClient(
+                SUPABASE_URL,
+                SUPABASE_ANON_KEY
+            );
 
 
-loadFounderInbox();
+            const {
+                data: {
+                    user
+                },
+                error: authError
+            } = await client.auth.getUser();
 
+
+            if (authError) {
+                showMessage(
+                    "Authentication error: " + authError.message,
+                    "#ef4444"
+                );
+                return;
+            }
+
+
+            if (!user) {
+                showMessage(
+                    "You are not logged in.",
+                    "#ef4444"
+                );
+                return;
+            }
+
+
+            showMessage(
+                "Verifying Founder access...",
+                "#9F67FF"
+            );
+
+
+            const {
+                data: profile,
+                error: profileError
+            } = await client
+                .from("profiles")
+                .select("is_admin")
+                .eq("id", user.id)
+                .maybeSingle();
+
+
+            if (profileError) {
+                showMessage(
+                    "Profile error: " + profileError.message,
+                    "#ef4444"
+                );
+                return;
+            }
+
+
+            if (!profile || profile.is_admin !== true) {
+                showMessage(
+                    "Founder access required.",
+                    "#ef4444"
+                );
+                return;
+            }
+
+
+            showMessage(
+                "Loading SONVIA bookings...",
+                "#9F67FF"
+            );
+
+
+            const {
+                data: bookings,
+                error: bookingsError
+            } = await client
+                .from("bookings")
+                .select(`
+                    id,
+                    booking_code,
+                    artist_id,
+                    producer_id,
+                    service_name,
+                    amount,
+                    sonvia_fee,
+                    producer_amount,
+                    booking_date,
+                    session_time,
+                    status,
+                    created_at
+                `)
+                .order("created_at", {
+                    ascending: false
+                });
+
+
+            if (bookingsError) {
+                showMessage(
+                    "Bookings error: " + bookingsError.message,
+                    "#ef4444"
+                );
+                return;
+            }
+
+
+            allBookings = bookings || [];
+
+            renderBookings();
+
+        } catch (error) {
+
+            console.error(
+                "Founder Inbox error:",
+                error
+            );
+
+            showMessage(
+                "Founder Inbox error: " +
+                (error.message || error),
+                "#ef4444"
+            );
+        }
+    }
+
+
+    filterButtons.forEach(button => {
+
+        button.addEventListener("click", () => {
+
+            filterButtons.forEach(btn => {
+                btn.classList.remove("active");
+            });
+
+            button.classList.add("active");
+
+            currentFilter =
+                button.dataset.filter || "all";
+
+            renderBookings();
+        });
+
+    });
+
+
+    loadFounderInbox();
+
+});
 </script>
-    <script>
-document.getElementById("bookingsList").innerHTML = `
-<p style="color:#7C3AED;font-weight:bold;">
-JAVASCRIPT IS RUNNING
-</p>
-`;
-    </script>
     
 </body>
 </html>
