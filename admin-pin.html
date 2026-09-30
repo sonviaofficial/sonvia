@@ -405,9 +405,8 @@ setPinBtn.addEventListener('click',async()=>{
         console.error(error);
 
         showMessage(
-            'Unable to set Admin PIN.',
-            'error'
-        );
+            alert(error?.message || 'Unable to set admin PIN.');
+console.error('Set PIN error:', error);
 
         setPinBtn.disabled=false;
 
