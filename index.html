@@ -279,7 +279,12 @@ logo.addEventListener('click', async () => {
 
     founderTaps++;
 
+    // Visual feedback
     logo.classList.add('founder-glow');
+
+    if (navigator.vibrate) {
+        navigator.vibrate(40);
+    }
 
     clearTimeout(founderTimer);
 
@@ -289,110 +294,155 @@ logo.addEventListener('click', async () => {
 
         logo.classList.remove('founder-glow');
 
-    }, 2000);
+    }, 2500);
 
 
     // ==========================================
-    // 5 TAPS
+    // FIVE TAPS = FOUNDER VAULT
     // ==========================================
 
-    if (founderTaps === 5) {
+    if (founderTaps !== 5) {
+        return;
+    }
 
-        founderTaps = 0;
+    founderTaps = 0;
 
-        logo.classList.remove('founder-glow');
-
-        try {
-
-            // ==========================================
-            // CHECK LOGGED-IN USER
-            // ==========================================
-
-            const {
-                data: { user },
-                error: userError
-            } = await supabase.auth.getUser();
-
-            if (userError || !user) {
-
-                return;
-
-            }
+    logo.classList.remove('founder-glow');
 
 
-            // ==========================================
-            // CHECK FOUNDER ACCESS
-            // ==========================================
-
-            const {
-                data: profile,
-                error: profileError
-            } = await supabase
-                .from('profiles')
-                .select('is_admin')
-                .eq('id', user.id)
-                .single();
+    // Strong vibration
+    if (navigator.vibrate) {
+        navigator.vibrate([100, 60, 100]);
+    }
 
 
-            if (profileError || !profile?.is_admin) {
+    try {
 
-                return;
+        // ==========================================
+        // CHECK LOGGED-IN USER
+        // ==========================================
 
-            }
-
-
-            // ==========================================
-            // FOUNDER ACCESS CONFIRMED
-            // ==========================================
-
-            if (navigator.vibrate) {
-
-                navigator.vibrate(100);
-
-            }
+        const {
+            data: { user },
+            error: userError
+        } = await supabase.auth.getUser();
 
 
-            // ==========================================
-            // OPEN ADMIN PIN VERIFICATION
-            // ==========================================
+        if (userError) {
 
-            window.location.href = 'admin-pin.html';
+            console.error(
+                'User check error:',
+                userError
+            );
 
-        } catch (error) {
+            alert('Unable to check Founder access.');
 
-            console.error('Founder Vault error:', error);
+            return;
 
         }
+
+
+        // ==========================================
+        // NOT LOGGED IN
+        // ==========================================
+
+        if (!user) {
+
+            alert('Founder login required.');
+
+            window.location.href = 'login.html';
+
+            return;
+
+        }
+
+
+        // ==========================================
+        // CHECK FOUNDER ACCESS
+        // ==========================================
+
+        const {
+            data: profile,
+            error: profileError
+        } = await supabase
+            .from('profiles')
+            .select('is_admin')
+            .eq('id', user.id)
+            .single();
+
+
+        if (profileError) {
+
+            console.error(
+                'Founder profile error:',
+                profileError
+            );
+
+            alert('Unable to verify Founder access.');
+
+            return;
+
+        }
+
+
+        // ==========================================
+        // NOT ADMIN
+        // ==========================================
+
+        if (!profile || profile.is_admin !== true) {
+
+            alert('Founder access denied.');
+
+            return;
+
+        }
+
+
+        // ==========================================
+        // FOUNDER CONFIRMED
+        // ==========================================
+
+        window.location.href = 'admin-pin.html';
+
+
+    } catch (error) {
+
+        console.error(
+            'Founder Vault error:',
+            error
+        );
+
+        alert('Founder Vault error. Please try again.');
 
     }
 
 });
 
-      </script>
-
+</script>   
+  
 <script>
 
 if("serviceWorker" in navigator){
 
-window.addEventListener("load",function(){
+    window.addEventListener("load",function(){
 
-navigator.serviceWorker
+        navigator.serviceWorker
 
-.register("./service-worker.js")
+            .register("./service-worker.js")
 
-.then(()=>{
+            .then(()=>{
 
-console.log("SONVIA service worker registered.");
+                console.log("SONVIA service worker registered.");
 
-})
+            })
 
-.catch(error=>{
+            .catch(error=>{
 
-console.error(error);
+                console.error(error);
 
-});
+            });
 
-});
+    });
 
 }
 
