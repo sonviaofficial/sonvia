@@ -399,37 +399,22 @@ setPinBtn.addEventListener('click',async()=>{
         }
     );
 
+if(error || data !== true){
 
-    if(error || data !== true){
-
-        console.error(error);
-
-        showMessage(
-            alert(error?.message || 'Unable to set admin PIN.');
-console.error('Set PIN error:', error);
-
-        setPinBtn.disabled=false;
-
-        setPinBtn.textContent='Set Admin PIN';
-
-        return;
-
-    }
-
+    console.error('Set PIN error:', error);
 
     showMessage(
-        'Admin PIN created successfully.',
-        'success'
+        error?.message || 'Unable to set admin PIN.',
+        'error'
     );
 
+    setPinBtn.disabled=false;
 
-    setTimeout(()=>{
+    setPinBtn.textContent='Set Admin PIN';
 
-        window.location.href='admin-verification.html';
+    return;
 
-    },700);
-
-});
+}
 
 
 // ==========================================
