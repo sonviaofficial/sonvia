@@ -194,7 +194,7 @@ button:disabled{
     <div id="message" class="message"></div>
 
 </div>
-
+    
 
 <script type="module">
 
@@ -225,7 +225,7 @@ const message = document.getElementById('message');
 // MESSAGE
 // ==========================================
 
-function showMessage(text,type){
+function showMessage(text, type){
 
     message.textContent = text;
 
@@ -243,16 +243,14 @@ async function loadAdmin(){
     try{
 
         const {
-            data:{
-                user
-            },
-            error:userError
+            data: { user },
+            error: userError
         } = await supabase.auth.getUser();
 
 
         if(userError || !user){
 
-            window.location.href='login.html';
+            window.location.href = 'login.html';
 
             return;
 
@@ -264,12 +262,12 @@ async function loadAdmin(){
         // ==========================================
 
         const {
-            data:profile,
-            error:profileError
+            data: profile,
+            error: profileError
         } = await supabase
             .from('profiles')
-            .select('is_admin,admin_pin_hash')
-            .eq('id',user.id)
+            .select('is_admin, admin_pin_hash')
+            .eq('id', user.id)
             .single();
 
 
@@ -279,7 +277,7 @@ async function loadAdmin(){
             profile.is_admin !== true
         ){
 
-            window.location.href='artist-dashboard.html';
+            window.location.href = 'artist-dashboard.html';
 
             return;
 
@@ -302,10 +300,10 @@ async function loadAdmin(){
 
     }catch(error){
 
-        console.error(error);
+        console.error('Admin loading error:', error);
 
         showMessage(
-            'Unable to verify admin access.',
+            error?.message || 'Unable to verify admin access.',
             'error'
         );
 
@@ -320,9 +318,9 @@ async function loadAdmin(){
 
 function showSetupMode(){
 
-    title.textContent='Set Admin PIN';
+    title.textContent = 'Set Admin PIN';
 
-    subtitle.textContent=
+    subtitle.textContent =
         'Create a 6-digit PIN to protect your Founder Vault.';
 
     setupSection.classList.remove('hidden');
@@ -338,9 +336,9 @@ function showSetupMode(){
 
 function showVerifyMode(){
 
-    title.textContent='Enter Admin PIN';
+    title.textContent = 'Enter Admin PIN';
 
-    subtitle.textContent=
+    subtitle.textContent =
         'Enter your 6-digit Admin PIN to continue.';
 
     verifySection.classList.remove('hidden');
@@ -354,10 +352,10 @@ function showVerifyMode(){
 // SET PIN
 // ==========================================
 
-setPinBtn.addEventListener('click',async()=>{
+setPinBtn.addEventListener('click', async () => {
 
-    const firstPin=newPin.value.trim();
-    const secondPin=confirmPin.value.trim();
+    const firstPin = newPin.value.trim();
+    const secondPin = confirmPin.value.trim();
 
 
     if(!/^\d{6}$/.test(firstPin)){
@@ -384,9 +382,9 @@ setPinBtn.addEventListener('click',async()=>{
     }
 
 
-    setPinBtn.disabled=true;
+    setPinBtn.disabled = true;
 
-    setPinBtn.textContent='Saving...';
+    setPinBtn.textContent = 'Saving...';
 
 
     const {
@@ -395,35 +393,55 @@ setPinBtn.addEventListener('click',async()=>{
     } = await supabase.rpc(
         'set_admin_pin',
         {
-            pin:firstPin
+            pin: firstPin
         }
     );
 
-if(error || data !== true){
 
-    console.error('Set PIN error:', error);
+    if(error || data !== true){
+
+        console.error('Set PIN error:', error);
+
+        showMessage(
+            error?.message || 'Unable to set admin PIN.',
+            'error'
+        );
+
+        setPinBtn.disabled = false;
+
+        setPinBtn.textContent = 'Set Admin PIN';
+
+        return;
+
+    }
+
+
+    // ==========================================
+    // PIN CREATED
+    // ==========================================
 
     showMessage(
-        error?.message || 'Unable to set admin PIN.',
-        'error'
+        'Admin PIN created successfully.',
+        'success'
     );
 
-    setPinBtn.disabled=false;
 
-    setPinBtn.textContent='Set Admin PIN';
+    setTimeout(() => {
 
-    return;
+        window.location.href = 'admin-verification.html';
 
-}
+    }, 700);
+
+});
 
 
 // ==========================================
 // VERIFY PIN
 // ==========================================
 
-verifyPinBtn.addEventListener('click',async()=>{
+verifyPinBtn.addEventListener('click', async () => {
 
-    const enteredPin=pin.value.trim();
+    const enteredPin = pin.value.trim();
 
 
     if(!/^\d{6}$/.test(enteredPin)){
@@ -438,9 +456,9 @@ verifyPinBtn.addEventListener('click',async()=>{
     }
 
 
-    verifyPinBtn.disabled=true;
+    verifyPinBtn.disabled = true;
 
-    verifyPinBtn.textContent='Checking...';
+    verifyPinBtn.textContent = 'Checking...';
 
 
     const {
@@ -449,28 +467,34 @@ verifyPinBtn.addEventListener('click',async()=>{
     } = await supabase.rpc(
         'verify_admin_pin',
         {
-            pin:enteredPin
+            pin: enteredPin
         }
     );
 
 
     if(error || data !== true){
 
+        console.error('Verify PIN error:', error);
+
         showMessage(
-            'Incorrect Admin PIN.',
+            error?.message || 'Incorrect Admin PIN.',
             'error'
         );
 
-        pin.value='';
+        pin.value = '';
 
-        verifyPinBtn.disabled=false;
+        verifyPinBtn.disabled = false;
 
-        verifyPinBtn.textContent='Unlock Admin';
+        verifyPinBtn.textContent = 'Unlock Admin';
 
         return;
 
     }
 
+
+    // ==========================================
+    // ACCESS GRANTED
+    // ==========================================
 
     showMessage(
         'Access granted.',
@@ -478,14 +502,18 @@ verifyPinBtn.addEventListener('click',async()=>{
     );
 
 
-    setTimeout(()=>{
+    setTimeout(() => {
 
-        window.location.href='admin-verification.html';
+        window.location.href = 'admin-verification.html';
 
-    },500);
+    }, 500);
 
 });
 
+
+// ==========================================
+// START
+// ==========================================
 
 loadAdmin();
 
