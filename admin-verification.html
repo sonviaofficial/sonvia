@@ -139,27 +139,14 @@ return;
 loadRequests();
 
 }
-
 async function loadRequests(){
 
 const {data,error}=await supabase
 .from('verification_requests')
-.select(`
-id,
-status,
-payment_amount,
-created_at,
-user_id,
-profiles!verification_requests_user_id_fkey(
-id,
-full_name,
-artist_name,
-username,
-role
-)
-`)
-.eq('status','pending')
-.order('created_at',{ascending:false});
+.select('*');
+
+console.log("VERIFICATION REQUESTS:", data);
+console.log("VERIFICATION ERROR:", error);
 
 if(error){
 
