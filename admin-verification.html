@@ -148,13 +148,17 @@ const {data,error}=await supabase
 console.log("VERIFICATION REQUESTS:", data);
 console.log("VERIFICATION ERROR:", error);
 
-if(error){
+  if(error){
 
-container.innerHTML='<div class="empty">Unable to load requests.</div>';
+container.innerHTML = `
+<div class="empty">
+<strong>ERROR:</strong><br>
+${error.message || JSON.stringify(error)}
+</div>`;
 
 return;
 
-}
+  }
 
 if(!data.length){
 
