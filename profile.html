@@ -104,7 +104,14 @@ background:rgba(124,58,237,.15);
 border:1px solid #7C3AED;
 font-size:13px;
 }
+.verified-pill.get-verified{
+  cursor:pointer;
+}
 
+.verified-pill.get-verified:active{
+  transform:scale(.97);
+}
+  
 .role{
 margin-top:6px;
 color:#9ca3af;
@@ -212,9 +219,9 @@ background:#2a1a55;
 
     <div class="role">Artist • Ikorodu, Lagos</div>
 
-    <div class="verified-pill" id="verifiedBadge" style="display:none;">
+    <div class="verified-pill" id="verifiedBadge">
   <div class="verify-dot">✓</div>
-  Verified
+  <span id="verifiedText">Verified</span>
     </div>
 
   </div>
@@ -444,11 +451,28 @@ if (profile.username) {
   }
 
 const verifiedBadge = document.getElementById("verifiedBadge");
+const verifiedText = document.getElementById("verifiedText");
 
 if (profile.is_verified === true) {
-  verifiedBadge.style.display = "inline-flex";
+
+  // Already verified
+  verifiedText.textContent = "Verified";
+
+  verifiedBadge.classList.remove("get-verified");
+
+  verifiedBadge.onclick = null;
+
 } else {
-  verifiedBadge.style.display = "none";
+
+  // Not verified yet
+  verifiedText.textContent = "Get Verified";
+
+  verifiedBadge.classList.add("get-verified");
+
+  verifiedBadge.onclick = () => {
+    window.location.href = "get-verified.html";
+  };
+
 }
   const { count: followersCount } = await supabase
     .from("followers")
