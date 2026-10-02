@@ -13,7 +13,7 @@
 <title>Get Verified • SONVIA</title>
 
 <link rel="stylesheet" href="style.css">
-
+<script src="https://js.paystack.co/v2/inline.js"></script>
 <style>
 
 body{
@@ -441,21 +441,28 @@ async function checkUser(){
     return user;
 
 }
+// ==========================================
+// PAYSTACK TEST CONFIG
+// ==========================================
 
+const PAYSTACK_PUBLIC_KEY = "pk_test_9ea289b98aba2618b8c666f858ba2683eeb1bedf";
 
 // ==========================================
-// GET VERIFIED
+// GET VERIFIED — PAYSTACK TEST CHECKOUT
 // ==========================================
 
 document.getElementById('payButton').addEventListener('click', async () => {
 
   const button = document.getElementById('payButton');
 
+  button.disabled = true;
+  button.textContent = 'Loading...';
+
   const user = await checkUser();
 
   if (!user) return;
 
-  // Check whether the account is already verified
+  // Check current verification status
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('is_verified')
@@ -463,15 +470,27 @@ document.getElementById('payButton').addEventListener('click', async () => {
     .single();
 
   if (profileError) {
+
     console.error(profileError);
+
     alert('Unable to check your verification status.');
+
+    button.disabled = false;
+    button.textContent = 'Get Verified — ₦5,000';
+
     return;
   }
 
   if (profile?.is_verified === true) {
+
     alert('Your account is already verified.');
+
+    button.disabled = true;
+    button.textContent = '✓ Already Verified';
+
     return;
   }
+
 
   // Check for an existing pending request
   const { data: existing, error: existingError } = await supabase
@@ -482,21 +501,82 @@ document.getElementById('payButton').addEventListener('click', async () => {
     .maybeSingle();
 
   if (existingError) {
+
     console.error(existingError);
+
     alert('Unable to check your verification request.');
+
+    button.disabled = false;
+    button.textContent = 'Get Verified — ₦5,000';
+
     return;
   }
 
   if (existing) {
+
     alert('You already have a pending verification request.');
+
+    button.disabled = true;
+    button.textContent = 'Request Pending';
+
     return;
   }
 
-  // Paystack will be connected here next.
-  alert('Payment system is being connected. No payment has been taken yet.');
+
+  // ==========================================
+  // OPEN PAYSTACK CHECKOUT
+  // ==========================================
+
+  const handler = PaystackPop.setup({
+
+    key: PAYSTACK_PUBLIC_KEY,
+
+    email: user.email,
+
+    amount: 500000,
+
+    currency: 'NGN',
+
+    ref: 'SONVIA-' + user.id + '-' + Date.now(),
+
+    metadata: {
+
+      user_id: user.id,
+
+      purpose: 'SONVIA Verification',
+
+      amount_naira: 5000
+
+    },
+
+    callback: function(response) {
+
+      console.log(
+        'Paystack payment initialized:',
+        response.reference
+      );
+
+      alert(
+        'Payment completed. SONVIA is verifying your transaction.'
+      );
+
+      button.textContent = 'Payment Submitted ✓';
+
+    },
+
+    onClose: function() {
+
+      button.disabled = false;
+
+      button.textContent = 'Get Verified — ₦5,000';
+
+    }
+
+  });
+
+  handler.openIframe();
 
 });
-
 </script>
 
 
