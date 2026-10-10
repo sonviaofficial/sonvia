@@ -227,7 +227,23 @@ async function loadRequests() {
     statusEl.className = 'status';
     statusEl.textContent = 'Status: ' + status;
 
-    card.append(nameEl, usernameEl, roleEl, amountEl, statusEl);
+    const reasonEl = document.createElement('div');
+reasonEl.className = 'small';
+reasonEl.style.whiteSpace = 'pre-wrap';
+reasonEl.style.overflowWrap = 'anywhere';
+reasonEl.textContent =
+  'Reason for verification: ' +
+  (request.application_reason?.trim() ||
+    'No reason provided');
+
+card.append(
+  nameEl,
+  usernameEl,
+  roleEl,
+  reasonEl,
+  amountEl,
+  statusEl
+);
 
     if (status.toLowerCase() === 'pending') {
       const actions = document.createElement('div');
