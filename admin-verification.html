@@ -139,123 +139,190 @@ return;
 loadRequests();
 
 }
-async function loadRequests(){
 
-const {data,error}=await supabase
-.from('verification_requests')
-.select('*');
+async function loadRequests() {
+  container.innerHTML = '<div class="empty">Loading applications...</div>';
 
-console.log("VERIFICATION REQUESTS:", data);
-console.log("VERIFICATION ERROR:", error);
+  const { data: requests, error } = await supabase
+    .from('verification_requests')
+    .select('*')
+    .order('created_at', { ascending: false });
 
-  if(error){
-
-container.innerHTML = `
-<div class="empty">
-<strong>ERROR:</strong><br>
-${error.message || JSON.stringify(error)}
-</div>`;
-
-return;
-
+  if (error) {
+    container.innerHTML = `
+      <div class="empty">
+        <strong>Unable to load applications</strong><br>
+        ${error.message}
+      </div>`;
+    return;
   }
 
-if(!data.length){
+  if (!requests || requests.length === 0) {
+    container.innerHTML =
+      '<div class="empty">No applications submitted yet.</div>';
+    return;
+  }
 
-container.innerHTML='<div class="empty">No pending requests.</div>';
+  const userIds = [
+    ...new Set(requests.map(r => r.user_id).filter(Boolean))
+  ];
 
-return;
+  let profiles = [];
 
+  if (userIds.length) {
+    const { data, error: profileError } = await supabase
+      .from('profiles')
+      .select('id, artist_name, full_name, username, role, is_verified')
+      .in('id', userIds);
+
+    if (profileError) {
+      container.innerHTML = `
+        <div class="empty">
+          Applications loaded, but profiles could not be loaded.<br>
+          ${profileError.message}
+        </div>`;
+      return;
+    }
+
+    profiles = data || [];
+  }
+
+  const profileMap = new Map(
+    profiles.map(profile => [profile.id, profile])
+  );
+
+  container.innerHTML = '';
+
+  requests.forEach(request => {
+    const profile = profileMap.get(request.user_id) || {};
+    const status = request.status || 'pending';
+
+    const name =
+      profile.artist_name ||
+      profile.full_name ||
+      profile.username ||
+      'Unknown User';
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    const nameEl = document.createElement('div');
+    nameEl.className = 'name';
+    nameEl.textContent = name;
+
+    const usernameEl = document.createElement('div');
+    usernameEl.className = 'small';
+    usernameEl.textContent = '@' + (profile.username || 'user');
+
+    const roleEl = document.createElement('div');
+    roleEl.className = 'small';
+    roleEl.textContent = 'Role: ' + (profile.role || 'user');
+
+    const amountEl = document.createElement('div');
+    amountEl.className = 'small';
+    amountEl.textContent =
+      'Application fee: ₦' + (request.payment_amount ?? 5000);
+
+    const statusEl = document.createElement('div');
+    statusEl.className = 'status';
+    statusEl.textContent = 'Status: ' + status;
+
+    card.append(nameEl, usernameEl, roleEl, amountEl, statusEl);
+
+    if (status.toLowerCase() === 'pending') {
+      const actions = document.createElement('div');
+      actions.className = 'actions';
+
+      const approveButton = document.createElement('button');
+      approveButton.className = 'approve';
+      approveButton.textContent = 'Approve';
+      approveButton.onclick = () =>
+        approve(request.id, request.user_id);
+
+      const rejectButton = document.createElement('button');
+      rejectButton.className = 'reject';
+      rejectButton.textContent = 'Reject';
+      rejectButton.onclick = () => reject(request.id);
+
+      actions.append(approveButton, rejectButton);
+      card.appendChild(actions);
+    }
+
+    container.appendChild(card);
+  });
 }
 
-container.innerHTML='';
+async function approve(requestId, userId) {
+  if (!confirm('Approve this verification application?')) return;
 
-data.forEach(request=>{
+  if (!userId) {
+    alert('Cannot approve: applicant user ID is missing.');
+    return;
+  }
 
-const profile=request.profiles||{};
+  const { data: request, error: requestError } = await supabase
+    .from('verification_requests')
+    .update({ status: 'approved' })
+    .eq('id', requestId)
+    .eq('status', 'pending')
+    .select('id')
+    .maybeSingle();
 
-const name=
-profile.artist_name||
-profile.full_name||
-profile.username||
-'Unknown User';
+  if (requestError || !request) {
+    alert(
+      'Could not approve this application. ' +
+      (requestError?.message || 'It may no longer be pending.')
+    );
+    return;
+  }
 
-const role=profile.role||'user';
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .update({ is_verified: true })
+    .eq('id', userId);
 
-const card=document.createElement('div');
+  if (profileError) {
+    await supabase
+      .from('verification_requests')
+      .update({ status: 'pending' })
+      .eq('id', requestId)
+      .eq('status', 'approved');
 
-card.className='card';
+    alert(
+      'Profile verification failed. ' +
+      profileError.message
+    );
+    await loadRequests();
+    return;
+  }
 
-card.innerHTML=`
-<div class="name">${name}</div>
-
-<div class="small">@${profile.username||'user'}</div>
-
-<div class="small">Role: ${role}</div>
-
-<div class="small">₦${request.payment_amount||5000}</div>
-
-<div class="status">Pending</div>
-
-<div class="actions">
-
-<button class="approve">Approve</button>
-
-<button class="reject">Reject</button>
-
-</div>
-`;
-
-card.querySelector('.approve')
-.onclick=()=>approve(request.id,profile.id);
-
-card.querySelector('.reject')
-.onclick=()=>reject(request.id);
-
-container.appendChild(card);
-
-});
-
+  alert('Application approved and verified badge enabled.');
+  await loadRequests();
 }
 
-async function approve(requestId,userId){
+async function reject(requestId) {
+  if (!confirm('Reject this verification application?')) return;
 
-const ok=confirm('Approve this verification?');
+  const { data, error } = await supabase
+    .from('verification_requests')
+    .update({ status: 'rejected' })
+    .eq('id', requestId)
+    .eq('status', 'pending')
+    .select('id')
+    .maybeSingle();
 
-if(!ok)return;
+  if (error || !data) {
+    alert(
+      'Could not reject this application. ' +
+      (error?.message || 'It may no longer be pending.')
+    );
+    return;
+  }
 
-await supabase
-.from('verification_requests')
-.update({status:'approved'})
-.eq('id',requestId);
-
-await supabase
-.from('profiles')
-.update({
-is_verified:true,
-verification_status:'approved',
-verification_type:'paid'
-})
-.eq('id',userId);
-
-loadRequests();
-
+  alert('Application rejected.');
+  await loadRequests();
 }
-
-async function reject(requestId){
-
-const ok=confirm('Reject this verification request?');
-
-if(!ok)return;
-
-await supabase
-.from('verification_requests')
-.update({status:'rejected'})
-.eq('id',requestId);
-
-loadRequests();
-
-}
+  
 
 loadAdmin();
 
