@@ -343,6 +343,37 @@ button.pay:disabled{
 </div>
 
 
+<!-- VERIFICATION APPLICATION -->
+<div class="card" id="applicationCard">
+  <h3>Verification Application</h3>
+
+  <p class="note">
+    Submit your details for Founder review.
+    Applying does not guarantee verification.
+  </p>
+
+  <label for="verificationReason">Why should SONVIA verify you?</label>
+  <textarea
+    id="verificationReason"
+    maxlength="1000"
+    rows="4"
+    placeholder="Tell us about yourself and your SONVIA profile..."
+    style="width:100%;box-sizing:border-box;margin-top:10px;padding:12px;border-radius:12px;background:#15151d;color:white;border:1px solid #333;"
+    required
+  ></textarea>
+
+  <button
+    id="applyButton"
+    class="pay"
+    type="button"
+  >
+    Submit Application
+  </button>
+
+  <p id="applicationMessage" class="note" aria-live="polite"></p>
+</div>
+    
+    
 <!-- ==========================================
      PRICE
 ========================================== -->
@@ -417,166 +448,159 @@ button.pay:disabled{
 import { supabase } from './supabase.js';
 
 
-// ==========================================
-// CHECK USER
-// ==========================================
 
-async function checkUser(){
+async function checkUser() {
+  const {
+    data: { user },
+    error
+  } = await supabase.auth.getUser();
 
-    const {
-        data: { user },
-        error
-    } = await supabase.auth.getUser();
+  if (error || !user) {
+    window.location.href = 'login.html';
+    return null;
+  }
 
-
-    if(error || !user){
-
-        window.location.href = 'login.html';
-
-        return null;
-
-    }
-
-
-    return user;
-
+  return user;
 }
-// ==========================================
-// PAYSTACK TEST CONFIG
-// ==========================================
 
-const PAYSTACK_PUBLIC_KEY = "pk_test_9ea289b98aba2618b8c666f858ba2683eeb1bedf";
+const applyButton = document.getElementById('applyButton');
+const reasonInput = document.getElementById('verificationReason');
+const applicationMessage = document.getElementById('applicationMessage');
+const payButton = document.getElementById('payButton');
 
-// ==========================================
-// GET VERIFIED — PAYSTACK TEST CHECKOUT
-// ==========================================
+payButton.disabled = true;
+payButton.textContent = 'Payment integration coming soon';
 
-document.getElementById('payButton').addEventListener('click', async () => {
-console.log('GET VERIFIED BUTTON CLICKED');
-  const button = document.getElementById('payButton');
+function showMessage(message) {
+  applicationMessage.textContent = message;
+}
 
-  button.disabled = true;
-  button.textContent = 'Loading...';
-
+async function loadApplicationStatus() {
   const user = await checkUser();
-
   if (!user) return;
 
-  // Check current verification status
   const { data: profile, error: profileError } = await supabase
     .from('profiles')
     .select('is_verified')
     .eq('id', user.id)
-    .single();
+    .maybeSingle();
 
   if (profileError) {
-
-    console.error(profileError);
-
-    alert('Unable to check your verification status.');
-
-    button.disabled = false;
-    button.textContent = 'Get Verified — ₦5,000';
-
+    showMessage('Unable to check your verification status.');
     return;
   }
 
   if (profile?.is_verified === true) {
-
-    alert('Your account is already verified.');
-
-    button.disabled = true;
-    button.textContent = '✓ Already Verified';
-
+    showMessage('Your account is already verified.');
+    applyButton.disabled = true;
+    applyButton.textContent = 'Already Verified';
     return;
   }
 
-
-  // Check for an existing pending request
-  const { data: existing, error: existingError } = await supabase
+  const { data: requests, error } = await supabase
     .from('verification_requests')
-    .select('id')
+    .select('id, status, created_at')
     .eq('user_id', user.id)
-    .eq('status', 'pending')
-    .maybeSingle();
+    .order('created_at', { ascending: false })
+    .limit(1);
 
-  if (existingError) {
-
-    console.error(existingError);
-
-    alert('Unable to check your verification request.');
-
-    button.disabled = false;
-    button.textContent = 'Get Verified — ₦5,000';
-
+  if (error) {
+    showMessage('Unable to load your application status.');
     return;
   }
 
-  if (existing) {
+  const request = requests?.[0];
 
-    alert('You already have a pending verification request.');
+  if (request?.status === 'pending') {
+    showMessage('Your application is awaiting Founder review.');
+    applyButton.disabled = true;
+    applyButton.textContent = 'Application Pending';
+  } else if (request?.status === 'approved') {
+    showMessage('Your application was approved.');
+    applyButton.disabled = true;
+    applyButton.textContent = 'Application Approved';
+  } else if (request?.status === 'rejected') {
+    showMessage('Your previous application was rejected. You may submit a new one.');
+  } else {
+    showMessage('Tell us about yourself, then submit your application.');
+  }
+}
 
-    button.disabled = true;
-    button.textContent = 'Request Pending';
+applyButton.addEventListener('click', async () => {
+  const reason = reasonInput.value.trim();
 
+  if (reason.length < 20) {
+    showMessage('Please write at least 20 characters about yourself.');
+    reasonInput.focus();
     return;
   }
 
+  applyButton.disabled = true;
+  applyButton.textContent = 'Submitting...';
+  showMessage('');
 
-  // ==========================================
-  // OPEN PAYSTACK CHECKOUT
-  // ==========================================
+  try {
+    const user = await checkUser();
+    if (!user) return;
 
-  const handler = PaystackPop.setup({
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('is_verified')
+      .eq('id', user.id)
+      .maybeSingle();
 
-    key: PAYSTACK_PUBLIC_KEY,
-
-    email: user.email,
-
-    amount: 500000,
-
-    currency: 'NGN',
-
-    ref: 'SONVIA-' + user.id + '-' + Date.now(),
-
-    metadata: {
-
-      user_id: user.id,
-
-      purpose: 'SONVIA Verification',
-
-      amount_naira: 5000
-
-    },
-
-    callback: function(response) {
-
-      console.log(
-        'Paystack payment initialized:',
-        response.reference
-      );
-
-      alert(
-        'Payment completed. SONVIA is verifying your transaction.'
-      );
-
-      button.textContent = 'Payment Submitted ✓';
-
-    },
-
-    onClose: function() {
-
-      button.disabled = false;
-
-      button.textContent = 'Get Verified — ₦5,000';
-
+    if (profileError) {
+      throw new Error('Unable to check your verification status.');
     }
 
-  });
+    if (profile?.is_verified === true) {
+      throw new Error('Your account is already verified.');
+    }
 
-  handler.openIframe();
+    const { data: existingRequests, error: existingError } = await supabase
+      .from('verification_requests')
+      .select('id, status')
+      .eq('user_id', user.id)
+      .eq('status', 'pending')
+      .limit(1);
 
+    if (existingError) {
+      throw new Error('Unable to check existing applications.');
+    }
+
+    if (existingRequests?.length) {
+      showMessage('You already have a pending application.');
+      applyButton.textContent = 'Application Pending';
+      return;
+    }
+
+    const { error: insertError } = await supabase
+      .from('verification_requests')
+      .insert({
+        user_id: user.id,
+        status: 'pending',
+        payment_amount: 5000,
+        application_reason: reason
+      });
+
+    if (insertError) {
+      throw new Error('Could not save your application: ' + insertError.message);
+    }
+
+    reasonInput.value = '';
+    showMessage(
+      'Application submitted! Your request is awaiting Founder review. Payment is not connected yet, and verification is not automatic.'
+    );
+    applyButton.textContent = 'Application Pending';
+
+  } catch (error) {
+    showMessage(error.message || 'Something went wrong. Please try again.');
+    applyButton.disabled = false;
+    applyButton.textContent = 'Submit Application';
+  }
 });
+
+loadApplicationStatus();
 </script>
 
 
