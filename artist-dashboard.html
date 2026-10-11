@@ -540,12 +540,17 @@ document.getElementById("artistTag").textContent = "@" + (
   artistName.replace(/\s+/g, "").toLowerCase()
 );
 
+// LOAD ARTIST PROFILE PICTURE
 const avatar = document.getElementById("avatar");
 
 const avatarUrl = profile.avatar_url || profile.profile_picture;
 
-if (avatarUrl) {
-  avatar.src = avatarUrl;
+if (avatarUrl && avatarUrl.trim() !== "") {
+  const separator = avatarUrl.includes("?") ? "&" : "?";
+
+  avatar.src = avatarUrl + separator + "t=" + Date.now();
+} else {
+  console.warn("No artist profile picture URL found in Supabase.");
 }
 
 const verifiedBadge = document.getElementById("artistVerifiedBadge");
