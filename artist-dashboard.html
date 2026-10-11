@@ -474,67 +474,65 @@ showcase.innerHTML=songs.map(song=>`
 }
 
 // LOAD ARTIST
-async function loadArtist(){
+async function loadArtist() {
+try {
+const { data: { user } } = await supabase.auth.getUser();
 
-try{
-
-const {data:{user}}=await supabase.auth.getUser();
-
-if(!user){
-window.location.href="login.html";
-return;
+if (!user) {
+  window.location.href = "login.html";
+  return;
 }
 
-const {data:profile}=await supabase
-.from("profiles")
-.select("*")
-.eq("id",user.id)
-.single();
+const { data: profile, error } = await supabase
+  .from("profiles")
+  .select("*")
+  .eq("id", user.id)
+  .single();
 
-if(profile){
+if (error) throw error;
+if (!profile) return;
 
-const artistName=
-profile.username||
-profile.artist_name||
-profile.full_name||
-"Artist";
+const artistName =
+  profile.username ||
+  profile.artist_name ||
+  profile.full_name ||
+  "Artist";
 
-document.getElementById("artistName").textContent=artistName;
+document.getElementById("artistName").textContent = artistName;
 
-document.getElementById("artistTag").textContent="@"+(
-profile.username||
-artistName.replace(/\s+/g,"").toLowerCase()
+document.getElementById("artistTag").textContent = "@" + (
+  profile.username ||
+  artistName.replace(/\s+/g, "").toLowerCase()
 );
 
 const avatar = document.getElementById("avatar");
 
-if (profile.avatar_url) {
-avatar.src = profile.avatar_url;
-} else if (profile.profile_picture) {
-avatar.src = profile.profile_picture;
+const avatarUrl = profile.avatar_url || profile.profile_picture;
+
+if (avatarUrl) {
+  avatar.src = avatarUrl;
 }
-  const verifiedBadge = document.getElementById("artistVerifiedBadge");
+
+const verifiedBadge = document.getElementById("artistVerifiedBadge");
 const verifiedText = document.getElementById("artistVerifiedText");
 
 if (profile.is_verified === true) {
-verifiedText.textContent = "Verified";
-verifiedBadge.classList.remove("get-verified");
-verifiedBadge.onclick = null;
-verifiedBadge.style.cursor = "default";
+  verifiedText.textContent = "Verified";
+  verifiedBadge.classList.remove("get-verified");
+  verifiedBadge.onclick = null;
+  verifiedBadge.style.cursor = "default";
 } else {
-verifiedText.textContent = "Get Verified";
-verifiedBadge.classList.add("get-verified");
-verifiedBadge.style.cursor = "pointer";
-verifiedBadge.onclick = () => {
-window.location.href = "get-verified.html";
-};
-
+  verifiedText.textContent = "Get Verified";
+  verifiedBadge.classList.add("get-verified");
+  verifiedBadge.style.cursor = "pointer";
+  verifiedBadge.onclick = () => {
+    window.location.href = "get-verified.html";
+  };
 }
 
-}catch(err){
-console.error(err);
+} catch (err) {
+console.error("Error loading artist profile:", err);
 }
-
 }
 
 // AVATAR
