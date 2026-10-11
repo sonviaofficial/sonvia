@@ -182,11 +182,11 @@ alt="Artist">
 
 <h1 id="artistName" style="margin:0;font-size:26px;">Artist</h1>
 
-<div class="verified">
-<div class="verify-dot">✓</div>
-Verified
+<div id="artistVerifiedBadge" class="verified">
+  <div class="verify-dot">✓</div>
+  <span id="artistVerifiedText">Verified</span>
 </div>
-
+  
 </div>
 
 <div id="artistTag" class="username">@artist</div>
@@ -509,6 +509,21 @@ artistName.replace(/\s+/g,"").toLowerCase()
 if(profile.avatar_url){
 document.getElementById("avatar").src=profile.avatar_url;
 }
+  const verifiedBadge = document.getElementById("artistVerifiedBadge");
+const verifiedText = document.getElementById("artistVerifiedText");
+
+if (profile.is_verified === true) {
+verifiedText.textContent = "Verified";
+verifiedBadge.classList.remove("get-verified");
+verifiedBadge.onclick = null;
+verifiedBadge.style.cursor = "default";
+} else {
+verifiedText.textContent = "Get Verified";
+verifiedBadge.classList.add("get-verified");
+verifiedBadge.style.cursor = "pointer";
+verifiedBadge.onclick = () => {
+window.location.href = "get-verified.html";
+};
 
 }
 
