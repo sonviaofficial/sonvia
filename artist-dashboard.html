@@ -506,8 +506,12 @@ profile.username||
 artistName.replace(/\s+/g,"").toLowerCase()
 );
 
-if(profile.avatar_url){
-document.getElementById("avatar").src=profile.avatar_url;
+const avatar = document.getElementById("avatar");
+
+if (profile.avatar_url) {
+avatar.src = profile.avatar_url;
+} else if (profile.profile_picture) {
+avatar.src = profile.profile_picture;
 }
   const verifiedBadge = document.getElementById("artistVerifiedBadge");
 const verifiedText = document.getElementById("artistVerifiedText");
