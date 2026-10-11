@@ -153,8 +153,27 @@ margin-bottom:12px;
 </svg>
 </a>
 
+  <!-- SONVIA Notification Bell -->
 <div id="notificationBell"
-style="position:relative;cursor:pointer;padding:6px;display:inline-flex;">
+     style="position:relative;cursor:pointer;padding:6px;display:inline-flex;align-items:center;">
+
+  <svg width="24" height="24" viewBox="0 0 24 24"
+       fill="none" stroke="currentColor" stroke-width="2"
+       stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+    <path d="M10 21h4"/>
+  </svg>
+
+  <span id="notificationCount"
+        style="display:none;position:absolute;top:0;right:0;
+               min-width:17px;height:17px;padding:0 4px;
+               border-radius:20px;background:#7C3AED;color:white;
+               font-size:10px;font-weight:bold;
+               align-items:center;justify-content:center;
+               box-sizing:border-box;">
+  </span>
+
+</div>
 
 <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
 <path d="M15 17h5l-1.4-1.4A2 2 0 0 1 18 14.2V11a6 6 0 1 0-12 0v3.2a2 2 0 0 1-.6 1.4L4 17h5"/>
@@ -599,6 +618,35 @@ await loadSongShowcase();
 
 </script>
 
+  <script>
+// SONVIA NOTIFICATION BELL & BADGE
+
+function updateNotificationBadge(count) {
+  const badge = document.getElementById("notificationCount");
+
+  if (!badge) return;
+
+  if (count <= 0) {
+    badge.style.display = "none";
+    return;
+  }
+
+  badge.style.display = "flex";
+  badge.textContent = count > 99 ? "99+" : count;
+}
+
+updateNotificationBadge(5) 
+
+const notificationBell =
+  document.getElementById("notificationBell");
+
+if (notificationBell) {
+  notificationBell.addEventListener("click", () => {
+    window.location.href = "notifications.html";
+  });
+}
+  </script>
+  
 </body>
   </html>
   
