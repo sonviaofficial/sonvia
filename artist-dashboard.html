@@ -188,7 +188,12 @@ margin-bottom:12px;
 class="avatar"
 src="https://placehold.co/80x80/222/fff?text=A"
 alt="Artist">
-
+<input
+  type="file"
+  id="avatarInput"
+  accept="image/*"
+  hidden
+>
 <div style="flex:1;">
 
 <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -477,36 +482,110 @@ window.location.href="book-session.html";
 });
 
 // SONG SHOWCASE
-async function loadSongShowcase(){
 
-const {data:{user}}=await supabase.auth.getUser();
+async function loadSongShowcase() {
+  const showcase = document.getElementById("songShowcase");
 
-const {data:songs}=await supabase
-.from("songs")
-.select("*")
-.eq("artist_id",user.id)
-.order("created_at",{ascending:false})
-.limit(3);
+  if (!showcase) {
+    console.error("SONVIA: songShowcase element is missing.");
+    return;
+  }
 
-const showcase=document.getElementById("songShowcase");
+  showcase.textContent = "Loading songs...";
 
-if(!songs||songs.length===0){
-showcase.innerHTML=`
-<h3>No songs yet</h3>
-<p>Upload up to 3 songs for producers to hear your sound.</p>
-<a href="my-songs.html"><button>My Songs</button></a>`;
-return;
+  try {
+    const {
+      data: { user },
+      error: authError
+    } = await supabase.auth.getUser();
+
+    if (authError) throw authError;
+
+    if (!user) {
+      showcase.textContent = "Please log in to view your songs.";
+      return;
+    }
+
+    const { data: songs, error: songsError } = await supabase
+      .from("songs")
+      .select("*")
+      .eq("artist_id", user.id)
+      .order("created_at", { ascending: false })
+      .limit(3);
+
+    if (songsError) throw songsError;
+
+    showcase.replaceChildren();
+
+    if (!songs || songs.length === 0) {
+      const message = document.createElement("p");
+      message.textContent =
+        "No songs found yet. Upload your songs so producers can hear your sound.";
+      showcase.appendChild(message);
+
+      const link = document.createElement("a");
+      link.href = "my-songs.html";
+      link.textContent = "Upload / Manage Songs";
+      link.style.color = "#9F67FF";
+      showcase.appendChild(link);
+
+      return;
+    }
+
+    songs.forEach((song) => {
+      const card = document.createElement("div");
+      card.style.cssText =
+        "padding:12px 0;border-bottom:1px solid #333;";
+
+      const title = document.createElement("h4");
+      title.textContent = song.title || "Untitled Song";
+      title.style.margin = "0 0 10px";
+      card.appendChild(title);
+
+      if (song.audio_url) {
+        const audio = document.createElement("audio");
+        audio.controls = true;
+        audio.preload = "none";
+        audio.style.width = "100%";
+        audio.src = song.audio_url;
+        card.appendChild(audio);
+      } else {
+        const missing = document.createElement("p");
+        missing.textContent = "Audio file URL is missing for this song.";
+        card.appendChild(missing);
+      }
+
+      showcase.appendChild(card);
+    });
+
+    const link = document.createElement("a");
+    link.href = "my-songs.html";
+    link.textContent = "View All Songs";
+    link.style.cssText =
+      "display:inline-block;margin-top:14px;color:#9F67FF;";
+    showcase.appendChild(link);
+
+  } catch (error) {
+    console.error("SONVIA Song Showcase error:", error);
+
+    showcase.replaceChildren();
+
+    const message = document.createElement("p");
+    message.textContent =
+      "Songs couldn't load: " + (error.message || "Unknown error");
+    message.style.color = "#ff8585";
+    showcase.appendChild(message);
+
+    const retry = document.createElement("button");
+    retry.type = "button";
+    retry.textContent = "Try Again";
+    retry.style.cssText =
+      "margin-top:10px;padding:10px 16px;background:#7C3AED;color:white;border:0;border-radius:8px;cursor:pointer;";
+    retry.addEventListener("click", loadSongShowcase);
+    showcase.appendChild(retry);
+  }
 }
-
-showcase.innerHTML=songs.map(song=>`
-<div class="song">
-<h4>${song.title}</h4>
-<audio controls>
-<source src="${song.audio_url}">
-</audio>
-</div>`).join("")+
-`<a href="my-songs.html"><button>View All Songs</button></a>`;
-}
+  
 
 // LOAD ARTIST
 async function loadArtist() {
@@ -644,14 +723,6 @@ if (avatar && avatarInput) {
   
 } else {
   console.error("SONVIA: avatar or avatarInput element is missing.");
-}
-// LOCATION
-if(navigator.geolocation){
-navigator.geolocation.getCurrentPosition(()=>{
-document.getElementById("locationText").textContent="📍 Around your location";
-},()=>{
-document.getElementById("locationText").textContent="Location unavailable";
-});
 }
 
 // LOGOUT
