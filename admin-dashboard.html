@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>SONVIA | Founder Admin</title>
+
+<meta name="theme-color" content="#10091d">
+
+<style>
+:root {
+    --bg: #0c0814;
+    --panel: #171021;
+    --panel2: #20152f;
+    --purple: #7c3aed;
+    --accent: #9f67ff;
+    --text: #ffffff;
+    --muted: #a89bb9;
+    --border: rgba(255,255,255,0.08);
+    --green: #39ff91;
+    --red: #ff5577;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: Arial, Helvetica, sans-serif;
+    min-height: 100vh;
+}
+
+button, input, select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.app {
+    min-height: 100vh;
+}
+
+/* TOP HEADER */
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(12,8,20,0.96);
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border);
+    padding: 15px 22px;
+}
+
+.topbar-inner {
+    max-width: 1500px;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 11px;
+    flex-shrink: 0;
+}
+
+.logo {
+    width: 42px;
+    height: 42px;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    background: var(--purple);
+    font-size: 23px;
+    font-weight: 900;
+    box-shadow: 0 0 22px rgba(124,58,237,0.3);
+}
+
+.brand h1 {
+    font-size: 19px;
+    letter-spacing: 2px;
+}
+
+.brand p {
+    margin-top: 4px;
+    color: var(--muted);
+    font-size: 11px;
+}
+
+.founder-badge {
+    background: rgba(124,58,237,0.17);
+    border: 1px solid rgba(159,103,255,0.35);
+    color: #c8a8ff;
+    padding: 9px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    white-space: nowrap;
+}
+
+/* NAVIGATION */
+
+.nav-wrapper {
+    max-width: 1500px;
+    margin: auto;
+    padding: 12px 22px 0;
+}
+
+.nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: thin;
+    scrollbar-color: var(--purple) var(--bg);
+    padding-bottom: 10px;
+    -webkit-overflow-scrolling: touch;
+}
+
+.nav-item {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--muted);
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 11px;
+    padding: 11px 15px;
+    white-space: nowrap;
+    transition: 0.2s;
+}
+
+.nav-item:hover {
+    background: var(--panel);
+    color: white;
+}
+
+.nav-item.active {
+    color: white;
+    background: rgba(124,58,237,0.2);
+    border-color: rgba(159,103,255,0.3);
+}
+
+/* MAIN CONTENT */
+
+.main {
+    max-width: 1500px;
+    margin: auto;
+    padding: 27px 22px 60px;
+}
+
+.page {
+    display: none;
+    animation: appear 0.2s ease;
+}
+
+.page.active {
+    display: block;
+}
+
+@keyframes appear {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.page-heading {
+    margin-bottom: 25px;
+}
+
+.page-heading h2 {
+    font-size: clamp(23px, 4vw, 31px);
+    margin-bottom: 8px;
+}
+
+.page-heading p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+.eyebrow {
+    display: inline-block;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    font-size: 10px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* CARDS */
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: linear-gradient(145deg, var(--panel2), var(--panel));
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    padding: 21px;
+    min-width: 0;
+}
+
+.stat-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.stat-icon {
+    width: 43px;
+    height: 43px;
+    display: grid;
+    place-items: center;
+    border-radius: 13px;
+    background: rgba(124,58,237,0.19);
+    font-size: 21px;
+}
+
+.stat-label {
+    color: var(--muted);
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.stat-value {
+    font-size: clamp(23px, 3vw, 32px);
+    font-weight: bold;
+    overflow-wrap: anywhere;
+}
+
+.stat-note {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 10px;
+}
+
+.green {
+    color: var(--green);
+}
+
+.purple {
+    color: var(--accent);
+}
+
+.red {
+    color: var(--red);
+}
+
+/* PANELS */
+
+.grid-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 18px;
+    margin-bottom: 22px;
+}
+
+.section-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 17px;
+    padding: 22px;
+    margin-bottom: 20px;
+    min-width: 0;
+}
+
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.section-title h3 {
+    font-size: 16px;
+}
+
+.section-title p {
+    color: var(--muted);
+    font-size: 12px;
+    margin-top: 6px;
+    line-height: 1.5;
+}
+
+/* EARLY USER PROGRAM */
+
+.early-banner {
+    background: linear-gradient(
+        120deg,
+        rgba(124,58,237,0.23),
+        rgba(159,103,255,0.06)
+    );
+    border: 1px solid rgba(159,103,255,0.3);
+    border-radius: 17px;
+    padding: 23px;
+    margin-bottom: 23px;
+}
+
+.early-banner h3 {
+    font-size: 19px;
+    margin-bottom: 9px;
+}
+
+.early-banner p {
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+}
+
+.progress-track {
+    height: 9px;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #342541;
+    margin: 18px 0 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    width: 0%;
+    background: linear-gradient(90deg, var(--purple), var(--accent));
+    border-radius: 10px;
+    transition: width 0.3s;
+}
+
+.progress-caption {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    color: var(--muted);
+    font-size: 12px;
+}
+
+.slot-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    margin-top: 18px;
+}
+
+.slot {
+    background: rgba(0,0,0,0.15);
+    border: 1px solid var(--border);
+    border-radius: 13px;
+    padding: 17px;
+}
+
+.slot h4 {
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.slot-number {
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.slot p {
+    color: var(--muted);
+    font-size: 11px;
+    margin-top: 7px;
+}
+
+/* TABLES */
+
+.table-wrap {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 560px;
+}
+
+th, td {
+    padding: 15px 12px;
+    text-align: left;
+    border-bottom: 1px solid var(--border);
+    font-size: 12px;
+}
+
+th {
+    color: var(--muted);
+    font-weight: normal;
+}
+
+td {
+    color: #e9e0f3;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 35px 15px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.8;
+}
+
+.status {
+    display: inline-block;
+    padding: 6px 9px;
+    border-radius: 20px;
+    background: rgba(168,155,185,0.12);
+    color: var(--muted);
+    font-size: 10px;
+}
+
+.status.success {
+    background: rgba(57,255,145,0.1);
+    color: var(--green);
+}
+
+.status.pending {
+    background: rgba(255,190,70,0.1);
+    color: #ffce73;
+}
+
+/* INPUTS AND BUTTONS */
+
+.toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.input, .select {
+    color: white;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    outline: none;
+    min-width: 0;
+}
+
+.input:focus, .select:focus {
+    border-color: var(--accent);
+}
+
+.input {
+    flex: 1;
+    min-width: 180px;
+}
+
+.select option {
+    background: var(--panel);
+}
+
+.btn {
+    border: none;
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: white;
+    background: var(--purple);
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.btn:hover {
+    filter: brightness(1.15);
+}
+
+.btn.secondary {
+    background: var(--panel2);
+    border: 1px solid var(--border);
+}
+
+.btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.notice {
+    background: rgba(124,58,237,0.1);
+    border: 1px solid rgba(159,103,255,0.2);
+    padding: 15px;
+    border-radius: 12px;
+    color: #d8c5ff;
+    font-size: 12px;
+    line-height: 1.7;
+    margin-bottom: 18px;
+}
+
+/* MOBILE */
+
+@media (max-width: 900px) {
+    .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .grid-2 {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 520px) {
+    .topbar {
+        padding: 13px 15px;
+    }
+
+    .nav-wrapper {
+        padding: 10px 15px 0;
+    }
+
+    .main {
+        padding: 23px 15px 45px;
+    }
+
+    .brand h1 {
+        font-size: 17px;
+    }
+
+    .logo {
+        width: 38px;
+        height: 38px;
+    }
+
+    .founder-badge {
+        font-size: 10px;
+        padding: 8px;
+    }
+
+    .stats {
+        gap: 11px;
+    }
+
+    .card {
+        padding: 15px;
+        border-radius: 14px;
+    }
+
+    .section-card {
+        padding: 16px;
+    }
+
+    .early-banner {
+        padding: 17px;
+    }
+
+    .slot-grid {
+        gap: 10px;
+    }
+
+    .slot {
+        padding: 12px;
+    }
+
+    .nav-item {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <header class="topbar">
+        <div class="topbar-inner">
+
+            <div class="brand">
+                <div class="logo">S</div>
+
+                <div>
+                    <h1>SONVIA</h1>
+                    <p>Founder Control Center</p>
+                </div>
+            </div>
+
+            <div class="founder-badge">
+                ◆ Founder Admin
+            </div>
+
+        </div>
+    </header>
+
+
+    <!-- NAVIGATION -->
+
+    <div class="nav-wrapper">
+        <nav class="nav" id="mainNav">
+
+            <button class="nav-item active" data-page="dashboard">
+                🏠 Dashboard
+            </button>
+
+            <button class="nav-item" data-page="users">
+                👥 Users
+            </button>
+
+            <button class="nav-item" data-page="bookings">
+                🎵 Bookings
+            </button>
+
+            <button class="nav-item" data-page="verification">
+                💜 Verification
+            </button>
+
+            <button class="nav-item" data-page="wallet">
+                💰 Earnings Wallet
+            </button>
+
+            <button class="nav-item" data-page="analytics">
+                📊 Analytics
+            </button>
+
+            <button class="nav-item" data-page="feedback">
+                💬 Feedback
+            </button>
+
+            <button class="nav-item" data-page="settings">
+                ⚙️ Settings
+            </button>
+
+        </nav>
+    </div>
+
+
+    <main class="main">
+
+        <!-- DASHBOARD -->
+
+        <section class="page active" id="page-dashboard">
+
+            <div class="page-heading">
+                <span class="eyebrow">Founder overview</span>
+                <h2>Welcome to SONVIA 💜</h2>
+                <p>
+                    Manage your platform, users, verification programme
+                    and business activity from one place.
+                </p>
+            </div>
+
+            <div class="notice">
+                <strong>Preview mode:</strong>
+                The dashboard is not yet connected to your database.
+                Numbers will remain unavailable until we connect Supabase.
+            </div>
+
+            <div class="stats">
+
+                <div class="card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Users</span>
+                        <span class="stat-icon">👥</span>
+                    </div>
+                    <div class="stat-value">—</div>
+                    <div class="stat-note">Awaiting database connection</div>
+                </div>
+
+                <div class="card">
+                    <div class="stat-top">
+                        <span class="stat-label">Total Bookings</span>
+                        <span class="stat-icon">🎵</span>
+                    </div>
+                    <div class="stat-value">—</div>
+                    <div class="stat-note">Awaiting database connection</div>
+                </div>
+
+                <div class="card">
+                    <div class="stat-top">
+                        <span class="stat-label">SONVIA Earnings</span>
+                        <span class="stat-icon">💰</span>
+                    </div>
+                    <div class="stat-value">₦—</div>
+                    <div class="stat-note">Real transactions only</div>
+                </div>
+
+                <div class="card">
+                    <div class="stat-top">
+                        <span class="stat-label">Early Users Approved</span>
+                        <span class="stat-icon">💜</span>
+                    </div>
+                    <div class="stat-value">— / 30</div>
+                    <div class="stat-note">15 artists + 15 producers</div>
+                </div>
+
+            </div>
+
+
+            <div class="grid-2">
+
+                <div class="section-card">
+
+                    <div class="section-title">
+                        <div>
+                            <h3>💜 Early User Programme</h3>
+                            <p>Track the first 30 free verification slots.</p>
+                        </div>
+                    </div>
+
+                    <div class="stat-value" id="earlyTotal">— / 30</div>
+
+                    <div class="progress-track">
+                        <div class="progress-fill" id="earlyProgress"></div>
+                    </div>
+
+                    <div class="progress-caption">
+                        <span id="earlyRemaining">Awaiting database</span>
+                        <span>30 slots</span>
+                    </div>
+
+                    <br>
+
+                    <button class="btn"
+                        onclick="showPage('verification')">
+                        View Verification
+                    </button>
+
+                </div>
+
+
+                <div class="section-card">
+
+                    <div class="section-title">
+                        <div>
+                            <h3>⚡ Quick Navigation</h3>
+                            <p>Jump to a management section.</p>
+                        </div>
+                    </div>
+
+                    <div class="toolbar">
+                        <button class="btn secondary"
+                            onclick="showPage('users')">
+                            👥 Manage Users
+                        </button>
+
+                        <button class="btn secondary"
+                            onclick="showPage('verification')">
+                            💜 Verification
+                        </button>
+
+                        <button class="btn secondary"
+                            onclick="showPage('wallet')">
+                            💰 Earnings
+                        </button>
+
+                        <button class="btn secondary"
+                            onclick="showPage('bookings')">
+                            🎵 Bookings
+                        </button>
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="section-card">
+
+                <div class="section-title">
+                    <div>
+                        <h3>🕒 Recent Activity</h3>
+                        <p>Platform events will appear here after integration.</p>
+                    </div>
+                </div>
+
+                <div class="empty-state">
+                    No activity available yet.<br>
+                    Connect Supabase to load real platform activity.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- USERS -->
+
+        <section class="page" id="page-users">
+
+            <div class="page-heading">
+                <span class="eyebrow">Account management</span>
+                <h2>Users</h2>
+                <p>
+                    Find registered artists, producers and other
+                    supported account types.
+                </p>
+            </div>
+
+            <div class="notice">
+                User records will load from Supabase after integration.
+                Account actions will be restricted to authorised Founder
+                access and protected server-side.
+            </div>
+
+            <div class="section-card">
+
+                <div class="section-title">
+                    <div>
+                        <h3>All SONVIA Users</h3>
+                        <p>Search and filter accounts.</p>
+                    </div>
+                </div>
+
+                <div class="toolbar">
+
+                    <input
+                        class="input"
+                        type="search"
+                        placeholder="Search username or name..."
+                        disabled
+                        aria-label="Search users"
+                    >
+
+                    <select class="select" disabled
+                        aria-label="Filter account type">
+                        <option>All account types</option>
+                        <option>Artists</option>
+                        <option>Producers</option>
+                    </select>
+
+                    <button class="btn secondary" disabled>
+                        Search
+                    </button>
+
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>USER</th>
+                                <th>ACCOUNT TYPE</th>
+                                <th>VERIFICATION</th>
+                                <th>STATUS</th>
+                                <th>ACTIONS</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            <tr>
+                                <td colspan="5" class="empty-state">
+                                    User list not connected yet.<br>
+                                    No real users are loaded or modified
+                                    by this preview.
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- BOOKINGS -->
+
+        <section class="page" id="page-bookings">
+
+            <div class="page-heading">
+                <span class="eyebrow">Marketplace</span>
+                <h2>Bookings</h2>
+                <p>
+                    Monitor artist bookings, producer sessions
+                    and booking payment records.
+                </p>
+            </div>
+
+            <div class="section-card">
+
+                <div class="section-title">
+                    <div>
+                        <h3>All Bookings</h3>
+                        <p>Booking records will come from Supabase.</p>
+                    </div>
+                </div>
+
+                <div class="toolbar">
+                    <select class="select" disabled>
+                        <option>All booking statuses</option>
+                        <option>Pending</option>
+                        <option>Confirmed</option>
+                        <option>Completed</option>
+                        <option>Missed</option>
+                    </select>
+                </div>
+
+                <div class="empty-state">
+                    Booking data is not connected yet.
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- VERIFICATION -->
+
+        <section class="page" id="page-verification">
+
+            <div class="page-heading">
+                <span class="eyebrow">Trust and safety</span>
+                <h2>Verification Centre</h2>
+                <p>
+                    Manage early-user verification and regular
+                    verification applications.
+                </p>
+            </div>
+
+
+            <div class="early-banner">
+
+                
